@@ -1,0 +1,944 @@
+enum CardColor {
+  Black
+  Red
+  Blue
+  Green
+  White
+  Colorless
+}
+
+input CreatePaymentCardInfo {
+  cardNumber: Int!
+  cv: Int!
+  expiration: DateTime!
+}
+
+input CreatePaymentCardInfoInput {
+  cardNumber: Int!
+  cv: Int!
+  expiration: DateTime!
+  clientMutationId: String!
+}
+
+type CreatePaymentCardInfoPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  paymentCardInfo: PaymentCardInfo
+  edge: PaymentCardInfoEdge
+}
+
+input CreateProducts {
+  category: CardColor
+  imgUrl: String
+  name: String!
+  price: Float
+  quantity: Int
+}
+
+input CreateProductsInput {
+  category: CardColor
+  imgUrl: String
+  name: String!
+  price: Float
+  quantity: Int
+  clientMutationId: String!
+}
+
+type CreateProductsPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  products: Products
+  edge: ProductsEdge
+}
+
+input CreateUser {
+  dateOfBirth: DateTime
+  secret: String!
+  userName: String!
+  userType: Roles!
+}
+
+"""
+If authentication was successful the payload contains the user and a token. If unsuccessful this payload is null.
+"""
+type CreateUserPayload {
+  user: User
+  clientMutationId: String
+  viewer: Viewer!
+}
+
+scalar DateTime
+
+input DeletePaymentCardInfoInput {
+  id: ID!
+  clientMutationId: String!
+}
+
+type DeletePaymentCardInfoPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  paymentCardInfo: PaymentCardInfo
+  edge: PaymentCardInfoEdge
+  deletedId: ID
+}
+
+input DeleteProductsInput {
+  id: ID!
+  clientMutationId: String!
+}
+
+type DeleteProductsPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  products: Products
+  edge: ProductsEdge
+  deletedId: ID
+}
+
+input DeleteUserInput {
+  id: ID!
+  clientMutationId: String!
+}
+
+type DeleteUserPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  user: User
+  edge: UserEdge
+  deletedId: ID
+}
+
+"""HelloPayload"""
+type HelloPayload {
+  message: String!
+}
+
+input InvokeFunctionInput {
+  name: String!
+  input: String!
+  clientMutationId: String
+}
+
+type InvokeFunctionPayload {
+  result: String!
+  clientMutationId: String
+}
+
+type Mutation {
+  createPaymentCardInfo(input: CreatePaymentCardInfoInput!): CreatePaymentCardInfoPayload
+  createProducts(input: CreateProductsInput!): CreateProductsPayload
+  updatePaymentCardInfo(input: UpdatePaymentCardInfoInput!): UpdatePaymentCardInfoPayload
+  updateProducts(input: UpdateProductsInput!): UpdateProductsPayload
+  updateUser(input: UpdateUserInput!): UpdateUserPayload
+  updateOrCreatePaymentCardInfo(input: UpdateOrCreatePaymentCardInfoInput!): UpdateOrCreatePaymentCardInfoPayload
+  updateOrCreateProducts(input: UpdateOrCreateProductsInput!): UpdateOrCreateProductsPayload
+  updateOrCreateUser(input: UpdateOrCreateUserInput!): UpdateOrCreateUserPayload
+  deletePaymentCardInfo(input: DeletePaymentCardInfoInput!): DeletePaymentCardInfoPayload
+  deleteProducts(input: DeleteProductsInput!): DeleteProductsPayload
+  deleteUser(input: DeleteUserInput!): DeleteUserPayload
+  createUser(input: SignupUserInput!): CreateUserPayload!
+  invokeFunction(input: InvokeFunctionInput!): InvokeFunctionPayload
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type PaymentCardInfo implements Node {
+  cardNumber: Int!
+  cv: Int!
+  expiration: DateTime!
+  id: ID!
+}
+
+"""A connection to a list of items."""
+type PaymentCardInfoConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [PaymentCardInfoEdge]
+
+  """Count of filtered result set without considering pagination arguments"""
+  count: Int!
+}
+
+"""An edge in a connection."""
+type PaymentCardInfoEdge {
+  """The item at the end of the edge."""
+  node: PaymentCardInfo!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+input PaymentCardInfoFilter {
+  """Logical AND on all given filters."""
+  AND: [PaymentCardInfoFilter!]
+
+  """Logical OR on all given filters."""
+  OR: [PaymentCardInfoFilter!]
+  cardNumber: Int
+
+  """All values that are not equal to given value."""
+  cardNumber_not: Int
+
+  """All values that are contained in given list."""
+  cardNumber_in: [Int!]
+
+  """All values that are not contained in given list."""
+  cardNumber_not_in: [Int!]
+
+  """All values less than the given value."""
+  cardNumber_lt: Int
+
+  """All values less than or equal the given value."""
+  cardNumber_lte: Int
+
+  """All values greater than the given value."""
+  cardNumber_gt: Int
+
+  """All values greater than or equal the given value."""
+  cardNumber_gte: Int
+  cv: Int
+
+  """All values that are not equal to given value."""
+  cv_not: Int
+
+  """All values that are contained in given list."""
+  cv_in: [Int!]
+
+  """All values that are not contained in given list."""
+  cv_not_in: [Int!]
+
+  """All values less than the given value."""
+  cv_lt: Int
+
+  """All values less than or equal the given value."""
+  cv_lte: Int
+
+  """All values greater than the given value."""
+  cv_gt: Int
+
+  """All values greater than or equal the given value."""
+  cv_gte: Int
+  expiration: DateTime
+
+  """All values that are not equal to given value."""
+  expiration_not: DateTime
+
+  """All values that are contained in given list."""
+  expiration_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  expiration_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  expiration_lt: DateTime
+
+  """All values less than or equal the given value."""
+  expiration_lte: DateTime
+
+  """All values greater than the given value."""
+  expiration_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  expiration_gte: DateTime
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+}
+
+enum PaymentCardInfoOrderBy {
+  cardNumber_ASC
+  cardNumber_DESC
+  cv_ASC
+  cv_DESC
+  expiration_ASC
+  expiration_DESC
+  id_ASC
+  id_DESC
+}
+
+type Products implements Node {
+  category: CardColor
+  id: ID!
+  imgUrl: String
+  name: String!
+  price: Float!
+  quantity: Int!
+}
+
+"""A connection to a list of items."""
+type ProductsConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ProductsEdge]
+
+  """Count of filtered result set without considering pagination arguments"""
+  count: Int!
+}
+
+"""An edge in a connection."""
+type ProductsEdge {
+  """The item at the end of the edge."""
+  node: Products!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+input ProductsFilter {
+  """Logical AND on all given filters."""
+  AND: [ProductsFilter!]
+
+  """Logical OR on all given filters."""
+  OR: [ProductsFilter!]
+  category: CardColor
+
+  """All values that are not equal to given value."""
+  category_not: CardColor
+
+  """All values that are contained in given list."""
+  category_in: [CardColor!]
+
+  """All values that are not contained in given list."""
+  category_not_in: [CardColor!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  imgUrl: String
+
+  """All values that are not equal to given value."""
+  imgUrl_not: String
+
+  """All values that are contained in given list."""
+  imgUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  imgUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  imgUrl_lt: String
+
+  """All values less than or equal the given value."""
+  imgUrl_lte: String
+
+  """All values greater than the given value."""
+  imgUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  imgUrl_gte: String
+
+  """All values containing the given string."""
+  imgUrl_contains: String
+
+  """All values not containing the given string."""
+  imgUrl_not_contains: String
+
+  """All values starting with the given string."""
+  imgUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  imgUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  imgUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  imgUrl_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
+  quantity: Int
+
+  """All values that are not equal to given value."""
+  quantity_not: Int
+
+  """All values that are contained in given list."""
+  quantity_in: [Int!]
+
+  """All values that are not contained in given list."""
+  quantity_not_in: [Int!]
+
+  """All values less than the given value."""
+  quantity_lt: Int
+
+  """All values less than or equal the given value."""
+  quantity_lte: Int
+
+  """All values greater than the given value."""
+  quantity_gt: Int
+
+  """All values greater than or equal the given value."""
+  quantity_gte: Int
+}
+
+enum ProductsOrderBy {
+  category_ASC
+  category_DESC
+  id_ASC
+  id_DESC
+  imgUrl_ASC
+  imgUrl_DESC
+  name_ASC
+  name_DESC
+  price_ASC
+  price_DESC
+  quantity_ASC
+  quantity_DESC
+}
+
+type Query {
+  viewer: Viewer!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+enum Roles {
+  Admin
+  Customer
+}
+
+input SignupUserInput {
+  dateOfBirth: DateTime
+  secret: String!
+  userName: String!
+  userType: Roles!
+  clientMutationId: String!
+}
+
+input UpdateOrCreatePaymentCardInfoInput {
+  update: UpdatePaymentCardInfo!
+  create: CreatePaymentCardInfo!
+  clientMutationId: String!
+}
+
+type UpdateOrCreatePaymentCardInfoPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  paymentCardInfo: PaymentCardInfo
+  edge: PaymentCardInfoEdge
+}
+
+input UpdateOrCreateProductsInput {
+  update: UpdateProducts!
+  create: CreateProducts!
+  clientMutationId: String!
+}
+
+type UpdateOrCreateProductsPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  products: Products
+  edge: ProductsEdge
+}
+
+input UpdateOrCreateUserInput {
+  update: UpdateUser!
+  create: CreateUser!
+  clientMutationId: String!
+}
+
+type UpdateOrCreateUserPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  user: User
+  edge: UserEdge
+}
+
+input UpdatePaymentCardInfo {
+  cardNumber: Int
+  cv: Int
+  expiration: DateTime
+  id: ID!
+}
+
+input UpdatePaymentCardInfoInput {
+  cardNumber: Int
+  cv: Int
+  expiration: DateTime
+  id: ID!
+  clientMutationId: String!
+}
+
+type UpdatePaymentCardInfoPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  paymentCardInfo: PaymentCardInfo
+  edge: PaymentCardInfoEdge
+}
+
+input UpdateProducts {
+  category: CardColor
+  id: ID!
+  imgUrl: String
+  name: String
+  price: Float
+  quantity: Int
+}
+
+input UpdateProductsInput {
+  category: CardColor
+  id: ID!
+  imgUrl: String
+  name: String
+  price: Float
+  quantity: Int
+  clientMutationId: String!
+}
+
+type UpdateProductsPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  products: Products
+  edge: ProductsEdge
+}
+
+input UpdateUser {
+  dateOfBirth: DateTime
+  id: ID!
+  secret: String
+  userName: String
+  userType: Roles
+}
+
+input UpdateUserInput {
+  dateOfBirth: DateTime
+  id: ID!
+  secret: String
+  userName: String
+  userType: Roles
+  clientMutationId: String!
+}
+
+type UpdateUserPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  user: User
+  edge: UserEdge
+}
+
+type User implements Node {
+  createdAt: DateTime!
+  dateOfBirth: DateTime
+  id: ID!
+  secret: String!
+  updatedAt: DateTime!
+  userName: String!
+  userType: Roles!
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]
+
+  """Count of filtered result set without considering pagination arguments"""
+  count: Int!
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+input UserFilter {
+  """Logical AND on all given filters."""
+  AND: [UserFilter!]
+
+  """Logical OR on all given filters."""
+  OR: [UserFilter!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  dateOfBirth: DateTime
+
+  """All values that are not equal to given value."""
+  dateOfBirth_not: DateTime
+
+  """All values that are contained in given list."""
+  dateOfBirth_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  dateOfBirth_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  dateOfBirth_lt: DateTime
+
+  """All values less than or equal the given value."""
+  dateOfBirth_lte: DateTime
+
+  """All values greater than the given value."""
+  dateOfBirth_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  dateOfBirth_gte: DateTime
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  secret: String
+
+  """All values that are not equal to given value."""
+  secret_not: String
+
+  """All values that are contained in given list."""
+  secret_in: [String!]
+
+  """All values that are not contained in given list."""
+  secret_not_in: [String!]
+
+  """All values less than the given value."""
+  secret_lt: String
+
+  """All values less than or equal the given value."""
+  secret_lte: String
+
+  """All values greater than the given value."""
+  secret_gt: String
+
+  """All values greater than or equal the given value."""
+  secret_gte: String
+
+  """All values containing the given string."""
+  secret_contains: String
+
+  """All values not containing the given string."""
+  secret_not_contains: String
+
+  """All values starting with the given string."""
+  secret_starts_with: String
+
+  """All values not starting with the given string."""
+  secret_not_starts_with: String
+
+  """All values ending with the given string."""
+  secret_ends_with: String
+
+  """All values not ending with the given string."""
+  secret_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  userName: String
+
+  """All values that are not equal to given value."""
+  userName_not: String
+
+  """All values that are contained in given list."""
+  userName_in: [String!]
+
+  """All values that are not contained in given list."""
+  userName_not_in: [String!]
+
+  """All values less than the given value."""
+  userName_lt: String
+
+  """All values less than or equal the given value."""
+  userName_lte: String
+
+  """All values greater than the given value."""
+  userName_gt: String
+
+  """All values greater than or equal the given value."""
+  userName_gte: String
+
+  """All values containing the given string."""
+  userName_contains: String
+
+  """All values not containing the given string."""
+  userName_not_contains: String
+
+  """All values starting with the given string."""
+  userName_starts_with: String
+
+  """All values not starting with the given string."""
+  userName_not_starts_with: String
+
+  """All values ending with the given string."""
+  userName_ends_with: String
+
+  """All values not ending with the given string."""
+  userName_not_ends_with: String
+  userType: Roles
+
+  """All values that are not equal to given value."""
+  userType_not: Roles
+
+  """All values that are contained in given list."""
+  userType_in: [Roles!]
+
+  """All values that are not contained in given list."""
+  userType_not_in: [Roles!]
+}
+
+enum UserOrderBy {
+  createdAt_ASC
+  createdAt_DESC
+  dateOfBirth_ASC
+  dateOfBirth_DESC
+  id_ASC
+  id_DESC
+  secret_ASC
+  secret_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  userName_ASC
+  userName_DESC
+  userType_ASC
+  userType_DESC
+}
+
+"""This is the famous Relay viewer object"""
+type Viewer {
+  allPaymentCardInfoes(filter: PaymentCardInfoFilter, orderBy: PaymentCardInfoOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): PaymentCardInfoConnection!
+  allProductses(filter: ProductsFilter, orderBy: ProductsOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): ProductsConnection!
+  allUsers(filter: UserFilter, orderBy: UserOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  user: User
+  PaymentCardInfo(id: ID): PaymentCardInfo
+  Products(id: ID): Products
+  User(id: ID, secret: String, userName: String): User
+
+  """hello"""
+  hello(name: String): HelloPayload
+  id: ID!
+}
+
