@@ -3,7 +3,7 @@ import "./App.css";
 import NavBar from "../../components/NavBar";
 import Products from "../Products";
 import { ThemeProvider } from "@material-ui/styles";
-import { createMuiTheme } from "@material-ui/core";
+import { createMuiTheme, Container } from "@material-ui/core";
 
 const myMtgShopTheme = createMuiTheme({
     palette: {
@@ -25,7 +25,9 @@ const App: React.FC = () => {
         <React.Fragment>
             <ThemeProvider theme={myMtgShopTheme}>
                 <NavBar />
-                <Products />
+                <Container maxWidth="sm">
+                    <Products />
+                </Container>
             </ThemeProvider>
         </React.Fragment>
     );

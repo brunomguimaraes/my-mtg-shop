@@ -1,8 +1,8 @@
 /* tslint:disable */
 
 import { ConcreteRequest } from "relay-runtime";
-export type AppQueryVariables = {};
-export type AppQueryResponse = {
+export type ProductsQueryVariables = {};
+export type ProductsQueryResponse = {
     readonly viewer: {
         readonly allProducts: {
             readonly count: number;
@@ -11,20 +11,22 @@ export type AppQueryResponse = {
                     readonly name: string;
                     readonly price: number | null;
                     readonly id: string;
+                    readonly imgUrl: string | null;
+                    readonly quantity: number | null;
                 };
             } | null> | null;
         };
     };
 };
-export type AppQuery = {
-    readonly response: AppQueryResponse;
-    readonly variables: AppQueryVariables;
+export type ProductsQuery = {
+    readonly response: ProductsQueryResponse;
+    readonly variables: ProductsQueryVariables;
 };
 
 
 
 /*
-query AppQuery {
+query ProductsQuery {
   viewer {
     allProducts {
       count
@@ -33,6 +35,8 @@ query AppQuery {
           name
           price
           id
+          imgUrl
+          quantity
         }
       }
     }
@@ -97,7 +101,21 @@ v1 = {
               "args": null,
               "storageKey": null
             },
-            (v0/*: any*/)
+            (v0/*: any*/),
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "name": "imgUrl",
+              "args": null,
+              "storageKey": null
+            },
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "name": "quantity",
+              "args": null,
+              "storageKey": null
+            }
           ]
         }
       ]
@@ -108,7 +126,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "AppQuery",
+    "name": "ProductsQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": [],
@@ -129,7 +147,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "AppQuery",
+    "name": "ProductsQuery",
     "argumentDefinitions": [],
     "selections": [
       {
@@ -149,12 +167,12 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "AppQuery",
+    "name": "ProductsQuery",
     "id": null,
-    "text": "query AppQuery {\n  viewer {\n    allProducts {\n      count\n      edges {\n        node {\n          name\n          price\n          id\n        }\n      }\n    }\n    id\n  }\n}\n",
+    "text": "query ProductsQuery {\n  viewer {\n    allProducts {\n      count\n      edges {\n        node {\n          name\n          price\n          id\n          imgUrl\n          quantity\n        }\n      }\n    }\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = 'a24d746be3f65f4c1d398cbe9e8c365d';
+(node as any).hash = 'd04cf4d274831daea880e56873af218c';
 export default node;
