@@ -1,7 +1,7 @@
 import { Environment, Network, RecordSource, Store } from "relay-runtime";
 
 function fetchQuery(operation: any, variables: any) {
-    return fetch("https://api.graph.cool/relay/v1/cjzmr35c20tux0179y3fkwg81", {
+    return fetch("https://api.graph.cool/relay/v1/cjzogtfs9497g01948v8slrdj", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
