@@ -24,8 +24,8 @@
     "typescript": "3.5.3"
   },
   "scripts": {
-    "update-schema": "get-graphql-schema https://api.graph.cool/relay/v1/cjzmr35c20tux0179y3fkwg81 > ./src/schema.graphql",
-    "relay": "relay-compiler --src ./src --schema ./src/schema.graphql --extensions tsx",
+    "update-schema": "get-graphql-schema https://api.graph.cool/relay/v1/cjzogtfs9497g01948v8slrdj > ./src/schema.graphql",
+    "relay": "relay-compiler --language typescript --src ./src --schema ./src/schema.graphql --extensions tsx",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
-    "relay-compiler": "^5.0.0"
+    "relay-compiler": "^5.0.0",
+    "relay-compiler-language-typescript": "^4.7.0"
   }
 }
