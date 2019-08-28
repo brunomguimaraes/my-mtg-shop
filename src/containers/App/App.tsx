@@ -39,14 +39,9 @@ const App: React.FC = () => {
                     console.log("response:", props);
                     return (
                         <div>
-                            Done!
-                            <div>
-                                {props.viewer.allProducts.edges!.map(
-                                    (e: any) => (
-                                        <p>{e.node.name}</p>
-                                    )
-                                )}
-                            </div>
+                            {props.viewer.allProducts.edges!.map((e: any) => (
+                                <p key={e.node.id}>{e.node.name}</p>
+                            ))}
                         </div>
                     );
                 }}
