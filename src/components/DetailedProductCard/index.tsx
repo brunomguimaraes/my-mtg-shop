@@ -6,6 +6,7 @@ import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import { CardMedia, Box } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import { formatCurrency } from "../../utils/formaters";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -65,11 +66,7 @@ export default function DetailedProductCard({
                     </Grid>
                     <Grid item>
                         <Typography gutterBottom variant="h6">
-                            R$
-                            {" " +
-                                price
-                                    .toFixed(2)
-                                    .replace(/\d(?=(\d{3})+\.)/g, "$&,")}
+                            {formatCurrency(price)}
                         </Typography>
                     </Grid>
                 </Grid>
