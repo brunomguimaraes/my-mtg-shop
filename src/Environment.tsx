@@ -1,7 +1,8 @@
 import { Environment, Network, RecordSource, Store } from "relay-runtime";
+require("dotenv").config();
 
 function fetchQuery(operation: any, variables: any) {
-    return fetch("https://api.graph.cool/relay/v1/cjzogtfs9497g01948v8slrdj", {
+    return fetch(process.env.REACT_APP_API_URL as string, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
