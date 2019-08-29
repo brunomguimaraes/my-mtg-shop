@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./style.css";
 import NavBar from "../../components/NavBar";
 import Products from "../Products";
 import { ThemeProvider } from "@material-ui/styles";
