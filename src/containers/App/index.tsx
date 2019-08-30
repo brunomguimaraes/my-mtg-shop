@@ -45,7 +45,9 @@ const App: React.FC = () => {
                             }
                             return (
                                 <ProductsList
-                                    allProducts={props.viewer.allProducts}
+                                    allProducts={
+                                        props.viewer.allProducts as any
+                                    }
                                 />
                             );
                         }}
