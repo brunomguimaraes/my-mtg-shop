@@ -7,6 +7,9 @@ import Typography from "@material-ui/core/Typography";
 import { CardMedia, Box } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { formatCurrency } from "../../utils/formaters";
+import { createFragmentContainer } from "react-relay";
+import { graphql } from "babel-plugin-relay/macro";
+import { DetailedProductCard_product } from "./__generated__/DetailedProductCard_product.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,25 +41,15 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface IProduct {
-    id: string;
-    imgUrl: string;
-    name: string;
-    price: number;
-    quantity: number;
-}
+type IProduct = {
+    product: DetailedProductCard_product;
+};
 
-export default function DetailedProductCard({
-    id,
-    imgUrl,
-    name,
-    price,
-    quantity
-}: IProduct) {
+function DetailedProductCard({ product }: IProduct) {
     const classes = useStyles();
 
     return (
-        <Box boxShadow={2} key={id} className={classes.root}>
+        <Box boxShadow={2} key={product.id} className={classes.root}>
             <div className={classes.section1}>
                 <Grid container alignItems="center">
                     <Grid item xs>
@@ -64,11 +57,13 @@ export default function DetailedProductCard({
                             {name}
                         </Typography>
                     </Grid>
-                    <Grid item>
-                        <Typography gutterBottom variant="h6">
-                            {formatCurrency(price)}
-                        </Typography>
-                    </Grid>
+                    {product.price && (
+                        <Grid item>
+                            <Typography gutterBottom variant="h6">
+                                {formatCurrency(product.price)}
+                            </Typography>
+                        </Grid>
+                    )}
                 </Grid>
             </div>
             <Divider variant="middle" />
@@ -80,15 +75,17 @@ export default function DetailedProductCard({
                     alignItems="center"
                 >
                     <Grid item>
-                        <CardMedia
-                            className={classes.productImage}
-                            image={imgUrl}
-                            title={`${name} Card pic`}
-                        />
+                        {product.imgUrl && (
+                            <CardMedia
+                                className={classes.productImage}
+                                image={product.imgUrl}
+                                title={`${name} Card pic`}
+                            />
+                        )}
                     </Grid>
                     <Grid item>
                         <Typography gutterBottom variant="body2">
-                            Em estoque: {quantity}
+                            Em estoque: {product.quantity}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -102,3 +99,15 @@ export default function DetailedProductCard({
         </Box>
     );
 }
+
+export default createFragmentContainer(DetailedProductCard, {
+    product: graphql`
+        fragment DetailedProductCard_product on Product {
+            id
+            imgUrl
+            name
+            price
+            quantity
+        }
+    `
+});

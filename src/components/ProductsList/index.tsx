@@ -1,35 +1,37 @@
 import React from "react";
 import DetailedProductCard from "../../components/DetailedProductCard";
 import { Container } from "@material-ui/core";
+import { graphql } from "babel-plugin-relay/macro";
+import { createFragmentContainer } from "react-relay";
+import { ProductsList_allProducts } from "./__generated__/ProductsList_allProducts.graphql";
 
-export interface IProducts {
-    allProducts: IProduct[];
-}
+type IProps = {
+    allProducts: ProductsList_allProducts;
+};
 
-export interface IProduct {
-    id: string;
-    name: string;
-    imgUrl: string;
-    price: number;
-    quantity: number;
-}
-
-const ProductsList = ({ allProducts }: IProducts) => {
+const ProductsList = ({ allProducts }: IProps) => {
+    console.log(allProducts);
     return (
         <React.Fragment>
-            {allProducts.map((product: IProduct) => (
-                <Container key={product.id}>
-                    <DetailedProductCard
-                        id={product.id}
-                        name={product.name}
-                        imgUrl={product.imgUrl}
-                        price={product.price}
-                        quantity={product.quantity}
-                    />
-                </Container>
-            ))}
+            {allProducts &&
+                allProducts.edges!.map((product) => (
+                    <Container key={allProducts.edges!.indexOf(product)}>
+                        <DetailedProductCard product={product!.node} />
+                    </Container>
+                ))}
         </React.Fragment>
     );
 };
 
-export default ProductsList;
+export default createFragmentContainer(ProductsList, {
+    allProducts: graphql`
+        fragment ProductsList_allProducts on ProductConnection {
+            count
+            edges {
+                node {
+                    ...DetailedProductCard_product
+                }
+            }
+        }
+    `
+});
