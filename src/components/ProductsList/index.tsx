@@ -10,7 +10,6 @@ type IProps = {
 };
 
 const ProductsList = ({ allProducts }: IProps) => {
-    console.log(allProducts);
     return (
         <React.Fragment>
             {allProducts &&
