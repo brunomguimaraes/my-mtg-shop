@@ -12,6 +12,7 @@
     "@types/react-relay": "^5.0.0",
     "@types/relay-runtime": "^5.0.3",
     "babel-plugin-relay": "^5.0.0",
+    "dotenv": "^8.1.0",
     "eslint-utils": "^1.4.2",
     "get-graphql-schema": "^2.1.2",
     "graphql": "^14.5.3",
@@ -24,11 +25,11 @@
     "typescript": "3.5.3"
   },
   "scripts": {
-    "update-schema": "get-graphql-schema https://api.graph.cool/relay/v1/cjzmr35c20tux0179y3fkwg81 > ./src/schema.graphql",
-    "relay": "relay-compiler --src ./src --schema ./src/schema.graphql --extensions tsx",
+    "relay": "relay-compiler --language typescript --src ./src --schema ./src/schema.graphql --extensions tsx",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "update-schema": "get-graphql-schema https://api.graph.cool/relay/v1/cjzogtfs9497g01948v8slrdj > ./src/schema.graphql",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -47,6 +48,7 @@
     ]
   },
   "devDependencies": {
-    "relay-compiler": "^5.0.0"
+    "relay-compiler": "^5.0.0",
+    "relay-compiler-language-typescript": "^4.7.0"
   }
 }
