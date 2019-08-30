@@ -34,7 +34,7 @@ const App: React.FC = () => {
                 <Container maxWidth="sm">
                     <QueryRenderer<AppQuery>
                         environment={environment}
-                        query={AppQuery}
+                        query={AppViewerQuery}
                         variables={{}}
                         render={({ error, props }): React.ReactNode => {
                             if (error) {
@@ -58,7 +58,7 @@ const App: React.FC = () => {
 
 export default App;
 
-const AppQuery = graphql`
+const AppViewerQuery = graphql`
     query AppQuery {
         viewer {
             allProducts {

@@ -54,7 +54,7 @@ function DetailedProductCard({ product }: IProduct) {
                 <Grid container alignItems="center">
                     <Grid item xs>
                         <Typography gutterBottom variant="h5">
-                            {name}
+                            {product.name}
                         </Typography>
                     </Grid>
                     {product.price && (
@@ -79,7 +79,7 @@ function DetailedProductCard({ product }: IProduct) {
                             <CardMedia
                                 className={classes.productImage}
                                 image={product.imgUrl}
-                                title={`${name} Card pic`}
+                                title={`${product.name} Card pic`}
                             />
                         )}
                     </Grid>
