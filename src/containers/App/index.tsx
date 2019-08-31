@@ -27,34 +27,38 @@ const myMtgShopTheme = createMuiTheme({
 
 const App: React.FC = () => {
     return (
-        <QueryRenderer<AppQuery>
-            environment={environment}
-            query={AppViewerQuery}
-            variables={{}}
-            render={({ error, props }): React.ReactNode => {
-                if (error) {
-                    return <div>Erro ao carregar produtos</div>;
-                }
-                if (!props) {
-                    return <Loading />;
-                }
-                return (
-                    <React.Fragment>
-                        <CssBaseline />
-                        <ThemeProvider theme={myMtgShopTheme}>
+        <ThemeProvider theme={myMtgShopTheme}>
+            <QueryRenderer<AppQuery>
+                environment={environment}
+                query={AppViewerQuery}
+                variables={{}}
+                render={({ error, props }): React.ReactNode => {
+                    console.log("triggou render App!");
+                    if (error) {
+                        return <div>Erro ao carregar produtos</div>;
+                    }
+                    if (!props) {
+                        return <Loading />;
+                    }
+                    return (
+                        <React.Fragment>
+                            <CssBaseline />
                             <NavBar />
                             <Container maxWidth="sm">
                                 <ProductsList
                                     allProducts={
                                         props.viewer.allProducts as any
                                     }
+                                    shoppingCart={
+                                        props.viewer.User!.shoppingCart as any
+                                    }
                                 />
                             </Container>
-                        </ThemeProvider>
-                    </React.Fragment>
-                );
-            }}
-        />
+                        </React.Fragment>
+                    );
+                }}
+            />
+        </ThemeProvider>
     );
 };
 
@@ -65,6 +69,11 @@ const AppViewerQuery = graphql`
         viewer {
             allProducts {
                 ...ProductsList_allProducts
+            }
+            User(id: "cjzyfwspn0f1a01671todqxul") {
+                shoppingCart {
+                    ...ProductsList_shoppingCart
+                }
             }
         }
     }

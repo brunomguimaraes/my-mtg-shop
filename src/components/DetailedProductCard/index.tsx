@@ -10,6 +10,8 @@ import { formatCurrency } from "../../utils/formaters";
 import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import { DetailedProductCard_product } from "./__generated__/DetailedProductCard_product.graphql";
+import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
+import { uuidVersion4Generator } from "../../utils/idGenerators";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,12 +43,41 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+interface ICartProducts {
+    readonly edges: ReadonlyArray<{
+        readonly node: {
+            readonly product: {
+                readonly id: string;
+            } | null;
+        };
+    } | null> | null;
+}
+
 type IProduct = {
     product: DetailedProductCard_product;
+    productsOnCart: ICartProducts | null;
+    shoppingCartId: string;
 };
 
-function DetailedProductCard({ product }: IProduct) {
+function DetailedProductCard({
+    product,
+    productsOnCart,
+    shoppingCartId
+}: IProduct) {
     const classes = useStyles();
+
+    const handleAddToCart = () => {
+        if (
+            productsOnCart!.edges!.find(
+                (e) => e!.node!.product!.id === product.id
+            )
+        ) {
+            console.log("achei");
+        } else {
+            const clientMutationId = uuidVersion4Generator();
+            createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
+        }
+    };
 
     return (
         <Box boxShadow={2} key={product.id} className={classes.root}>
@@ -91,7 +122,7 @@ function DetailedProductCard({ product }: IProduct) {
                 </Grid>
             </div>
             <div className={classes.section3}>
-                <Button color="primary">
+                <Button color="primary" onClick={handleAddToCart}>
                     <AddShoppingCartIcon />
                     Adicionar ao carrinho
                 </Button>

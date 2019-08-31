@@ -2,12 +2,18 @@
 
 import { ConcreteRequest } from "relay-runtime";
 type ProductsList_allProducts$ref = any;
+type ProductsList_shoppingCart$ref = any;
 export type AppQueryVariables = {};
 export type AppQueryResponse = {
     readonly viewer: {
         readonly allProducts: {
             readonly " $fragmentRefs": ProductsList_allProducts$ref;
         };
+        readonly User: {
+            readonly shoppingCart: {
+                readonly " $fragmentRefs": ProductsList_shoppingCart$ref;
+            } | null;
+        } | null;
     };
 };
 export type AppQuery = {
@@ -23,6 +29,13 @@ query AppQuery {
     allProducts {
       ...ProductsList_allProducts
     }
+    User(id: "cjzyfwspn0f1a01671todqxul") {
+      shoppingCart {
+        ...ProductsList_shoppingCart
+        id
+      }
+      id
+    }
     id
   }
 }
@@ -37,6 +50,20 @@ fragment ProductsList_allProducts on ProductConnection {
   }
 }
 
+fragment ProductsList_shoppingCart on ShoppingCart {
+  id
+  cartProducts {
+    edges {
+      node {
+        product {
+          id
+        }
+        id
+      }
+    }
+  }
+}
+
 fragment DetailedProductCard_product on Product {
   id
   imgUrl
@@ -47,7 +74,14 @@ fragment DetailedProductCard_product on Product {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = {
+var v0 = [
+  {
+    "kind": "Literal",
+    "name": "id",
+    "value": "cjzyfwspn0f1a01671todqxul"
+  }
+],
+v1 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "id",
@@ -85,6 +119,33 @@ return {
                 "kind": "FragmentSpread",
                 "name": "ProductsList_allProducts",
                 "args": null
+              }
+            ]
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "User",
+            "storageKey": "User(id:\"cjzyfwspn0f1a01671todqxul\")",
+            "args": (v0/*: any*/),
+            "concreteType": "User",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "shoppingCart",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "ShoppingCart",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "FragmentSpread",
+                    "name": "ProductsList_shoppingCart",
+                    "args": null
+                  }
+                ]
               }
             ]
           }
@@ -140,7 +201,7 @@ return {
                     "concreteType": "Product",
                     "plural": false,
                     "selections": [
-                      (v0/*: any*/),
+                      (v1/*: any*/),
                       {
                         "kind": "ScalarField",
                         "alias": null,
@@ -175,7 +236,77 @@ return {
               }
             ]
           },
-          (v0/*: any*/)
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "User",
+            "storageKey": "User(id:\"cjzyfwspn0f1a01671todqxul\")",
+            "args": (v0/*: any*/),
+            "concreteType": "User",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "shoppingCart",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "ShoppingCart",
+                "plural": false,
+                "selections": [
+                  (v1/*: any*/),
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "name": "cartProducts",
+                    "storageKey": null,
+                    "args": null,
+                    "concreteType": "CartProductConnection",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "LinkedField",
+                        "alias": null,
+                        "name": "edges",
+                        "storageKey": null,
+                        "args": null,
+                        "concreteType": "CartProductEdge",
+                        "plural": true,
+                        "selections": [
+                          {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "name": "node",
+                            "storageKey": null,
+                            "args": null,
+                            "concreteType": "CartProduct",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "kind": "LinkedField",
+                                "alias": null,
+                                "name": "product",
+                                "storageKey": null,
+                                "args": null,
+                                "concreteType": "Product",
+                                "plural": false,
+                                "selections": [
+                                  (v1/*: any*/)
+                                ]
+                              },
+                              (v1/*: any*/)
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              (v1/*: any*/)
+            ]
+          },
+          (v1/*: any*/)
         ]
       }
     ]
@@ -184,10 +315,10 @@ return {
     "operationKind": "query",
     "name": "AppQuery",
     "id": null,
-    "text": "query AppQuery {\n  viewer {\n    allProducts {\n      ...ProductsList_allProducts\n    }\n    id\n  }\n}\n\nfragment ProductsList_allProducts on ProductConnection {\n  count\n  edges {\n    node {\n      ...DetailedProductCard_product\n      id\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n}\n",
+    "text": "query AppQuery {\n  viewer {\n    allProducts {\n      ...ProductsList_allProducts\n    }\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      shoppingCart {\n        ...ProductsList_shoppingCart\n        id\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment ProductsList_allProducts on ProductConnection {\n  count\n  edges {\n    node {\n      ...DetailedProductCard_product\n      id\n    }\n  }\n}\n\nfragment ProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    edges {\n      node {\n        product {\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '6b1a773e3d382e5e6479c52dbafaa502';
+(node as any).hash = 'bfc9fca6e36bd7d1f84b8921d589ce65';
 export default node;

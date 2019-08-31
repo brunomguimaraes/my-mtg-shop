@@ -51,6 +51,7 @@ export default function NavBar() {
             query={UserViewerQuery}
             variables={{}}
             render={({ error, props }): React.ReactNode => {
+                console.log("triggou render Navbar!");
                 if (error) {
                     return <div>Erro ao carregar loja virtual</div>;
                 }
