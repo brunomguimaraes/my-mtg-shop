@@ -12,6 +12,7 @@ import { graphql } from "babel-plugin-relay/macro";
 import { DetailedProductCard_product } from "./__generated__/DetailedProductCard_product.graphql";
 import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
+import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,6 +47,8 @@ const useStyles = makeStyles((theme: Theme) =>
 interface ICartProducts {
     readonly edges: ReadonlyArray<{
         readonly node: {
+            readonly id: string;
+            readonly quantityOnCart: number;
             readonly product: {
                 readonly id: string;
             } | null;
@@ -65,6 +68,7 @@ function DetailedProductCard({
     shoppingCartId
 }: IProduct) {
     const classes = useStyles();
+    const clientMutationId = uuidVersion4Generator();
 
     const handleAddToCart = () => {
         if (
@@ -72,9 +76,19 @@ function DetailedProductCard({
                 (e) => e!.node!.product!.id === product.id
             )
         ) {
-            console.log("achei");
+            const cartProductId = productsOnCart!.edges!.find(
+                (e) => e!.node!.product!.id === product.id
+            )!.node.id;
+            const numberOnCart = productsOnCart!.edges!.find(
+                (e) => e!.node!.product!.id === product.id
+            )!.node.quantityOnCart;
+
+            updateCartProduct(
+                clientMutationId,
+                cartProductId,
+                numberOnCart + 1
+            );
         } else {
-            const clientMutationId = uuidVersion4Generator();
             createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
         }
     };

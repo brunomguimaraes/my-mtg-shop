@@ -11,6 +11,11 @@ export type NavBarQueryResponse = {
             readonly shoppingCart: {
                 readonly cartProducts: {
                     readonly count: number;
+                    readonly edges: ReadonlyArray<{
+                        readonly node: {
+                            readonly quantityOnCart: number;
+                        };
+                    } | null> | null;
                 } | null;
                 readonly " $fragmentRefs": CartProductsList_shoppingCart$ref;
             } | null;
@@ -33,6 +38,12 @@ query NavBarQuery {
       shoppingCart {
         cartProducts {
           count
+          edges {
+            node {
+              quantityOnCart
+              id
+            }
+          }
         }
         ...CartProductsList_shoppingCart
         id
@@ -88,6 +99,13 @@ v3 = {
   "name": "count",
   "args": null,
   "storageKey": null
+},
+v4 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "quantityOnCart",
+  "args": null,
+  "storageKey": null
 };
 return {
   "kind": "Request",
@@ -136,7 +154,30 @@ return {
                     "concreteType": "CartProductConnection",
                     "plural": false,
                     "selections": [
-                      (v3/*: any*/)
+                      (v3/*: any*/),
+                      {
+                        "kind": "LinkedField",
+                        "alias": null,
+                        "name": "edges",
+                        "storageKey": null,
+                        "args": null,
+                        "concreteType": "CartProductEdge",
+                        "plural": true,
+                        "selections": [
+                          {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "name": "node",
+                            "storageKey": null,
+                            "args": null,
+                            "concreteType": "CartProduct",
+                            "plural": false,
+                            "selections": [
+                              (v4/*: any*/)
+                            ]
+                          }
+                        ]
+                      }
                     ]
                   },
                   {
@@ -214,13 +255,8 @@ return {
                             "concreteType": "CartProduct",
                             "plural": false,
                             "selections": [
-                              {
-                                "kind": "ScalarField",
-                                "alias": null,
-                                "name": "quantityOnCart",
-                                "args": null,
-                                "storageKey": null
-                              },
+                              (v4/*: any*/),
+                              (v2/*: any*/),
                               {
                                 "kind": "LinkedField",
                                 "alias": null,
@@ -240,8 +276,7 @@ return {
                                   },
                                   (v2/*: any*/)
                                 ]
-                              },
-                              (v2/*: any*/)
+                              }
                             ]
                           }
                         ]
@@ -262,10 +297,10 @@ return {
     "operationKind": "query",
     "name": "NavBarQuery",
     "id": null,
-    "text": "query NavBarQuery {\n  viewer {\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      name\n      id\n      shoppingCart {\n        cartProducts {\n          count\n        }\n        ...CartProductsList_shoppingCart\n        id\n      }\n    }\n    id\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    edges {\n      node {\n        quantityOnCart\n        product {\n          name\n          price\n          id\n        }\n        id\n      }\n    }\n  }\n}\n",
+    "text": "query NavBarQuery {\n  viewer {\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      name\n      id\n      shoppingCart {\n        cartProducts {\n          count\n          edges {\n            node {\n              quantityOnCart\n              id\n            }\n          }\n        }\n        ...CartProductsList_shoppingCart\n        id\n      }\n    }\n    id\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    edges {\n      node {\n        quantityOnCart\n        product {\n          name\n          price\n          id\n        }\n        id\n      }\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = 'b981eaad967a2688dcfde8adea9c5eaa';
+(node as any).hash = '9c3481544c1bfa7e9b7ecc5b61b788c1';
 export default node;

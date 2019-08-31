@@ -45,6 +45,8 @@ export default createFragmentContainer(ProductsList, {
             cartProducts {
                 edges {
                     node {
+                        id
+                        quantityOnCart
                         product {
                             id
                         }

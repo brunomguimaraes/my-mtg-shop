@@ -18,8 +18,6 @@ export type CartProductproductProduct = {
     readonly quantityInStock?: number | null;
 };
 export type CartProductshoppingCartShoppingCart = {
-    readonly totalCartPrice?: number | null;
-    readonly totalQuantityInCart?: number | null;
     readonly orderId?: string | null;
     readonly order?: ShoppingCartorderOrder | null;
     readonly userId?: string | null;
@@ -43,8 +41,6 @@ export type OrderuserUser = {
     readonly orders?: ReadonlyArray<UserordersOrder> | null;
 };
 export type UsershoppingCartShoppingCart = {
-    readonly totalCartPrice?: number | null;
-    readonly totalQuantityInCart?: number | null;
     readonly orderId?: string | null;
     readonly order?: ShoppingCartorderOrder | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
@@ -67,8 +63,6 @@ export type UserordersOrder = {
     readonly shoppingCart?: OrdershoppingCartShoppingCart | null;
 };
 export type OrdershoppingCartShoppingCart = {
-    readonly totalCartPrice?: number | null;
-    readonly totalQuantityInCart?: number | null;
     readonly userId?: string | null;
     readonly user?: ShoppingCartuserUser | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;

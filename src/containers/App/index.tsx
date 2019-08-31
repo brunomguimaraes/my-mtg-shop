@@ -33,7 +33,6 @@ const App: React.FC = () => {
                 query={AppViewerQuery}
                 variables={{}}
                 render={({ error, props }): React.ReactNode => {
-                    console.log("triggou render App!");
                     if (error) {
                         return <div>Erro ao carregar produtos</div>;
                     }

@@ -2,7 +2,8 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type Colors = "Black" | "Blue" | "Colorless" | "Gold" | "Green" | "Red" | "White" | "%future added value";
-export type CreateCartProductInput = {
+export type UpdateCartProductInput = {
+    readonly id: string;
     readonly quantityOnCart?: number | null;
     readonly productId?: string | null;
     readonly product?: CartProductproductProduct | null;
@@ -18,8 +19,6 @@ export type CartProductproductProduct = {
     readonly quantityInStock?: number | null;
 };
 export type CartProductshoppingCartShoppingCart = {
-    readonly totalCartPrice?: number | null;
-    readonly totalQuantityInCart?: number | null;
     readonly orderId?: string | null;
     readonly order?: ShoppingCartorderOrder | null;
     readonly userId?: string | null;
@@ -43,8 +42,6 @@ export type OrderuserUser = {
     readonly orders?: ReadonlyArray<UserordersOrder> | null;
 };
 export type UsershoppingCartShoppingCart = {
-    readonly totalCartPrice?: number | null;
-    readonly totalQuantityInCart?: number | null;
     readonly orderId?: string | null;
     readonly order?: ShoppingCartorderOrder | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
@@ -67,8 +64,6 @@ export type UserordersOrder = {
     readonly shoppingCart?: OrdershoppingCartShoppingCart | null;
 };
 export type OrdershoppingCartShoppingCart = {
-    readonly totalCartPrice?: number | null;
-    readonly totalQuantityInCart?: number | null;
     readonly userId?: string | null;
     readonly user?: ShoppingCartuserUser | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
@@ -81,11 +76,11 @@ export type ShoppingCartuserUser = {
     readonly ordersIds?: ReadonlyArray<string> | null;
     readonly orders?: ReadonlyArray<UserordersOrder> | null;
 };
-export type CreateCartProductMutationVariables = {
-    readonly input: CreateCartProductInput;
+export type UpdateCartProductMutationVariables = {
+    readonly input: UpdateCartProductInput;
 };
-export type CreateCartProductMutationResponse = {
-    readonly createCartProduct: {
+export type UpdateCartProductMutationResponse = {
+    readonly updateCartProduct: {
         readonly clientMutationId: string;
         readonly cartProduct: {
             readonly quantityOnCart: number;
@@ -110,18 +105,18 @@ export type CreateCartProductMutationResponse = {
         } | null;
     } | null;
 };
-export type CreateCartProductMutation = {
-    readonly response: CreateCartProductMutationResponse;
-    readonly variables: CreateCartProductMutationVariables;
+export type UpdateCartProductMutation = {
+    readonly response: UpdateCartProductMutationResponse;
+    readonly variables: UpdateCartProductMutationVariables;
 };
 
 
 
 /*
-mutation CreateCartProductMutation(
-  $input: CreateCartProductInput!
+mutation UpdateCartProductMutation(
+  $input: UpdateCartProductInput!
 ) {
-  createCartProduct(input: $input) {
+  updateCartProduct(input: $input) {
     clientMutationId
     cartProduct {
       quantityOnCart
@@ -157,7 +152,7 @@ var v0 = [
   {
     "kind": "LocalArgument",
     "name": "input",
-    "type": "CreateCartProductInput!",
+    "type": "UpdateCartProductInput!",
     "defaultValue": null
   }
 ],
@@ -214,7 +209,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "CreateCartProductMutation",
+    "name": "UpdateCartProductMutation",
     "type": "Mutation",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
@@ -222,10 +217,10 @@ return {
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "createCartProduct",
+        "name": "updateCartProduct",
         "storageKey": null,
         "args": (v1/*: any*/),
-        "concreteType": "CreateCartProductPayload",
+        "concreteType": "UpdateCartProductPayload",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -319,16 +314,16 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "CreateCartProductMutation",
+    "name": "UpdateCartProductMutation",
     "argumentDefinitions": (v0/*: any*/),
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "createCartProduct",
+        "name": "updateCartProduct",
         "storageKey": null,
         "args": (v1/*: any*/),
-        "concreteType": "CreateCartProductPayload",
+        "concreteType": "UpdateCartProductPayload",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -426,12 +421,12 @@ return {
   },
   "params": {
     "operationKind": "mutation",
-    "name": "CreateCartProductMutation",
+    "name": "UpdateCartProductMutation",
     "id": null,
-    "text": "mutation CreateCartProductMutation(\n  $input: CreateCartProductInput!\n) {\n  createCartProduct(input: $input) {\n    clientMutationId\n    cartProduct {\n      quantityOnCart\n      id\n      product {\n        name\n        id\n      }\n    }\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            product {\n              name\n              price\n              id\n            }\n            id\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
+    "text": "mutation UpdateCartProductMutation(\n  $input: UpdateCartProductInput!\n) {\n  updateCartProduct(input: $input) {\n    clientMutationId\n    cartProduct {\n      quantityOnCart\n      id\n      product {\n        name\n        id\n      }\n    }\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            product {\n              name\n              price\n              id\n            }\n            id\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '2a2e5515ab55353fc2c53d78128360bb';
+(node as any).hash = '610487d8366bfd4c7937049114ed3a59';
 export default node;

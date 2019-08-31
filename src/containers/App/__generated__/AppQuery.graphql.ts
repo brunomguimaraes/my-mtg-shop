@@ -55,10 +55,11 @@ fragment ProductsList_shoppingCart on ShoppingCart {
   cartProducts {
     edges {
       node {
+        id
+        quantityOnCart
         product {
           id
         }
-        id
       }
     }
   }
@@ -282,6 +283,14 @@ return {
                             "concreteType": "CartProduct",
                             "plural": false,
                             "selections": [
+                              (v1/*: any*/),
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "name": "quantityOnCart",
+                                "args": null,
+                                "storageKey": null
+                              },
                               {
                                 "kind": "LinkedField",
                                 "alias": null,
@@ -293,8 +302,7 @@ return {
                                 "selections": [
                                   (v1/*: any*/)
                                 ]
-                              },
-                              (v1/*: any*/)
+                              }
                             ]
                           }
                         ]
@@ -315,7 +323,7 @@ return {
     "operationKind": "query",
     "name": "AppQuery",
     "id": null,
-    "text": "query AppQuery {\n  viewer {\n    allProducts {\n      ...ProductsList_allProducts\n    }\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      shoppingCart {\n        ...ProductsList_shoppingCart\n        id\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment ProductsList_allProducts on ProductConnection {\n  count\n  edges {\n    node {\n      ...DetailedProductCard_product\n      id\n    }\n  }\n}\n\nfragment ProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    edges {\n      node {\n        product {\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n}\n",
+    "text": "query AppQuery {\n  viewer {\n    allProducts {\n      ...ProductsList_allProducts\n    }\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      shoppingCart {\n        ...ProductsList_shoppingCart\n        id\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment ProductsList_allProducts on ProductConnection {\n  count\n  edges {\n    node {\n      ...DetailedProductCard_product\n      id\n    }\n  }\n}\n\nfragment ProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n}\n",
     "metadata": {}
   }
 };

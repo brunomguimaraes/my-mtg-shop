@@ -51,7 +51,6 @@ export default function NavBar() {
             query={UserViewerQuery}
             variables={{}}
             render={({ error, props }): React.ReactNode => {
-                console.log("triggou render Navbar!");
                 if (error) {
                     return <div>Erro ao carregar loja virtual</div>;
                 }
@@ -79,10 +78,16 @@ export default function NavBar() {
                                         color="inherit"
                                     >
                                         <Badge
-                                            badgeContent={
-                                                props.viewer.User!.shoppingCart!
-                                                    .cartProducts!.count
-                                            }
+                                            badgeContent={props!.viewer
+                                                .User!.shoppingCart!.cartProducts!.edges!.map(
+                                                    (product) =>
+                                                        product!.node!
+                                                            .quantityOnCart!
+                                                )
+                                                .reduce(
+                                                    (totalValue, amount) =>
+                                                        totalValue + amount
+                                                )}
                                             color="secondary"
                                         >
                                             <ShoppingCartIcon />
@@ -114,6 +119,11 @@ const UserViewerQuery = graphql`
                 shoppingCart {
                     cartProducts {
                         count
+                        edges {
+                            node {
+                                quantityOnCart
+                            }
+                        }
                     }
                     ...CartProductsList_shoppingCart
                 }
