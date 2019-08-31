@@ -42,7 +42,7 @@ fragment DetailedProductCard_product on Product {
   imgUrl
   name
   price
-  quantity
+  quantityInStock
 }
 */
 
@@ -165,7 +165,7 @@ return {
                       {
                         "kind": "ScalarField",
                         "alias": null,
-                        "name": "quantity",
+                        "name": "quantityInStock",
                         "args": null,
                         "storageKey": null
                       }
@@ -184,7 +184,7 @@ return {
     "operationKind": "query",
     "name": "AppQuery",
     "id": null,
-    "text": "query AppQuery {\n  viewer {\n    allProducts {\n      ...ProductsList_allProducts\n    }\n    id\n  }\n}\n\nfragment ProductsList_allProducts on ProductConnection {\n  count\n  edges {\n    node {\n      ...DetailedProductCard_product\n      id\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantity\n}\n",
+    "text": "query AppQuery {\n  viewer {\n    allProducts {\n      ...ProductsList_allProducts\n    }\n    id\n  }\n}\n\nfragment ProductsList_allProducts on ProductConnection {\n  count\n  edges {\n    node {\n      ...DetailedProductCard_product\n      id\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n}\n",
     "metadata": {}
   }
 };

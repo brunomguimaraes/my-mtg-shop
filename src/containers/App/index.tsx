@@ -27,34 +27,34 @@ const myMtgShopTheme = createMuiTheme({
 
 const App: React.FC = () => {
     return (
-        <React.Fragment>
-            <CssBaseline />
-            <ThemeProvider theme={myMtgShopTheme}>
-                <NavBar />
-                <Container maxWidth="sm">
-                    <QueryRenderer<AppQuery>
-                        environment={environment}
-                        query={AppViewerQuery}
-                        variables={{}}
-                        render={({ error, props }): React.ReactNode => {
-                            if (error) {
-                                return <div>Erro ao carregar produtos</div>;
-                            }
-                            if (!props) {
-                                return <Loading />;
-                            }
-                            return (
+        <QueryRenderer<AppQuery>
+            environment={environment}
+            query={AppViewerQuery}
+            variables={{}}
+            render={({ error, props }): React.ReactNode => {
+                if (error) {
+                    return <div>Erro ao carregar produtos</div>;
+                }
+                if (!props) {
+                    return <Loading />;
+                }
+                return (
+                    <React.Fragment>
+                        <CssBaseline />
+                        <ThemeProvider theme={myMtgShopTheme}>
+                            <NavBar />
+                            <Container maxWidth="sm">
                                 <ProductsList
                                     allProducts={
                                         props.viewer.allProducts as any
                                     }
                                 />
-                            );
-                        }}
-                    />
-                </Container>
-            </ThemeProvider>
-        </React.Fragment>
+                            </Container>
+                        </ThemeProvider>
+                    </React.Fragment>
+                );
+            }}
+        />
     );
 };
 

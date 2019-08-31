@@ -85,7 +85,7 @@ function DetailedProductCard({ product }: IProduct) {
                     </Grid>
                     <Grid item>
                         <Typography gutterBottom variant="body2">
-                            Em estoque: {product.quantity}
+                            Em estoque: {product.quantityInStock}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -107,7 +107,7 @@ export default createFragmentContainer(DetailedProductCard, {
             imgUrl
             name
             price
-            quantity
+            quantityInStock
         }
     `
 });
