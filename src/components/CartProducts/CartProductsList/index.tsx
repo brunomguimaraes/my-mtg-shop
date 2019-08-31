@@ -8,9 +8,14 @@ import {
     createStyles,
     Theme
 } from "@material-ui/core";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import { CartProductsList_shoppingCart } from "./__generated__/CartProductsList_shoppingCart.graphql";
+import { formatCurrency } from "../../../utils/formaters";
+import { uuidVersion4Generator } from "../../../utils/idGenerators";
+import { updateCartProduct } from "../../../relay/mutations/UpdateCartProduct";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,6 +37,7 @@ const CartProductsList = ({
     anchorElOnClose
 }: IProps) => {
     const classes = useStyles();
+    const clientMutationId = uuidVersion4Generator();
 
     React.useEffect(() => {
         setAnchorEl(anchorElementReference);
@@ -44,10 +50,24 @@ const CartProductsList = ({
     const isCartListOpen = Boolean(anchorEl);
     const DropdownListId = "secondary-cart-list-dropdown";
 
-    function handleCartListClose() {
+    const handleCartListClose = () => {
         anchorElOnClose();
         setAnchorEl(null);
-    }
+    };
+
+    const handleIncreaseCartProduct = (
+        productId: string,
+        numberOnCart: number
+    ) => {
+        updateCartProduct(clientMutationId, productId, numberOnCart + 1);
+    };
+    const handleDecreaseCartProduct = (
+        productId: string,
+        numberOnCart: number
+    ) => {
+        updateCartProduct(clientMutationId, productId, numberOnCart - 1);
+    };
+
     return (
         <React.Fragment>
             <Menu
@@ -67,18 +87,48 @@ const CartProductsList = ({
                         (cartProduct) =>
                             cartProduct!.node.quantityOnCart !== 0 && (
                                 <MenuItem key={cartProduct!.node.product!.name}>
+                                    <AddCircleIcon
+                                        onClick={() =>
+                                            handleIncreaseCartProduct(
+                                                cartProduct!.node.id,
+                                                cartProduct!.node.quantityOnCart
+                                            )
+                                        }
+                                        fontSize="small"
+                                    />
+                                    <RemoveCircleIcon
+                                        onClick={() =>
+                                            handleDecreaseCartProduct(
+                                                cartProduct!.node.id,
+                                                cartProduct!.node.quantityOnCart
+                                            )
+                                        }
+                                        fontSize="small"
+                                    />
                                     {cartProduct!.node.quantityOnCart}
                                     {"x "}
                                     {cartProduct!.node.product!.name}
-                                    {"  R$"}
-                                    {cartProduct!.node.product!.price! *
-                                        cartProduct!.node.quantityOnCart}
+                                    {"  "}
+                                    {formatCurrency(
+                                        cartProduct!.node.product!.price! *
+                                            cartProduct!.node.quantityOnCart
+                                    )}
                                 </MenuItem>
                             )
                     )}
                 <Divider variant="middle" />
                 <div className={classes.sectionProceedToCheckout}>
                     <Button color="primary">Finalizar Compra</Button>
+                    Valor total:
+                    {formatCurrency(
+                        shoppingCart!
+                            .cartProducts!.edges!.map(
+                                (cartProduct) =>
+                                    cartProduct!.node.product!.price! *
+                                    cartProduct!.node.quantityOnCart
+                            )
+                            .reduce((totalValue, amount) => totalValue + amount)
+                    )}
                 </div>
             </Menu>
         </React.Fragment>
@@ -92,6 +142,7 @@ export default createFragmentContainer(CartProductsList, {
             cartProducts {
                 edges {
                     node {
+                        id
                         quantityOnCart
                         product {
                             name

@@ -7,6 +7,7 @@ export type CartProductsList_shoppingCart = {
     readonly cartProducts: {
         readonly edges: ReadonlyArray<{
             readonly node: {
+                readonly id: string;
                 readonly quantityOnCart: number;
                 readonly product: {
                     readonly name: string;
@@ -20,20 +21,22 @@ export type CartProductsList_shoppingCart = {
 
 
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+};
+return {
   "kind": "Fragment",
   "name": "CartProductsList_shoppingCart",
   "type": "ShoppingCart",
   "metadata": null,
   "argumentDefinitions": [],
   "selections": [
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "id",
-      "args": null,
-      "storageKey": null
-    },
+    (v0/*: any*/),
     {
       "kind": "LinkedField",
       "alias": null,
@@ -61,6 +64,7 @@ const node: ReaderFragment = {
               "concreteType": "CartProduct",
               "plural": false,
               "selections": [
+                (v0/*: any*/),
                 {
                   "kind": "ScalarField",
                   "alias": null,
@@ -101,5 +105,6 @@ const node: ReaderFragment = {
     }
   ]
 };
-(node as any).hash = 'c298907259281df6e5467f1d900caf26';
+})();
+(node as any).hash = '7c89636ac13ffb7294636fac0948dd9f';
 export default node;
