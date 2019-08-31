@@ -21,6 +21,20 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         sectionProceedToCheckout: {
             margin: theme.spacing(3, 1, 1)
+        },
+        sectionMenuItem: {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start"
+        },
+        sectionMenuItemSlug: {
+            margin: theme.spacing(1, 1, 1)
+        },
+        sectionPlusMinusIcons: {
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center"
         }
     })
 );
@@ -86,33 +100,55 @@ const CartProductsList = ({
                     shoppingCart!.cartProducts!.edges!.map(
                         (cartProduct) =>
                             cartProduct!.node.quantityOnCart !== 0 && (
-                                <MenuItem key={cartProduct!.node.product!.name}>
-                                    <AddCircleIcon
-                                        onClick={() =>
-                                            handleIncreaseCartProduct(
-                                                cartProduct!.node.id,
-                                                cartProduct!.node.quantityOnCart
-                                            )
+                                <MenuItem
+                                    key={cartProduct!.node.product!.name}
+                                    className={classes.sectionMenuItem}
+                                >
+                                    <div
+                                        className={
+                                            classes.sectionPlusMinusIcons
                                         }
-                                        fontSize="small"
-                                    />
-                                    <RemoveCircleIcon
-                                        onClick={() =>
-                                            handleDecreaseCartProduct(
-                                                cartProduct!.node.id,
+                                    >
+                                        <AddCircleIcon
+                                            onClick={() =>
+                                                handleIncreaseCartProduct(
+                                                    cartProduct!.node.id,
+                                                    cartProduct!.node
+                                                        .quantityOnCart
+                                                )
+                                            }
+                                            fontSize="small"
+                                        />
+                                        <RemoveCircleIcon
+                                            onClick={() =>
+                                                handleDecreaseCartProduct(
+                                                    cartProduct!.node.id,
+                                                    cartProduct!.node
+                                                        .quantityOnCart
+                                                )
+                                            }
+                                            fontSize="small"
+                                        />
+                                    </div>
+                                    <div
+                                        className={classes.sectionMenuItemSlug}
+                                    >
+                                        {cartProduct!.node.quantityOnCart}
+                                        {"x "}
+                                    </div>
+                                    <div
+                                        className={classes.sectionMenuItemSlug}
+                                    >
+                                        {cartProduct!.node.product!.name}
+                                    </div>
+                                    <div
+                                        className={classes.sectionMenuItemSlug}
+                                    >
+                                        {formatCurrency(
+                                            cartProduct!.node.product!.price! *
                                                 cartProduct!.node.quantityOnCart
-                                            )
-                                        }
-                                        fontSize="small"
-                                    />
-                                    {cartProduct!.node.quantityOnCart}
-                                    {"x "}
-                                    {cartProduct!.node.product!.name}
-                                    {"  "}
-                                    {formatCurrency(
-                                        cartProduct!.node.product!.price! *
-                                            cartProduct!.node.quantityOnCart
-                                    )}
+                                        )}
+                                    </div>
                                 </MenuItem>
                             )
                     )}
