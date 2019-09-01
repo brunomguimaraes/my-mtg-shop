@@ -7,7 +7,7 @@ export type DetailedProductCard_product = {
     readonly imgUrl: string | null;
     readonly name: string;
     readonly price: number | null;
-    readonly quantity: number | null;
+    readonly quantityInStock: number | null;
     readonly " $refType": DetailedProductCard_product$ref;
 };
 
@@ -51,11 +51,11 @@ const node: ReaderFragment = {
     {
       "kind": "ScalarField",
       "alias": null,
-      "name": "quantity",
+      "name": "quantityInStock",
       "args": null,
       "storageKey": null
     }
   ]
 };
-(node as any).hash = '47bd5d8c40348a38952ab0c23833e847';
+(node as any).hash = '26dcb9ea07362f64358c82248cfbd838';
 export default node;
