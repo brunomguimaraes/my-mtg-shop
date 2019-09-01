@@ -171,7 +171,7 @@ enum CartProductOrderBy {
 input CartProductproductProduct {
   cardColor: Colors
   imgUrl: String
-  name: String!
+  name: String
   price: Float
   quantityInStock: Int
 }
@@ -293,7 +293,7 @@ type CreatePaymentInfoPayload {
 input CreateProduct {
   cardColor: Colors
   imgUrl: String
-  name: String!
+  name: String
   price: Float
   quantityInStock: Int
   cartProductId: ID
@@ -303,7 +303,7 @@ input CreateProduct {
 input CreateProductInput {
   cardColor: Colors
   imgUrl: String
-  name: String!
+  name: String
   price: Float
   quantityInStock: Int
   cartProductId: ID
@@ -1153,7 +1153,7 @@ type Product implements Node {
   cartProduct(filter: CartProductFilter): CartProduct
   id: ID!
   imgUrl: String
-  name: String!
+  name: String
   price: Float
   quantityInStock: Int
 }

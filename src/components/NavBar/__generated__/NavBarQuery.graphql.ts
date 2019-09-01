@@ -56,15 +56,16 @@ query NavBarQuery {
 fragment CartProductsList_shoppingCart on ShoppingCart {
   id
   cartProducts {
+    count
     edges {
       node {
         id
         quantityOnCart
         product {
+          id
           name
           price
           quantityInStock
-          id
         }
       }
     }
@@ -267,6 +268,7 @@ return {
                                 "concreteType": "Product",
                                 "plural": false,
                                 "selections": [
+                                  (v2/*: any*/),
                                   (v1/*: any*/),
                                   {
                                     "kind": "ScalarField",
@@ -281,8 +283,7 @@ return {
                                     "name": "quantityInStock",
                                     "args": null,
                                     "storageKey": null
-                                  },
-                                  (v2/*: any*/)
+                                  }
                                 ]
                               }
                             ]
@@ -305,7 +306,7 @@ return {
     "operationKind": "query",
     "name": "NavBarQuery",
     "id": null,
-    "text": "query NavBarQuery {\n  viewer {\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      name\n      id\n      shoppingCart {\n        cartProducts {\n          count\n          edges {\n            node {\n              quantityOnCart\n              id\n            }\n          }\n        }\n        ...CartProductsList_shoppingCart\n        id\n      }\n    }\n    id\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          name\n          price\n          quantityInStock\n          id\n        }\n      }\n    }\n  }\n}\n",
+    "text": "query NavBarQuery {\n  viewer {\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      name\n      id\n      shoppingCart {\n        cartProducts {\n          count\n          edges {\n            node {\n              quantityOnCart\n              id\n            }\n          }\n        }\n        ...CartProductsList_shoppingCart\n        id\n      }\n    }\n    id\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n",
     "metadata": {}
   }
 };

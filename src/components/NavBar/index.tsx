@@ -78,16 +78,26 @@ export default function NavBar() {
                                         color="inherit"
                                     >
                                         <Badge
-                                            badgeContent={props!.viewer
-                                                .User!.shoppingCart!.cartProducts!.edges!.map(
-                                                    (product) =>
-                                                        product!.node!
-                                                            .quantityOnCart!
-                                                )
-                                                .reduce(
-                                                    (totalValue, amount) =>
-                                                        totalValue + amount
-                                                )}
+                                            badgeContent={
+                                                props!.viewer.User!
+                                                    .shoppingCart!.cartProducts!
+                                                    .count !== 0
+                                                    ? props!.viewer
+                                                          .User!.shoppingCart!.cartProducts!.edges!.map(
+                                                              (product) =>
+                                                                  product!.node!
+                                                                      .quantityOnCart!
+                                                          )
+                                                          .reduce(
+                                                              (
+                                                                  totalValue,
+                                                                  amount
+                                                              ) =>
+                                                                  totalValue +
+                                                                  amount
+                                                          )
+                                                    : 0
+                                            }
                                             color="secondary"
                                         >
                                             <ShoppingCartIcon />

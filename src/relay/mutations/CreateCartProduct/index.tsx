@@ -37,18 +37,14 @@ export const createCartProduct = (
     clientMutationId: string,
     quantityOnCart: number,
     productId: string,
-    shoppingCartId: string,
-    quantityInStock: number
+    shoppingCartId: string
 ) => {
     const variables = {
         input: {
             clientMutationId,
             quantityOnCart,
             productId,
-            shoppingCartId,
-            product: {
-                quantityInStock
-            }
+            shoppingCartId
         }
     };
 

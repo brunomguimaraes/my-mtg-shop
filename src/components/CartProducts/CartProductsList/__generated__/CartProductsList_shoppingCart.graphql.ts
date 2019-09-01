@@ -5,12 +5,14 @@ export type CartProductsList_shoppingCart$ref = any;
 export type CartProductsList_shoppingCart = {
     readonly id: string;
     readonly cartProducts: {
+        readonly count: number;
         readonly edges: ReadonlyArray<{
             readonly node: {
                 readonly id: string;
                 readonly quantityOnCart: number;
                 readonly product: {
-                    readonly name: string;
+                    readonly id: string;
+                    readonly name: string | null;
                     readonly price: number | null;
                     readonly quantityInStock: number | null;
                 } | null;
@@ -48,6 +50,13 @@ return {
       "plural": false,
       "selections": [
         {
+          "kind": "ScalarField",
+          "alias": null,
+          "name": "count",
+          "args": null,
+          "storageKey": null
+        },
+        {
           "kind": "LinkedField",
           "alias": null,
           "name": "edges",
@@ -82,6 +91,7 @@ return {
                   "concreteType": "Product",
                   "plural": false,
                   "selections": [
+                    (v0/*: any*/),
                     {
                       "kind": "ScalarField",
                       "alias": null,
@@ -114,5 +124,5 @@ return {
   ]
 };
 })();
-(node as any).hash = 'd623b951abdc715ad0af34e165a1fc4c';
+(node as any).hash = '0c2134f9461e3022dbe8ee347b71ef4c';
 export default node;

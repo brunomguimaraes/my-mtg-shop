@@ -13,6 +13,7 @@ import { DetailedProductCard_product } from "./__generated__/DetailedProductCard
 import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
+import { updateProduct } from "../../relay/mutations/UpdateProduct";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -86,16 +87,19 @@ function DetailedProductCard({
             updateCartProduct(
                 clientMutationId,
                 cartProductId,
-                numberOnCart + 1,
-                product.quantityInStock! <= 0 ? product.quantityInStock! - 1 : 0
+                numberOnCart + 1
+            );
+            updateProduct(
+                clientMutationId,
+                product.id,
+                product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0
             );
         } else {
-            createCartProduct(
+            createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
+            updateProduct(
                 clientMutationId,
-                1,
                 product.id,
-                shoppingCartId,
-                product.quantityInStock! <= 0 ? product.quantityInStock! - 1 : 0
+                product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0
             );
         }
     };

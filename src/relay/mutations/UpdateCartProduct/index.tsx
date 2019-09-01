@@ -36,17 +36,13 @@ const mutation = graphql`
 export const updateCartProduct = (
     clientMutationId: string,
     id: string,
-    quantityOnCart: number,
-    quantityInStock: number
+    quantityOnCart: number
 ) => {
     const variables = {
         input: {
             clientMutationId,
             id,
-            quantityOnCart,
-            product: {
-                quantityInStock
-            }
+            quantityOnCart
         }
     };
 

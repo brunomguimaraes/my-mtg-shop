@@ -5,7 +5,7 @@ export type DetailedProductCard_product$ref = any;
 export type DetailedProductCard_product = {
     readonly id: string;
     readonly imgUrl: string | null;
-    readonly name: string;
+    readonly name: string | null;
     readonly price: number | null;
     readonly quantityInStock: number | null;
     readonly " $refType": DetailedProductCard_product$ref;

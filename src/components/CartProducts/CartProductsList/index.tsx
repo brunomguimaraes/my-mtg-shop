@@ -16,6 +16,7 @@ import { CartProductsList_shoppingCart } from "./__generated__/CartProductsList_
 import { formatCurrency } from "../../../utils/formaters";
 import { uuidVersion4Generator } from "../../../utils/idGenerators";
 import { updateCartProduct } from "../../../relay/mutations/UpdateCartProduct";
+import { updateProduct } from "../../../relay/mutations/UpdateProduct";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -74,23 +75,24 @@ const CartProductsList = ({
         numberOnCart: number,
         productsInStock: number
     ) => {
-        updateCartProduct(
+        updateCartProduct(clientMutationId, productId, numberOnCart + 1);
+        updateProduct(
             clientMutationId,
             productId,
-            numberOnCart + 1,
-            productsInStock - 1
+            productsInStock >= 0 ? productsInStock + 1 : 0
         );
     };
+
     const handleDecreaseCartProduct = (
         productId: string,
         numberOnCart: number,
         productsInStock: number
     ) => {
-        updateCartProduct(
+        updateCartProduct(clientMutationId, productId, numberOnCart - 1);
+        updateProduct(
             clientMutationId,
             productId,
-            numberOnCart - 1,
-            productsInStock + 1
+            productsInStock >= 0 ? productsInStock - 1 : 0
         );
     };
 
@@ -111,10 +113,11 @@ const CartProductsList = ({
                 {shoppingCart &&
                     shoppingCart!.cartProducts!.edges!.map(
                         (cartProduct) =>
-                            cartProduct!.node.quantityOnCart !== 0 ||
-                            (null && (
+                            cartProduct!.node.quantityOnCart !== 0 && (
                                 <MenuItem
-                                    key={cartProduct!.node.product!.name}
+                                    key={shoppingCart!.cartProducts!.edges!.indexOf(
+                                        cartProduct
+                                    )}
                                     className={classes.sectionMenuItem}
                                 >
                                     <div
@@ -125,7 +128,8 @@ const CartProductsList = ({
                                         <AddCircleIcon
                                             onClick={() =>
                                                 handleIncreaseCartProduct(
-                                                    cartProduct!.node.id,
+                                                    cartProduct!.node.product!
+                                                        .id!,
                                                     cartProduct!.node
                                                         .quantityOnCart,
                                                     cartProduct!.node.product!
@@ -137,7 +141,8 @@ const CartProductsList = ({
                                         <RemoveCircleIcon
                                             onClick={() =>
                                                 handleDecreaseCartProduct(
-                                                    cartProduct!.node.id,
+                                                    cartProduct!.node.product!
+                                                        .id!,
                                                     cartProduct!.node
                                                         .quantityOnCart,
                                                     cartProduct!.node.product!
@@ -167,20 +172,25 @@ const CartProductsList = ({
                                         )}
                                     </div>
                                 </MenuItem>
-                            ))
+                            )
                     )}
                 <Divider variant="middle" />
                 <div className={classes.sectionProceedToCheckout}>
                     <Button color="primary">Finalizar Compra</Button>
                     Valor total:
                     {formatCurrency(
-                        shoppingCart!
-                            .cartProducts!.edges!.map(
-                                (cartProduct) =>
-                                    cartProduct!.node.product!.price! *
-                                    cartProduct!.node.quantityOnCart
-                            )
-                            .reduce((totalValue, amount) => totalValue + amount)
+                        shoppingCart!.cartProducts!.count !== 0
+                            ? shoppingCart!
+                                  .cartProducts!.edges!.map(
+                                      (cartProduct) =>
+                                          cartProduct!.node.product!.price! *
+                                          cartProduct!.node.quantityOnCart
+                                  )
+                                  .reduce(
+                                      (totalValue, amount) =>
+                                          totalValue + amount
+                                  )
+                            : 0
                     )}
                 </div>
             </Menu>
@@ -193,11 +203,13 @@ export default createFragmentContainer(CartProductsList, {
         fragment CartProductsList_shoppingCart on ShoppingCart {
             id
             cartProducts {
+                count
                 edges {
                     node {
                         id
                         quantityOnCart
                         product {
+                            id
                             name
                             price
                             quantityInStock

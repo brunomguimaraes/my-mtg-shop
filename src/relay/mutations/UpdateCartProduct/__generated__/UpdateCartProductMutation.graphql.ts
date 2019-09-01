@@ -14,7 +14,7 @@ export type UpdateCartProductInput = {
 export type CartProductproductProduct = {
     readonly cardColor?: Colors | null;
     readonly imgUrl?: string | null;
-    readonly name: string;
+    readonly name?: string | null;
     readonly price?: number | null;
     readonly quantityInStock?: number | null;
 };
@@ -86,7 +86,7 @@ export type UpdateCartProductMutationResponse = {
             readonly quantityOnCart: number;
             readonly id: string;
             readonly product: {
-                readonly name: string;
+                readonly name: string | null;
                 readonly quantityInStock: number | null;
             } | null;
         } | null;
@@ -97,7 +97,7 @@ export type UpdateCartProductMutationResponse = {
                     readonly node: {
                         readonly quantityOnCart: number;
                         readonly product: {
-                            readonly name: string;
+                            readonly name: string | null;
                             readonly price: number | null;
                             readonly quantityInStock: number | null;
                         } | null;
