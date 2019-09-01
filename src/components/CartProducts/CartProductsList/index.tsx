@@ -15,8 +15,8 @@ import { createFragmentContainer } from "react-relay";
 import { CartProductsList_shoppingCart } from "./__generated__/CartProductsList_shoppingCart.graphql";
 import { formatCurrency } from "../../../utils/formaters";
 import { uuidVersion4Generator } from "../../../utils/idGenerators";
-import { updateCartProduct } from "../../../relay/mutations/UpdateCartProduct";
 import { updateProduct } from "../../../relay/mutations/UpdateProduct";
+import { updateCartProduct } from "../../../relay/mutations/UpdateCartProduct";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -71,11 +71,12 @@ const CartProductsList = ({
     };
 
     const handleIncreaseCartProduct = (
+        cartProductId: string,
         productId: string,
         numberOnCart: number,
         productsInStock: number
     ) => {
-        updateCartProduct(clientMutationId, productId, numberOnCart + 1);
+        updateCartProduct(clientMutationId, cartProductId, numberOnCart + 1);
         updateProduct(
             clientMutationId,
             productId,
@@ -84,11 +85,13 @@ const CartProductsList = ({
     };
 
     const handleDecreaseCartProduct = (
+        cartProductId: string,
         productId: string,
         numberOnCart: number,
         productsInStock: number
     ) => {
-        updateCartProduct(clientMutationId, productId, numberOnCart - 1);
+        console.log("n on cart", productId);
+        updateCartProduct(clientMutationId, cartProductId, numberOnCart - 1);
         updateProduct(
             clientMutationId,
             productId,
@@ -128,6 +131,7 @@ const CartProductsList = ({
                                         <AddCircleIcon
                                             onClick={() =>
                                                 handleIncreaseCartProduct(
+                                                    cartProduct!.node.id,
                                                     cartProduct!.node.product!
                                                         .id!,
                                                     cartProduct!.node
@@ -141,6 +145,7 @@ const CartProductsList = ({
                                         <RemoveCircleIcon
                                             onClick={() =>
                                                 handleDecreaseCartProduct(
+                                                    cartProduct!.node.id,
                                                     cartProduct!.node.product!
                                                         .id!,
                                                     cartProduct!.node
