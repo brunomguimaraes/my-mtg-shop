@@ -79,7 +79,7 @@ const CartProductsList = ({
         updateProduct(
             clientMutationId,
             productId,
-            productsInStock >= 0 ? productsInStock + 1 : 0
+            productsInStock >= 0 ? productsInStock - 1 : 0
         );
     };
 
@@ -92,7 +92,7 @@ const CartProductsList = ({
         updateProduct(
             clientMutationId,
             productId,
-            productsInStock >= 0 ? productsInStock - 1 : 0
+            productsInStock >= 0 ? productsInStock + 1 : 0
         );
     };
 
