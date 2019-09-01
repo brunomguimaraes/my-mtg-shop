@@ -86,6 +86,7 @@ export type CreateCartProductMutationResponse = {
             readonly id: string;
             readonly product: {
                 readonly name: string;
+                readonly quantityInStock: number | null;
             } | null;
         } | null;
         readonly shoppingCart: {
@@ -97,6 +98,7 @@ export type CreateCartProductMutationResponse = {
                         readonly product: {
                             readonly name: string;
                             readonly price: number | null;
+                            readonly quantityInStock: number | null;
                         } | null;
                     };
                 } | null> | null;
@@ -122,6 +124,7 @@ mutation CreateCartProductMutation(
       id
       product {
         name
+        quantityInStock
         id
       }
     }
@@ -134,6 +137,7 @@ mutation CreateCartProductMutation(
             product {
               name
               price
+              quantityInStock
               id
             }
             id
@@ -193,11 +197,18 @@ v5 = {
 v6 = {
   "kind": "ScalarField",
   "alias": null,
-  "name": "count",
+  "name": "quantityInStock",
   "args": null,
   "storageKey": null
 },
 v7 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "count",
+  "args": null,
+  "storageKey": null
+},
+v8 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "price",
@@ -243,7 +254,8 @@ return {
                 "concreteType": "Product",
                 "plural": false,
                 "selections": [
-                  (v5/*: any*/)
+                  (v5/*: any*/),
+                  (v6/*: any*/)
                 ]
               }
             ]
@@ -266,7 +278,7 @@ return {
                 "concreteType": "CartProductConnection",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/),
+                  (v7/*: any*/),
                   {
                     "kind": "LinkedField",
                     "alias": null,
@@ -296,7 +308,8 @@ return {
                             "plural": false,
                             "selections": [
                               (v5/*: any*/),
-                              (v7/*: any*/)
+                              (v8/*: any*/),
+                              (v6/*: any*/)
                             ]
                           }
                         ]
@@ -347,6 +360,7 @@ return {
                 "plural": false,
                 "selections": [
                   (v5/*: any*/),
+                  (v6/*: any*/),
                   (v4/*: any*/)
                 ]
               }
@@ -370,7 +384,7 @@ return {
                 "concreteType": "CartProductConnection",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/),
+                  (v7/*: any*/),
                   {
                     "kind": "LinkedField",
                     "alias": null,
@@ -400,7 +414,8 @@ return {
                             "plural": false,
                             "selections": [
                               (v5/*: any*/),
-                              (v7/*: any*/),
+                              (v8/*: any*/),
+                              (v6/*: any*/),
                               (v4/*: any*/)
                             ]
                           },
@@ -422,10 +437,10 @@ return {
     "operationKind": "mutation",
     "name": "CreateCartProductMutation",
     "id": null,
-    "text": "mutation CreateCartProductMutation(\n  $input: CreateCartProductInput!\n) {\n  createCartProduct(input: $input) {\n    clientMutationId\n    cartProduct {\n      quantityOnCart\n      id\n      product {\n        name\n        id\n      }\n    }\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            product {\n              name\n              price\n              id\n            }\n            id\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
+    "text": "mutation CreateCartProductMutation(\n  $input: CreateCartProductInput!\n) {\n  createCartProduct(input: $input) {\n    clientMutationId\n    cartProduct {\n      quantityOnCart\n      id\n      product {\n        name\n        quantityInStock\n        id\n      }\n    }\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            product {\n              name\n              price\n              quantityInStock\n              id\n            }\n            id\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '2a2e5515ab55353fc2c53d78128360bb';
+(node as any).hash = '977f6c556c1591ac929ef92acdc8e24f';
 export default node;

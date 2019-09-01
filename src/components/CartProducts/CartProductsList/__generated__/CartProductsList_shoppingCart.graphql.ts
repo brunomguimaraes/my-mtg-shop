@@ -12,6 +12,7 @@ export type CartProductsList_shoppingCart = {
                 readonly product: {
                     readonly name: string;
                     readonly price: number | null;
+                    readonly quantityInStock: number | null;
                 } | null;
             };
         } | null> | null;
@@ -94,6 +95,13 @@ return {
                       "name": "price",
                       "args": null,
                       "storageKey": null
+                    },
+                    {
+                      "kind": "ScalarField",
+                      "alias": null,
+                      "name": "quantityInStock",
+                      "args": null,
+                      "storageKey": null
                     }
                   ]
                 }
@@ -106,5 +114,5 @@ return {
   ]
 };
 })();
-(node as any).hash = '7c89636ac13ffb7294636fac0948dd9f';
+(node as any).hash = 'd623b951abdc715ad0af34e165a1fc4c';
 export default node;

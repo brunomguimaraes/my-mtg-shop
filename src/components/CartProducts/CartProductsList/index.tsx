@@ -71,15 +71,27 @@ const CartProductsList = ({
 
     const handleIncreaseCartProduct = (
         productId: string,
-        numberOnCart: number
+        numberOnCart: number,
+        productsInStock: number
     ) => {
-        updateCartProduct(clientMutationId, productId, numberOnCart + 1);
+        updateCartProduct(
+            clientMutationId,
+            productId,
+            numberOnCart + 1,
+            productsInStock - 1
+        );
     };
     const handleDecreaseCartProduct = (
         productId: string,
-        numberOnCart: number
+        numberOnCart: number,
+        productsInStock: number
     ) => {
-        updateCartProduct(clientMutationId, productId, numberOnCart - 1);
+        updateCartProduct(
+            clientMutationId,
+            productId,
+            numberOnCart - 1,
+            productsInStock + 1
+        );
     };
 
     return (
@@ -99,7 +111,8 @@ const CartProductsList = ({
                 {shoppingCart &&
                     shoppingCart!.cartProducts!.edges!.map(
                         (cartProduct) =>
-                            cartProduct!.node.quantityOnCart !== 0 && (
+                            cartProduct!.node.quantityOnCart !== 0 ||
+                            (null && (
                                 <MenuItem
                                     key={cartProduct!.node.product!.name}
                                     className={classes.sectionMenuItem}
@@ -114,7 +127,9 @@ const CartProductsList = ({
                                                 handleIncreaseCartProduct(
                                                     cartProduct!.node.id,
                                                     cartProduct!.node
-                                                        .quantityOnCart
+                                                        .quantityOnCart,
+                                                    cartProduct!.node.product!
+                                                        .quantityInStock!
                                                 )
                                             }
                                             fontSize="small"
@@ -124,7 +139,9 @@ const CartProductsList = ({
                                                 handleDecreaseCartProduct(
                                                     cartProduct!.node.id,
                                                     cartProduct!.node
-                                                        .quantityOnCart
+                                                        .quantityOnCart,
+                                                    cartProduct!.node.product!
+                                                        .quantityInStock!
                                                 )
                                             }
                                             fontSize="small"
@@ -150,7 +167,7 @@ const CartProductsList = ({
                                         )}
                                     </div>
                                 </MenuItem>
-                            )
+                            ))
                     )}
                 <Divider variant="middle" />
                 <div className={classes.sectionProceedToCheckout}>
@@ -183,6 +200,7 @@ export default createFragmentContainer(CartProductsList, {
                         product {
                             name
                             price
+                            quantityInStock
                         }
                     }
                 }

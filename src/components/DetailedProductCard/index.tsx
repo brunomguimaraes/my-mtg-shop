@@ -86,10 +86,17 @@ function DetailedProductCard({
             updateCartProduct(
                 clientMutationId,
                 cartProductId,
-                numberOnCart + 1
+                numberOnCart + 1,
+                product.quantityInStock! <= 0 ? product.quantityInStock! - 1 : 0
             );
         } else {
-            createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
+            createCartProduct(
+                clientMutationId,
+                1,
+                product.id,
+                shoppingCartId,
+                product.quantityInStock! <= 0 ? product.quantityInStock! - 1 : 0
+            );
         }
     };
 
