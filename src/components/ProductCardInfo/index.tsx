@@ -15,6 +15,7 @@ import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
 import { updateProduct } from "../../relay/mutations/UpdateProduct";
+import { MySnackbarContentWrapper } from "../SnackBar";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -42,6 +43,12 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		section3: {
 			margin: theme.spacing(3, 1, 1)
+		},
+		snackBarStyle: {
+			position: "fixed",
+			bottom: "2%",
+			right: "2%",
+			width: "30vw"
 		}
 	})
 );
@@ -73,9 +80,14 @@ const ProductCardInfo = ({
 	const clientMutationId = uuidVersion4Generator();
 
 	const [loading, setLoading] = React.useState<boolean>(false);
+	const [isSnackBarVisible, setSnackBarVisible] = React.useState<boolean>(
+		false
+	);
 	const [error, setError] = React.useState<boolean>(false);
+	const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
 
 	const handleAddToCart = () => {
+		setLoading(true);
 		const productToBeAdded = productsOnCart!.edges!.find(
 			e => e!.node!.product!.id === product.id
 		);
@@ -87,23 +99,31 @@ const ProductCardInfo = ({
 				cartProductId,
 				numberOnCart + 1
 			);
-			updateProduct(
-				clientMutationId,
-				product.id,
-				product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0,
-				() => setLoading(false),
-				() => setError(true)
-			);
 		} else {
 			createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
-			updateProduct(
-				clientMutationId,
-				product.id,
-				product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0,
-				() => setLoading(false),
-				() => setError(true)
-			);
 		}
+		updateProduct(
+			clientMutationId,
+			product.id,
+			product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0,
+			() => successHandler("Produto adicionado com sucesso"),
+			() => errorHandler()
+		);
+	};
+
+	const successHandler = (message: string) => {
+		setLoading(false);
+		setFeedbackMessage(message);
+		setSnackBarVisible(true);
+		setTimeout(() => setSnackBarVisible(false), 3000);
+	};
+
+	const errorHandler = () => {
+		setLoading(false);
+		setError(true);
+		setFeedbackMessage("Algum erro ocorreu");
+		setSnackBarVisible(true);
+		setTimeout(() => setSnackBarVisible(false), 3000);
 	};
 
 	return (
@@ -160,11 +180,18 @@ const ProductCardInfo = ({
 				</Grid>
 			</div>
 			<div className={classes.section3}>
-				<Button color="primary" onClick={handleAddToCart}>
+				<Button color="primary" disabled={loading} onClick={handleAddToCart}>
 					<AddShoppingCartIcon />
 					Adicionar ao carrinho
 				</Button>
 			</div>
+			{isSnackBarVisible && (
+					<MySnackbarContentWrapper
+						className={classes.snackBarStyle}
+						message={feedbackMessage}
+						variant={error ? "error" : "success"}
+					/>
+				)}
 		</Box>
 	);
 };
