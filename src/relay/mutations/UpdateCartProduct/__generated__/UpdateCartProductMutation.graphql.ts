@@ -13,6 +13,8 @@ export type UpdateCartProductInput = {
 };
 export type CartProductproductProduct = {
     readonly cardColor?: Colors | null;
+    readonly cardType?: string | null;
+    readonly description?: string | null;
     readonly imgUrl?: string | null;
     readonly name?: string | null;
     readonly price?: number | null;

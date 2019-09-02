@@ -1,15 +1,16 @@
 import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
-import { CardMedia, Box } from "@material-ui/core";
+import {
+	CardMedia,
+	Box,
+	Chip,
+	Grid,
+	Typography,
+	Divider,
+	Button
+} from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { formatCurrency } from "../../utils/formaters";
-import { createFragmentContainer } from "react-relay";
-import { graphql } from "babel-plugin-relay/macro";
-import { DetailedProductCard_product } from "./__generated__/DetailedProductCard_product.graphql";
 import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
@@ -28,9 +29,11 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		productImage: {
 			backgroundSize: "contain",
-			width: 160,
-			height: 160,
-			cursor: "pointer"
+			width: 300,
+			height: 300
+		},
+		chip: {
+			marginRight: theme.spacing(1)
 		},
 		section1: {
 			margin: theme.spacing(3, 2)
@@ -40,12 +43,6 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		section3: {
 			margin: theme.spacing(3, 1, 1)
-		},
-		clickable: {
-			cursor: "pointer",
-			"&:hover": {
-				textDecoration: "underline"
-			}
 		},
 		snackBarStyle: {
 			position: "fixed",
@@ -69,18 +66,16 @@ interface ICartProducts {
 }
 
 type IProduct = {
-	product: DetailedProductCard_product;
+	product: any;
 	productsOnCart: ICartProducts | null;
 	shoppingCartId: string;
-	selectedProductHandler: (product: any) => void;
 };
 
-function DetailedProductCard({
+const ProductCardInfo = ({
 	product,
 	productsOnCart,
-	shoppingCartId,
-	selectedProductHandler
-}: IProduct) {
+	shoppingCartId
+}: IProduct) => {
 	const classes = useStyles();
 	const clientMutationId = uuidVersion4Generator();
 
@@ -92,13 +87,13 @@ function DetailedProductCard({
 	const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
 
 	const handleAddToCart = () => {
-        setLoading(true);
+		setLoading(true);
 		const productToBeAdded = productsOnCart!.edges!.find(
 			e => e!.node!.product!.id === product.id
 		);
 		if (productToBeAdded) {
 			const cartProductId = productToBeAdded.node.id;
-			const numberOnCart = productToBeAdded!.node.quantityOnCart;
+			const numberOnCart = productToBeAdded.node.quantityOnCart;
 			updateCartProduct(
 				clientMutationId,
 				cartProductId,
@@ -110,7 +105,7 @@ function DetailedProductCard({
 		updateProduct(
 			clientMutationId,
 			product.id,
-			product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0,
+			product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0,
 			() => successHandler("Produto adicionado com sucesso"),
 			() => errorHandler()
 		);
@@ -136,12 +131,7 @@ function DetailedProductCard({
 			<div className={classes.section1}>
 				<Grid container alignItems="center">
 					<Grid item xs>
-						<Typography
-							onClick={() => selectedProductHandler(product)}
-							className={classes.clickable}
-							gutterBottom
-							variant="h5"
-						>
+						<Typography gutterBottom variant="h5">
 							{product.name}
 						</Typography>
 					</Grid>
@@ -165,16 +155,26 @@ function DetailedProductCard({
 					<Grid item>
 						{product.imgUrl && (
 							<CardMedia
-								onClick={() => selectedProductHandler(product)}
 								className={classes.productImage}
 								image={product.imgUrl}
 								title={`${product.name} Card pic`}
 							/>
 						)}
 					</Grid>
-					<Grid item>
-						<Typography gutterBottom variant="body2">
-							Em estoque: {product.quantityInStock}
+					<div className={classes.section2}>
+						<Chip
+							className={classes.chip}
+							color="primary"
+							label={product.cardType}
+						/>
+						<Chip
+							className={classes.chip}
+							label={product.cardColor}
+						/>
+					</div>
+					<Grid className={classes.section2} item>
+						<Typography gutterBottom variant="body1">
+							{product.description}
 						</Typography>
 					</Grid>
 				</Grid>
@@ -185,7 +185,7 @@ function DetailedProductCard({
 					Adicionar ao carrinho
 				</Button>
 			</div>
-            {isSnackBarVisible && (
+			{isSnackBarVisible && (
 					<MySnackbarContentWrapper
 						className={classes.snackBarStyle}
 						message={feedbackMessage}
@@ -194,19 +194,6 @@ function DetailedProductCard({
 				)}
 		</Box>
 	);
-}
+};
 
-export default createFragmentContainer(DetailedProductCard, {
-	product: graphql`
-		fragment DetailedProductCard_product on Product {
-			id
-			imgUrl
-			name
-			price
-			quantityInStock
-			cardColor
-			description
-			cardType
-		}
-	`
-});
+export default ProductCardInfo;

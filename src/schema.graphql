@@ -170,6 +170,8 @@ enum CartProductOrderBy {
 
 input CartProductproductProduct {
   cardColor: Colors
+  cardType: String
+  description: String
   imgUrl: String
   name: String
   price: Float
@@ -292,6 +294,8 @@ type CreatePaymentInfoPayload {
 
 input CreateProduct {
   cardColor: Colors
+  cardType: String
+  description: String
   imgUrl: String
   name: String
   price: Float
@@ -302,6 +306,8 @@ input CreateProduct {
 
 input CreateProductInput {
   cardColor: Colors
+  cardType: String
+  description: String
   imgUrl: String
   name: String
   price: Float
@@ -1150,7 +1156,9 @@ input PaymentInfouserUser {
 """Product on Shelf"""
 type Product implements Node {
   cardColor: Colors
+  cardType: String
   cartProduct(filter: CartProductFilter): CartProduct
+  description: String
   id: ID!
   imgUrl: String
   name: String
@@ -1201,6 +1209,86 @@ input ProductFilter {
 
   """All values that are not contained in given list."""
   cardColor_not_in: [Colors!]
+  cardType: String
+
+  """All values that are not equal to given value."""
+  cardType_not: String
+
+  """All values that are contained in given list."""
+  cardType_in: [String!]
+
+  """All values that are not contained in given list."""
+  cardType_not_in: [String!]
+
+  """All values less than the given value."""
+  cardType_lt: String
+
+  """All values less than or equal the given value."""
+  cardType_lte: String
+
+  """All values greater than the given value."""
+  cardType_gt: String
+
+  """All values greater than or equal the given value."""
+  cardType_gte: String
+
+  """All values containing the given string."""
+  cardType_contains: String
+
+  """All values not containing the given string."""
+  cardType_not_contains: String
+
+  """All values starting with the given string."""
+  cardType_starts_with: String
+
+  """All values not starting with the given string."""
+  cardType_not_starts_with: String
+
+  """All values ending with the given string."""
+  cardType_ends_with: String
+
+  """All values not ending with the given string."""
+  cardType_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
   id: ID
 
   """All values that are not equal to given value."""
@@ -1371,6 +1459,10 @@ input ProductFilter {
 enum ProductOrderBy {
   cardColor_ASC
   cardColor_DESC
+  cardType_ASC
+  cardType_DESC
+  description_ASC
+  description_DESC
   id_ASC
   id_DESC
   imgUrl_ASC
@@ -1833,6 +1925,8 @@ type UpdatePaymentInfoPayload {
 
 input UpdateProduct {
   cardColor: Colors
+  cardType: String
+  description: String
   id: ID!
   imgUrl: String
   name: String
@@ -1844,6 +1938,8 @@ input UpdateProduct {
 
 input UpdateProductInput {
   cardColor: Colors
+  cardType: String
+  description: String
   id: ID!
   imgUrl: String
   name: String

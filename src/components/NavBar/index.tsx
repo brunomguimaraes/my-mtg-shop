@@ -5,139 +5,115 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { graphql } from "babel-plugin-relay/macro";
-import { QueryRenderer } from "react-relay";
-import Loading from "../Loading";
-import environment from "../../relay/Environment";
-import { NavBarQuery } from "./__generated__/NavBarQuery.graphql";
+import { createFragmentContainer } from "react-relay";
 import CartProductsList from "../CartProducts/CartProductsList";
 import { IconButton, Badge } from "@material-ui/core";
+import { NavBar_viewer } from "./__generated__/NavBar_viewer.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        grow: {
-            flexGrow: 1
-        },
-        title: {
-            display: "none",
-            [theme.breakpoints.up("sm")]: {
-                display: "block"
-            }
-        },
-        sectionCart: {
-            [theme.breakpoints.up("md")]: {
-                display: "flex"
-            }
-        }
-    })
+	createStyles({
+		grow: {
+			flexGrow: 1
+		},
+		title: {
+			display: "none",
+			[theme.breakpoints.up("sm")]: {
+				display: "block"
+			}
+		},
+		sectionCart: {
+			[theme.breakpoints.up("md")]: {
+				display: "flex"
+			}
+		}
+	})
 );
 
-export default function NavBar() {
-    const classes = useStyles();
+type IProps = {
+	viewer: NavBar_viewer;
+};
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const CartListId = "primary-cart-list-dropdown";
+const NavBar = ({ viewer }: IProps) => {
+	const classes = useStyles();
 
-    const handleCartListOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const CartListId = "primary-cart-list-dropdown";
 
-    const handleCartListClose = () => {
-        setAnchorEl(null);
-    };
+	const handleCartListOpen = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
 
-    return (
-        <QueryRenderer<NavBarQuery>
-            environment={environment}
-            query={UserViewerQuery}
-            variables={{}}
-            render={({ error, props }): React.ReactNode => {
-                if (error) {
-                    return <div>Erro ao carregar loja virtual</div>;
-                }
-                if (!props) {
-                    return <Loading />;
-                }
-                return (
-                    <div className={classes.grow}>
-                        <AppBar position="static">
-                            <Toolbar>
-                                <Typography
-                                    className={classes.title}
-                                    variant="h6"
-                                    noWrap
-                                >
-                                    My MTG Store
-                                </Typography>
-                                <div className={classes.grow} />
-                                <div className={classes.sectionCart}>
-                                    <IconButton
-                                        aria-label="show products list on cart"
-                                        aria-controls={CartListId}
-                                        aria-haspopup="true"
-                                        onClick={handleCartListOpen}
-                                        color="inherit"
-                                    >
-                                        <Badge
-                                            badgeContent={
-                                                props!.viewer.User!
-                                                    .shoppingCart!.cartProducts!
-                                                    .count !== 0
-                                                    ? props!.viewer
-                                                          .User!.shoppingCart!.cartProducts!.edges!.map(
-                                                              (product) =>
-                                                                  product!.node!
-                                                                      .quantityOnCart!
-                                                          )
-                                                          .reduce(
-                                                              (
-                                                                  totalValue,
-                                                                  amount
-                                                              ) =>
-                                                                  totalValue +
-                                                                  amount
-                                                          )
-                                                    : 0
-                                            }
-                                            color="secondary"
-                                        >
-                                            <ShoppingCartIcon />
-                                        </Badge>
-                                    </IconButton>
-                                </div>
-                            </Toolbar>
-                        </AppBar>
-                        <CartProductsList
-                            anchorElOnClose={handleCartListClose}
-                            anchorElementReference={anchorEl}
-                            shoppingCart={
-                                props.viewer.User!.shoppingCart as any
-                            }
-                        />
-                    </div>
-                );
-            }}
-        />
-    );
-}
+	const handleCartListClose = () => {
+		setAnchorEl(null);
+	};
 
-const UserViewerQuery = graphql`
-    query NavBarQuery {
-        viewer {
-            User(id: "cjzyfwspn0f1a01671todqxul") {
-                name
-                id
-                shoppingCart {
-                    cartProducts {
-                        count
-                        edges {
-                            node {
-                                quantityOnCart
-                            }
-                        }
-                    }
-                    ...CartProductsList_shoppingCart
-                }
-            }
-        }
-    }
-`;
+	return (
+		<div className={classes.grow}>
+			<AppBar position="static">
+				<Toolbar>
+					<Typography className={classes.title} variant="h6" noWrap>
+						My MTG Store
+					</Typography>
+					<div className={classes.grow} />
+					<div className={classes.sectionCart}>
+						<IconButton
+							aria-label="show products list on cart"
+							aria-controls={CartListId}
+							aria-haspopup="true"
+							onClick={handleCartListOpen}
+							color="inherit"
+						>
+							<Badge
+								badgeContent={
+									viewer.User!.shoppingCart!.cartProducts!
+										.count !== 0
+										? viewer
+												.User!.shoppingCart!.cartProducts!.edges!.map(
+													product =>
+														product!.node!
+															.quantityOnCart!
+												)
+												.reduce(
+													(totalValue, amount) =>
+														totalValue + amount
+												)
+										: 0
+								}
+								color="secondary"
+							>
+								<ShoppingCartIcon />
+							</Badge>
+						</IconButton>
+					</div>
+				</Toolbar>
+			</AppBar>
+			<CartProductsList
+				anchorElOnClose={handleCartListClose}
+				anchorElementReference={anchorEl}
+				shoppingCart={viewer.User!.shoppingCart as any}
+			/>
+		</div>
+	);
+};
+
+export default createFragmentContainer(NavBar, {
+	viewer: graphql`
+		fragment NavBar_viewer on Viewer {
+			User(id: "cjzyfwspn0f1a01671todqxul") {
+				name
+				id
+				shoppingCart {
+					cartProducts {
+						count
+						edges {
+							node {
+								quantityOnCart
+							}
+						}
+					}
+					...CartProductsList_shoppingCart
+				}
+			}
+		}
+	`
+});
