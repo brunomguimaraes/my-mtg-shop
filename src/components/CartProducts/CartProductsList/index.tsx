@@ -90,7 +90,6 @@ const CartProductsList = ({
         numberOnCart: number,
         productsInStock: number
     ) => {
-        console.log("n on cart", productId);
         updateCartProduct(clientMutationId, cartProductId, numberOnCart - 1);
         updateProduct(
             clientMutationId,

@@ -4,12 +4,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import { CardMedia, Box } from "@material-ui/core";
+import { CardMedia, Box, Chip } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { formatCurrency } from "../../utils/formaters";
-import { createFragmentContainer } from "react-relay";
-import { graphql } from "babel-plugin-relay/macro";
-import { DetailedProductCard_product } from "./__generated__/DetailedProductCard_product.graphql";
 import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
@@ -27,9 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         productImage: {
             backgroundSize: "contain",
-            width: 120,
-            height: 120,
-            cursor: "pointer"
+            width: 300,
+            height: 300
+        },
+        chip: {
+            marginRight: theme.spacing(1)
         },
         section1: {
             margin: theme.spacing(3, 2)
@@ -39,12 +38,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         section3: {
             margin: theme.spacing(3, 1, 1)
-        },
-        clickable: {
-            cursor: "pointer",
-            "&:hover": {
-                textDecoration: "underline"
-            }
         }
     })
 );
@@ -62,34 +55,26 @@ interface ICartProducts {
 }
 
 type IProduct = {
-    product: DetailedProductCard_product;
+    product: any;
     productsOnCart: ICartProducts | null;
     shoppingCartId: string;
-    selectedProductHandler: (product: any) => void;
 };
 
-function DetailedProductCard({
+const ProductCardInfo = ({
     product,
     productsOnCart,
-    shoppingCartId,
-    selectedProductHandler
-}: IProduct) {
+    shoppingCartId
+}: IProduct) => {
     const classes = useStyles();
     const clientMutationId = uuidVersion4Generator();
 
     const handleAddToCart = () => {
-        if (
-            productsOnCart!.edges!.find(
-                (e) => e!.node!.product!.id === product.id
-            )
-        ) {
-            const cartProductId = productsOnCart!.edges!.find(
-                (e) => e!.node!.product!.id === product.id
-            )!.node.id;
-            const numberOnCart = productsOnCart!.edges!.find(
-                (e) => e!.node!.product!.id === product.id
-            )!.node.quantityOnCart;
-
+        const productToBeAdded = productsOnCart!.edges!.find(
+            (e) => e!.node!.product!.id === product.id
+        );
+        if (productToBeAdded) {
+            const cartProductId = productToBeAdded.node.id;
+            const numberOnCart = productToBeAdded.node.quantityOnCart;
             updateCartProduct(
                 clientMutationId,
                 cartProductId,
@@ -98,14 +83,14 @@ function DetailedProductCard({
             updateProduct(
                 clientMutationId,
                 product.id,
-                product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0
+                product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0
             );
         } else {
             createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
             updateProduct(
                 clientMutationId,
                 product.id,
-                product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0
+                product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0
             );
         }
     };
@@ -115,12 +100,7 @@ function DetailedProductCard({
             <div className={classes.section1}>
                 <Grid container alignItems="center">
                     <Grid item xs>
-                        <Typography
-                            onClick={() => selectedProductHandler(product)}
-                            className={classes.clickable}
-                            gutterBottom
-                            variant="h5"
-                        >
+                        <Typography gutterBottom variant="h5">
                             {product.name}
                         </Typography>
                     </Grid>
@@ -144,16 +124,26 @@ function DetailedProductCard({
                     <Grid item>
                         {product.imgUrl && (
                             <CardMedia
-                                onClick={() => selectedProductHandler(product)}
                                 className={classes.productImage}
                                 image={product.imgUrl}
                                 title={`${product.name} Card pic`}
                             />
                         )}
                     </Grid>
+                    <div className={classes.section2}>
+                        <Chip
+                            className={classes.chip}
+                            color="primary"
+                            label={product.cardType}
+                        />
+                        <Chip
+                            className={classes.chip}
+                            label={product.cardColor}
+                        />
+                    </div>
                     <Grid item>
-                        <Typography gutterBottom variant="body2">
-                            Em estoque: {product.quantityInStock}
+                        <Typography gutterBottom variant="body1">
+                            {product.description}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -166,19 +156,6 @@ function DetailedProductCard({
             </div>
         </Box>
     );
-}
+};
 
-export default createFragmentContainer(DetailedProductCard, {
-    product: graphql`
-        fragment DetailedProductCard_product on Product {
-            id
-            imgUrl
-            name
-            price
-            quantityInStock
-            cardColor
-            description
-            cardType
-        }
-    `
-});
+export default ProductCardInfo;
