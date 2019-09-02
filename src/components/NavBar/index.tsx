@@ -5,12 +5,10 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { graphql } from "babel-plugin-relay/macro";
-import { QueryRenderer } from "react-relay";
-import Loading from "../Loading";
-import environment from "../../relay/Environment";
-import { NavBarQuery } from "./__generated__/NavBarQuery.graphql";
+import { createFragmentContainer } from "react-relay";
 import CartProductsList from "../CartProducts/CartProductsList";
 import { IconButton, Badge } from "@material-ui/core";
+import { NavBar_viewer } from "./__generated__/NavBar_viewer.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,7 +29,11 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export default function NavBar() {
+type IProps = {
+    viewer: NavBar_viewer
+};
+
+const NavBar = ({ viewer }: IProps) => {
     const classes = useStyles();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -46,18 +48,6 @@ export default function NavBar() {
     };
 
     return (
-        <QueryRenderer<NavBarQuery>
-            environment={environment}
-            query={UserViewerQuery}
-            variables={{}}
-            render={({ error, props }): React.ReactNode => {
-                if (error) {
-                    return <div>Erro ao carregar loja virtual</div>;
-                }
-                if (!props) {
-                    return <Loading />;
-                }
-                return (
                     <div className={classes.grow}>
                         <AppBar position="static">
                             <Toolbar>
@@ -79,10 +69,10 @@ export default function NavBar() {
                                     >
                                         <Badge
                                             badgeContent={
-                                                props!.viewer.User!
+                                                viewer.User!
                                                     .shoppingCart!.cartProducts!
                                                     .count !== 0
-                                                    ? props!.viewer
+                                                    ? viewer
                                                           .User!.shoppingCart!.cartProducts!.edges!.map(
                                                               (product) =>
                                                                   product!.node!
@@ -110,19 +100,17 @@ export default function NavBar() {
                             anchorElOnClose={handleCartListClose}
                             anchorElementReference={anchorEl}
                             shoppingCart={
-                                props.viewer.User!.shoppingCart as any
+                                viewer.User!.shoppingCart as any
                             }
                         />
                     </div>
-                );
-            }}
-        />
+            
     );
 }
 
-const UserViewerQuery = graphql`
-    query NavBarQuery {
-        viewer {
+export default createFragmentContainer(NavBar, {
+    viewer: graphql`
+        fragment NavBar_viewer on Viewer {
             User(id: "cjzyfwspn0f1a01671todqxul") {
                 name
                 id
@@ -139,5 +127,5 @@ const UserViewerQuery = graphql`
                 }
             }
         }
-    }
-`;
+    `
+});

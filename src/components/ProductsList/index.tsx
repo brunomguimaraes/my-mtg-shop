@@ -27,7 +27,6 @@ const ProductsList = ({ allProducts, shoppingCart }: IProps) => {
     const [selectedProductInfo, setSelectedProductInfo] = React.useState();
 
     const handleSelectedProduct = (product: any) => {
-        console.log("chamou");
         setSelectedProductInfo(product);
     };
 
