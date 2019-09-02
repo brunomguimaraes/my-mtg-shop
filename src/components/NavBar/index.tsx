@@ -79,8 +79,24 @@ export default function NavBar() {
                                     >
                                         <Badge
                                             badgeContent={
-                                                props.viewer.User!.shoppingCart!
-                                                    .cartProducts!.count
+                                                props!.viewer.User!
+                                                    .shoppingCart!.cartProducts!
+                                                    .count !== 0
+                                                    ? props!.viewer
+                                                          .User!.shoppingCart!.cartProducts!.edges!.map(
+                                                              (product) =>
+                                                                  product!.node!
+                                                                      .quantityOnCart!
+                                                          )
+                                                          .reduce(
+                                                              (
+                                                                  totalValue,
+                                                                  amount
+                                                              ) =>
+                                                                  totalValue +
+                                                                  amount
+                                                          )
+                                                    : 0
                                             }
                                             color="secondary"
                                         >
@@ -113,6 +129,11 @@ const UserViewerQuery = graphql`
                 shoppingCart {
                     cartProducts {
                         count
+                        edges {
+                            node {
+                                quantityOnCart
+                            }
+                        }
                     }
                     ...CartProductsList_shoppingCart
                 }

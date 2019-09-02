@@ -10,6 +10,10 @@ import { formatCurrency } from "../../utils/formaters";
 import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import { DetailedProductCard_product } from "./__generated__/DetailedProductCard_product.graphql";
+import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
+import { uuidVersion4Generator } from "../../utils/idGenerators";
+import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
+import { updateProduct } from "../../relay/mutations/UpdateProduct";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,12 +45,64 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+interface ICartProducts {
+    readonly edges: ReadonlyArray<{
+        readonly node: {
+            readonly id: string;
+            readonly quantityOnCart: number;
+            readonly product: {
+                readonly id: string;
+            } | null;
+        };
+    } | null> | null;
+}
+
 type IProduct = {
     product: DetailedProductCard_product;
+    productsOnCart: ICartProducts | null;
+    shoppingCartId: string;
 };
 
-function DetailedProductCard({ product }: IProduct) {
+function DetailedProductCard({
+    product,
+    productsOnCart,
+    shoppingCartId
+}: IProduct) {
     const classes = useStyles();
+    const clientMutationId = uuidVersion4Generator();
+
+    const handleAddToCart = () => {
+        if (
+            productsOnCart!.edges!.find(
+                (e) => e!.node!.product!.id === product.id
+            )
+        ) {
+            const cartProductId = productsOnCart!.edges!.find(
+                (e) => e!.node!.product!.id === product.id
+            )!.node.id;
+            const numberOnCart = productsOnCart!.edges!.find(
+                (e) => e!.node!.product!.id === product.id
+            )!.node.quantityOnCart;
+
+            updateCartProduct(
+                clientMutationId,
+                cartProductId,
+                numberOnCart + 1
+            );
+            updateProduct(
+                clientMutationId,
+                product.id,
+                product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0
+            );
+        } else {
+            createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
+            updateProduct(
+                clientMutationId,
+                product.id,
+                product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0
+            );
+        }
+    };
 
     return (
         <Box boxShadow={2} key={product.id} className={classes.root}>
@@ -91,7 +147,7 @@ function DetailedProductCard({ product }: IProduct) {
                 </Grid>
             </div>
             <div className={classes.section3}>
-                <Button color="primary">
+                <Button color="primary" onClick={handleAddToCart}>
                     <AddShoppingCartIcon />
                     Adicionar ao carrinho
                 </Button>

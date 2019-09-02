@@ -171,14 +171,12 @@ enum CartProductOrderBy {
 input CartProductproductProduct {
   cardColor: Colors
   imgUrl: String
-  name: String!
+  name: String
   price: Float
   quantityInStock: Int
 }
 
 input CartProductshoppingCartShoppingCart {
-  totalCartPrice: Float
-  totalQuantityInCart: Int
   orderId: ID
   order: ShoppingCartorderOrder
   userId: ID
@@ -295,7 +293,7 @@ type CreatePaymentInfoPayload {
 input CreateProduct {
   cardColor: Colors
   imgUrl: String
-  name: String!
+  name: String
   price: Float
   quantityInStock: Int
   cartProductId: ID
@@ -305,7 +303,7 @@ input CreateProduct {
 input CreateProductInput {
   cardColor: Colors
   imgUrl: String
-  name: String!
+  name: String
   price: Float
   quantityInStock: Int
   cartProductId: ID
@@ -322,8 +320,6 @@ type CreateProductPayload {
 }
 
 input CreateShoppingCart {
-  totalCartPrice: Float
-  totalQuantityInCart: Int
   orderId: ID
   order: ShoppingCartorderOrder
   userId: ID
@@ -333,8 +329,6 @@ input CreateShoppingCart {
 }
 
 input CreateShoppingCartInput {
-  totalCartPrice: Float
-  totalQuantityInCart: Int
   orderId: ID
   order: ShoppingCartorderOrder
   userId: ID
@@ -975,8 +969,6 @@ enum OrderOrderBy {
 }
 
 input OrdershoppingCartShoppingCart {
-  totalCartPrice: Float
-  totalQuantityInCart: Int
   userId: ID
   user: ShoppingCartuserUser
   cartProductsIds: [ID!]
@@ -1161,7 +1153,7 @@ type Product implements Node {
   cartProduct(filter: CartProductFilter): CartProduct
   id: ID!
   imgUrl: String
-  name: String!
+  name: String
   price: Float
   quantityInStock: Int
 }
@@ -1477,8 +1469,6 @@ type ShoppingCart implements Node {
   cartProducts(filter: CartProductFilter, orderBy: CartProductOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection
   id: ID!
   order(filter: OrderFilter): Order
-  totalCartPrice: Float!
-  totalQuantityInCart: Int!
   user(filter: UserFilter): User
 }
 
@@ -1555,50 +1545,6 @@ input ShoppingCartFilter {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  totalCartPrice: Float
-
-  """All values that are not equal to given value."""
-  totalCartPrice_not: Float
-
-  """All values that are contained in given list."""
-  totalCartPrice_in: [Float!]
-
-  """All values that are not contained in given list."""
-  totalCartPrice_not_in: [Float!]
-
-  """All values less than the given value."""
-  totalCartPrice_lt: Float
-
-  """All values less than or equal the given value."""
-  totalCartPrice_lte: Float
-
-  """All values greater than the given value."""
-  totalCartPrice_gt: Float
-
-  """All values greater than or equal the given value."""
-  totalCartPrice_gte: Float
-  totalQuantityInCart: Int
-
-  """All values that are not equal to given value."""
-  totalQuantityInCart_not: Int
-
-  """All values that are contained in given list."""
-  totalQuantityInCart_in: [Int!]
-
-  """All values that are not contained in given list."""
-  totalQuantityInCart_not_in: [Int!]
-
-  """All values less than the given value."""
-  totalQuantityInCart_lt: Int
-
-  """All values less than or equal the given value."""
-  totalQuantityInCart_lte: Int
-
-  """All values greater than the given value."""
-  totalQuantityInCart_gt: Int
-
-  """All values greater than or equal the given value."""
-  totalQuantityInCart_gte: Int
   cartProducts_every: CartProductFilter
   cartProducts_some: CartProductFilter
   cartProducts_none: CartProductFilter
@@ -1609,10 +1555,6 @@ input ShoppingCartFilter {
 enum ShoppingCartOrderBy {
   id_ASC
   id_DESC
-  totalCartPrice_ASC
-  totalCartPrice_DESC
-  totalQuantityInCart_ASC
-  totalQuantityInCart_DESC
 }
 
 input ShoppingCartorderOrder {
@@ -1922,8 +1864,6 @@ type UpdateProductPayload {
 
 input UpdateShoppingCart {
   id: ID!
-  totalCartPrice: Float
-  totalQuantityInCart: Int
   orderId: ID
   order: ShoppingCartorderOrder
   userId: ID
@@ -1934,8 +1874,6 @@ input UpdateShoppingCart {
 
 input UpdateShoppingCartInput {
   id: ID!
-  totalCartPrice: Float
-  totalQuantityInCart: Int
   orderId: ID
   order: ShoppingCartorderOrder
   userId: ID
@@ -2180,8 +2118,6 @@ input UserordersOrder {
 }
 
 input UsershoppingCartShoppingCart {
-  totalCartPrice: Float
-  totalQuantityInCart: Int
   orderId: ID
   order: ShoppingCartorderOrder
   cartProductsIds: [ID!]

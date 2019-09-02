@@ -1,25 +1,21 @@
 /* tslint:disable */
 
 import { ReaderFragment } from "relay-runtime";
-export type CartProductsList_shoppingCart$ref = any;
-export type CartProductsList_shoppingCart = {
+export type ProductsList_shoppingCart$ref = any;
+export type ProductsList_shoppingCart = {
     readonly id: string;
     readonly cartProducts: {
-        readonly count: number;
         readonly edges: ReadonlyArray<{
             readonly node: {
                 readonly id: string;
                 readonly quantityOnCart: number;
                 readonly product: {
                     readonly id: string;
-                    readonly name: string | null;
-                    readonly price: number | null;
-                    readonly quantityInStock: number | null;
                 } | null;
             };
         } | null> | null;
     } | null;
-    readonly " $refType": CartProductsList_shoppingCart$ref;
+    readonly " $refType": ProductsList_shoppingCart$ref;
 };
 
 
@@ -34,7 +30,7 @@ var v0 = {
 };
 return {
   "kind": "Fragment",
-  "name": "CartProductsList_shoppingCart",
+  "name": "ProductsList_shoppingCart",
   "type": "ShoppingCart",
   "metadata": null,
   "argumentDefinitions": [],
@@ -49,13 +45,6 @@ return {
       "concreteType": "CartProductConnection",
       "plural": false,
       "selections": [
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "name": "count",
-          "args": null,
-          "storageKey": null
-        },
         {
           "kind": "LinkedField",
           "alias": null,
@@ -91,28 +80,7 @@ return {
                   "concreteType": "Product",
                   "plural": false,
                   "selections": [
-                    (v0/*: any*/),
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "name": "name",
-                      "args": null,
-                      "storageKey": null
-                    },
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "name": "price",
-                      "args": null,
-                      "storageKey": null
-                    },
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "name": "quantityInStock",
-                      "args": null,
-                      "storageKey": null
-                    }
+                    (v0/*: any*/)
                   ]
                 }
               ]
@@ -124,5 +92,5 @@ return {
   ]
 };
 })();
-(node as any).hash = '0c2134f9461e3022dbe8ee347b71ef4c';
+(node as any).hash = 'bab339d24064aac0eacb408f5ad83570';
 export default node;
