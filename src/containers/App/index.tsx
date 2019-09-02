@@ -1,5 +1,4 @@
 import React from "react";
-import "./style.css";
 import NavBar from "../../components/NavBar";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme, Container, CssBaseline } from "@material-ui/core";
