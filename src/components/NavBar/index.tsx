@@ -11,121 +11,109 @@ import { IconButton, Badge } from "@material-ui/core";
 import { NavBar_viewer } from "./__generated__/NavBar_viewer.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        grow: {
-            flexGrow: 1
-        },
-        title: {
-            display: "none",
-            [theme.breakpoints.up("sm")]: {
-                display: "block"
-            }
-        },
-        sectionCart: {
-            [theme.breakpoints.up("md")]: {
-                display: "flex"
-            }
-        }
-    })
+	createStyles({
+		grow: {
+			flexGrow: 1
+		},
+		title: {
+			display: "none",
+			[theme.breakpoints.up("sm")]: {
+				display: "block"
+			}
+		},
+		sectionCart: {
+			[theme.breakpoints.up("md")]: {
+				display: "flex"
+			}
+		}
+	})
 );
 
 type IProps = {
-    viewer: NavBar_viewer
+	viewer: NavBar_viewer;
 };
 
 const NavBar = ({ viewer }: IProps) => {
-    const classes = useStyles();
+	const classes = useStyles();
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const CartListId = "primary-cart-list-dropdown";
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const CartListId = "primary-cart-list-dropdown";
 
-    const handleCartListOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
+	const handleCartListOpen = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
 
-    const handleCartListClose = () => {
-        setAnchorEl(null);
-    };
+	const handleCartListClose = () => {
+		setAnchorEl(null);
+	};
 
-    return (
-                    <div className={classes.grow}>
-                        <AppBar position="static">
-                            <Toolbar>
-                                <Typography
-                                    className={classes.title}
-                                    variant="h6"
-                                    noWrap
-                                >
-                                    My MTG Store
-                                </Typography>
-                                <div className={classes.grow} />
-                                <div className={classes.sectionCart}>
-                                    <IconButton
-                                        aria-label="show products list on cart"
-                                        aria-controls={CartListId}
-                                        aria-haspopup="true"
-                                        onClick={handleCartListOpen}
-                                        color="inherit"
-                                    >
-                                        <Badge
-                                            badgeContent={
-                                                viewer.User!
-                                                    .shoppingCart!.cartProducts!
-                                                    .count !== 0
-                                                    ? viewer
-                                                          .User!.shoppingCart!.cartProducts!.edges!.map(
-                                                              (product) =>
-                                                                  product!.node!
-                                                                      .quantityOnCart!
-                                                          )
-                                                          .reduce(
-                                                              (
-                                                                  totalValue,
-                                                                  amount
-                                                              ) =>
-                                                                  totalValue +
-                                                                  amount
-                                                          )
-                                                    : 0
-                                            }
-                                            color="secondary"
-                                        >
-                                            <ShoppingCartIcon />
-                                        </Badge>
-                                    </IconButton>
-                                </div>
-                            </Toolbar>
-                        </AppBar>
-                        <CartProductsList
-                            anchorElOnClose={handleCartListClose}
-                            anchorElementReference={anchorEl}
-                            shoppingCart={
-                                viewer.User!.shoppingCart as any
-                            }
-                        />
-                    </div>
-            
-    );
-}
+	return (
+		<div className={classes.grow}>
+			<AppBar position="static">
+				<Toolbar>
+					<Typography className={classes.title} variant="h6" noWrap>
+						My MTG Store
+					</Typography>
+					<div className={classes.grow} />
+					<div className={classes.sectionCart}>
+						<IconButton
+							aria-label="show products list on cart"
+							aria-controls={CartListId}
+							aria-haspopup="true"
+							onClick={handleCartListOpen}
+							color="inherit"
+						>
+							<Badge
+								badgeContent={
+									viewer.User!.shoppingCart!.cartProducts!
+										.count !== 0
+										? viewer
+												.User!.shoppingCart!.cartProducts!.edges!.map(
+													product =>
+														product!.node!
+															.quantityOnCart!
+												)
+												.reduce(
+													(totalValue, amount) =>
+														totalValue + amount
+												)
+										: 0
+								}
+								color="secondary"
+							>
+								<ShoppingCartIcon />
+							</Badge>
+						</IconButton>
+					</div>
+				</Toolbar>
+			</AppBar>
+			<CartProductsList
+				anchorElOnClose={handleCartListClose}
+				anchorElementReference={anchorEl}
+				shoppingCart={viewer.User!.shoppingCart as any}
+			/>
+		</div>
+	);
+};
 
 export default createFragmentContainer(NavBar, {
-    viewer: graphql`
-        fragment NavBar_viewer on Viewer {
-            User(id: "cjzyfwspn0f1a01671todqxul") {
-                name
-                id
-                shoppingCart {
-                    cartProducts {
-                        count
-                        edges {
-                            node {
-                                quantityOnCart
-                            }
-                        }
-                    }
-                    ...CartProductsList_shoppingCart
-                }
-            }
-        }
-    `
+	viewer: graphql`
+		fragment NavBar_viewer on Viewer {
+			User(id: "cjzyfwspn0f1a01671todqxul") {
+				name
+				id
+				shoppingCart {
+					cartProducts {
+						count
+						edges {
+							node {
+								quantityOnCart
+							}
+						}
+					}
+					...CartProductsList_shoppingCart
+				}
+			}
+		}
+	`
 });
