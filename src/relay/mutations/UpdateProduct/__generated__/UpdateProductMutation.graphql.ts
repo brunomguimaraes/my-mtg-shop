@@ -13,12 +13,67 @@ export type UpdateProductInput = {
     readonly quantityInStock?: number | null;
     readonly cartProductId?: string | null;
     readonly cartProduct?: ProductcartProductCartProduct | null;
-    readonly orderId?: string | null;
-    readonly order?: ProductorderOrder | null;
     readonly clientMutationId: string;
 };
 export type ProductcartProductCartProduct = {
     readonly quantityOnCart?: number | null;
+    readonly orderId?: string | null;
+    readonly order?: CartProductorderOrder | null;
+    readonly shoppingCartId?: string | null;
+    readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
+};
+export type CartProductorderOrder = {
+    readonly isPaid?: boolean | null;
+    readonly totalOrderValue: number;
+    readonly userId?: string | null;
+    readonly user?: OrderuserUser | null;
+    readonly cartProductsIds?: ReadonlyArray<string> | null;
+    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
+};
+export type OrderuserUser = {
+    readonly name: string;
+    readonly shoppingCartId?: string | null;
+    readonly shoppingCart?: UsershoppingCartShoppingCart | null;
+    readonly creditCardInfoIds?: ReadonlyArray<string> | null;
+    readonly creditCardInfo?: ReadonlyArray<UsercreditCardInfoPaymentInfo> | null;
+    readonly ordersIds?: ReadonlyArray<string> | null;
+    readonly orders?: ReadonlyArray<UserordersOrder> | null;
+};
+export type UsershoppingCartShoppingCart = {
+    readonly cartProductsIds?: ReadonlyArray<string> | null;
+    readonly cartProducts?: ReadonlyArray<ShoppingCartcartProductsCartProduct> | null;
+};
+export type ShoppingCartcartProductsCartProduct = {
+    readonly quantityOnCart?: number | null;
+    readonly orderId?: string | null;
+    readonly order?: CartProductorderOrder | null;
+    readonly productId?: string | null;
+    readonly product?: CartProductproductProduct | null;
+};
+export type CartProductproductProduct = {
+    readonly cardColor?: Colors | null;
+    readonly cardType?: string | null;
+    readonly description?: string | null;
+    readonly imgUrl?: string | null;
+    readonly name?: string | null;
+    readonly price?: number | null;
+    readonly quantityInStock?: number | null;
+};
+export type UsercreditCardInfoPaymentInfo = {
+    readonly cardNumber: number;
+    readonly cvv: number;
+    readonly isValid: boolean;
+};
+export type UserordersOrder = {
+    readonly isPaid?: boolean | null;
+    readonly totalOrderValue: number;
+    readonly cartProductsIds?: ReadonlyArray<string> | null;
+    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
+};
+export type OrdercartProductsCartProduct = {
+    readonly quantityOnCart?: number | null;
+    readonly productId?: string | null;
+    readonly product?: CartProductproductProduct | null;
     readonly shoppingCartId?: string | null;
     readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
 };
@@ -34,65 +89,6 @@ export type ShoppingCartuserUser = {
     readonly creditCardInfo?: ReadonlyArray<UsercreditCardInfoPaymentInfo> | null;
     readonly ordersIds?: ReadonlyArray<string> | null;
     readonly orders?: ReadonlyArray<UserordersOrder> | null;
-};
-export type UsercreditCardInfoPaymentInfo = {
-    readonly cardNumber: number;
-    readonly cvv: number;
-    readonly isValid: boolean;
-};
-export type UserordersOrder = {
-    readonly isPaid?: boolean | null;
-    readonly totalOrderValue: number;
-    readonly productsIds?: ReadonlyArray<string> | null;
-    readonly products?: ReadonlyArray<OrderproductsProduct> | null;
-};
-export type OrderproductsProduct = {
-    readonly cardColor?: Colors | null;
-    readonly cardType?: string | null;
-    readonly description?: string | null;
-    readonly imgUrl?: string | null;
-    readonly name?: string | null;
-    readonly price?: number | null;
-    readonly quantityInStock?: number | null;
-    readonly cartProductId?: string | null;
-    readonly cartProduct?: ProductcartProductCartProduct | null;
-};
-export type ShoppingCartcartProductsCartProduct = {
-    readonly quantityOnCart?: number | null;
-    readonly productId?: string | null;
-    readonly product?: CartProductproductProduct | null;
-};
-export type CartProductproductProduct = {
-    readonly cardColor?: Colors | null;
-    readonly cardType?: string | null;
-    readonly description?: string | null;
-    readonly imgUrl?: string | null;
-    readonly name?: string | null;
-    readonly price?: number | null;
-    readonly quantityInStock?: number | null;
-    readonly orderId?: string | null;
-    readonly order?: ProductorderOrder | null;
-};
-export type ProductorderOrder = {
-    readonly isPaid?: boolean | null;
-    readonly totalOrderValue: number;
-    readonly userId?: string | null;
-    readonly user?: OrderuserUser | null;
-    readonly productsIds?: ReadonlyArray<string> | null;
-    readonly products?: ReadonlyArray<OrderproductsProduct> | null;
-};
-export type OrderuserUser = {
-    readonly name: string;
-    readonly shoppingCartId?: string | null;
-    readonly shoppingCart?: UsershoppingCartShoppingCart | null;
-    readonly creditCardInfoIds?: ReadonlyArray<string> | null;
-    readonly creditCardInfo?: ReadonlyArray<UsercreditCardInfoPaymentInfo> | null;
-    readonly ordersIds?: ReadonlyArray<string> | null;
-    readonly orders?: ReadonlyArray<UserordersOrder> | null;
-};
-export type UsershoppingCartShoppingCart = {
-    readonly cartProductsIds?: ReadonlyArray<string> | null;
-    readonly cartProducts?: ReadonlyArray<ShoppingCartcartProductsCartProduct> | null;
 };
 export type UpdateProductMutationVariables = {
     readonly input: UpdateProductInput;

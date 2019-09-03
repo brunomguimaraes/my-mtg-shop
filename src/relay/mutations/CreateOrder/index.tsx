@@ -5,13 +5,18 @@ import environment from "../../Environment";
 const mutation = graphql`
 	mutation CreateOrderMutation($input: CreateOrderInput!) {
 		createOrder(input: $input) {
+			clientMutationId
 			order {
 				id
-				products {
+				cartProducts {
 					edges {
 						node {
 							id
-							name
+							quantityOnCart
+							product {
+								id
+								name
+							}
 						}
 					}
 				}
@@ -22,11 +27,10 @@ const mutation = graphql`
 	}
 `;
 
-export const completeOrder = (
+export const createOrder = (
 	isPaid: boolean,
-	productsIds: string[],
+	cartProductsIds: string[],
 	totalOrderValue: number,
-	userId: string,
 	clientMutationId: string,
 	onCompletedCallBack: () => void,
 	onErrorCallBack: () => void
@@ -35,8 +39,7 @@ export const completeOrder = (
 		input: {
 			isPaid,
 			totalOrderValue,
-			productsIds,
-			userId,
+			cartProductsIds,
 			clientMutationId
 		}
 	};
@@ -49,7 +52,6 @@ export const completeOrder = (
 		},
 		onError: err => {
 			onErrorCallBack();
-			console.log(err);
 		}
 	});
 };

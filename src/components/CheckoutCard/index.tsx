@@ -5,9 +5,8 @@ import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import { CheckoutCard_viewer } from "./__generated__/CheckoutCard_viewer.graphql";
 import CheckoutList from "../CheckoutList";
-import { formatCurrency } from "../../utils/formaters";
-import { completeOrder } from "../../relay/mutations/CreateOrder";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
+import { createOrder } from "../../relay/mutations/CreateOrder";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -55,9 +54,8 @@ type IProps = {
 
 const CheckoutCard = ({ viewer }: IProps) => {
 	const classes = useStyles();
-	console.log("viewer card", viewer.User!.shoppingCart);
 	const productsToCheckout = viewer.User!.shoppingCart!.cartProducts!;
-	const totalValue = formatCurrency(
+	const totalValue =
 		productsToCheckout.count !== 0
 			? productsToCheckout
 					.edges!.map(
@@ -66,8 +64,7 @@ const CheckoutCard = ({ viewer }: IProps) => {
 							cartProduct!.node.quantityOnCart
 					)
 					.reduce((totalValue, amount) => totalValue + amount)
-			: 0
-	);
+			: 0;
 
 	const placeOrder = () => {
 		const checkoutProducts = productsToCheckout.edges!.filter(
@@ -77,11 +74,10 @@ const CheckoutCard = ({ viewer }: IProps) => {
 			products => products!.node.id
 		);
 		const clientMutationId = uuidVersion4Generator();
-		completeOrder(
+		createOrder(
 			true,
 			checkoutProductsIds,
-			parseFloat(totalValue),
-			"cjzyfwspn0f1a01671todqxul",
+			totalValue,
 			clientMutationId,
 			() => console.log("success"),
 			() => console.log("error")

@@ -7,8 +7,8 @@ export type CreateOrderInput = {
     readonly totalOrderValue: number;
     readonly userId?: string | null;
     readonly user?: OrderuserUser | null;
-    readonly productsIds?: ReadonlyArray<string> | null;
-    readonly products?: ReadonlyArray<OrderproductsProduct> | null;
+    readonly cartProductsIds?: ReadonlyArray<string> | null;
+    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
     readonly clientMutationId: string;
 };
 export type OrderuserUser = {
@@ -26,8 +26,25 @@ export type UsershoppingCartShoppingCart = {
 };
 export type ShoppingCartcartProductsCartProduct = {
     readonly quantityOnCart?: number | null;
+    readonly orderId?: string | null;
+    readonly order?: CartProductorderOrder | null;
     readonly productId?: string | null;
     readonly product?: CartProductproductProduct | null;
+};
+export type CartProductorderOrder = {
+    readonly isPaid?: boolean | null;
+    readonly totalOrderValue: number;
+    readonly userId?: string | null;
+    readonly user?: OrderuserUser | null;
+    readonly cartProductsIds?: ReadonlyArray<string> | null;
+    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
+};
+export type OrdercartProductsCartProduct = {
+    readonly quantityOnCart?: number | null;
+    readonly productId?: string | null;
+    readonly product?: CartProductproductProduct | null;
+    readonly shoppingCartId?: string | null;
+    readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
 };
 export type CartProductproductProduct = {
     readonly cardColor?: Colors | null;
@@ -37,32 +54,6 @@ export type CartProductproductProduct = {
     readonly name?: string | null;
     readonly price?: number | null;
     readonly quantityInStock?: number | null;
-    readonly orderId?: string | null;
-    readonly order?: ProductorderOrder | null;
-};
-export type ProductorderOrder = {
-    readonly isPaid?: boolean | null;
-    readonly totalOrderValue: number;
-    readonly userId?: string | null;
-    readonly user?: OrderuserUser | null;
-    readonly productsIds?: ReadonlyArray<string> | null;
-    readonly products?: ReadonlyArray<OrderproductsProduct> | null;
-};
-export type OrderproductsProduct = {
-    readonly cardColor?: Colors | null;
-    readonly cardType?: string | null;
-    readonly description?: string | null;
-    readonly imgUrl?: string | null;
-    readonly name?: string | null;
-    readonly price?: number | null;
-    readonly quantityInStock?: number | null;
-    readonly cartProductId?: string | null;
-    readonly cartProduct?: ProductcartProductCartProduct | null;
-};
-export type ProductcartProductCartProduct = {
-    readonly quantityOnCart?: number | null;
-    readonly shoppingCartId?: string | null;
-    readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
 };
 export type CartProductshoppingCartShoppingCart = {
     readonly userId?: string | null;
@@ -85,8 +76,8 @@ export type UsercreditCardInfoPaymentInfo = {
 export type UserordersOrder = {
     readonly isPaid?: boolean | null;
     readonly totalOrderValue: number;
-    readonly productsIds?: ReadonlyArray<string> | null;
-    readonly products?: ReadonlyArray<OrderproductsProduct> | null;
+    readonly cartProductsIds?: ReadonlyArray<string> | null;
+    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
 };
 export type CreateOrderMutationVariables = {
     readonly input: CreateOrderInput;
@@ -96,11 +87,15 @@ export type CreateOrderMutationResponse = {
         readonly clientMutationId: string;
         readonly order: {
             readonly id: string;
-            readonly products: {
+            readonly cartProducts: {
                 readonly edges: ReadonlyArray<{
                     readonly node: {
                         readonly id: string;
-                        readonly name: string | null;
+                        readonly quantityOnCart: number;
+                        readonly product: {
+                            readonly id: string;
+                            readonly name: string | null;
+                        } | null;
                     };
                 } | null> | null;
             } | null;
@@ -124,11 +119,15 @@ mutation CreateOrderMutation(
     clientMutationId
     order {
       id
-      products {
+      cartProducts {
         edges {
           node {
             id
-            name
+            quantityOnCart
+            product {
+              id
+              name
+            }
           }
         }
       }
@@ -191,10 +190,10 @@ v2 = [
           {
             "kind": "LinkedField",
             "alias": null,
-            "name": "products",
+            "name": "cartProducts",
             "storageKey": null,
             "args": null,
-            "concreteType": "ProductConnection",
+            "concreteType": "CartProductConnection",
             "plural": false,
             "selections": [
               {
@@ -203,7 +202,7 @@ v2 = [
                 "name": "edges",
                 "storageKey": null,
                 "args": null,
-                "concreteType": "ProductEdge",
+                "concreteType": "CartProductEdge",
                 "plural": true,
                 "selections": [
                   {
@@ -212,16 +211,35 @@ v2 = [
                     "name": "node",
                     "storageKey": null,
                     "args": null,
-                    "concreteType": "Product",
+                    "concreteType": "CartProduct",
                     "plural": false,
                     "selections": [
                       (v1/*: any*/),
                       {
                         "kind": "ScalarField",
                         "alias": null,
-                        "name": "name",
+                        "name": "quantityOnCart",
                         "args": null,
                         "storageKey": null
+                      },
+                      {
+                        "kind": "LinkedField",
+                        "alias": null,
+                        "name": "product",
+                        "storageKey": null,
+                        "args": null,
+                        "concreteType": "Product",
+                        "plural": false,
+                        "selections": [
+                          (v1/*: any*/),
+                          {
+                            "kind": "ScalarField",
+                            "alias": null,
+                            "name": "name",
+                            "args": null,
+                            "storageKey": null
+                          }
+                        ]
                       }
                     ]
                   }
@@ -268,10 +286,10 @@ return {
     "operationKind": "mutation",
     "name": "CreateOrderMutation",
     "id": null,
-    "text": "mutation CreateOrderMutation(\n  $input: CreateOrderInput!\n) {\n  createOrder(input: $input) {\n    clientMutationId\n    order {\n      id\n      products {\n        edges {\n          node {\n            id\n            name\n          }\n        }\n      }\n      totalOrderValue\n      isPaid\n    }\n  }\n}\n",
+    "text": "mutation CreateOrderMutation(\n  $input: CreateOrderInput!\n) {\n  createOrder(input: $input) {\n    clientMutationId\n    order {\n      id\n      cartProducts {\n        edges {\n          node {\n            id\n            quantityOnCart\n            product {\n              id\n              name\n            }\n          }\n        }\n      }\n      totalOrderValue\n      isPaid\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '3a666f0acedd9957ade7e34129ecef3d';
+(node as any).hash = 'd59b77be6494389e2ebf34cd0be7636f';
 export default node;
