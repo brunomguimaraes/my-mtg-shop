@@ -18,6 +18,7 @@ import { uuidVersion4Generator } from "../../../utils/idGenerators";
 import { updateProduct } from "../../../relay/mutations/UpdateProduct";
 import { updateCartProduct } from "../../../relay/mutations/UpdateCartProduct";
 import { MySnackbarContentWrapper } from "../../SnackBar";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -231,7 +232,9 @@ const CartProductsList = ({
 				)}
 				<Divider variant="middle" />
 				<div className={classes.sectionProceedToCheckout}>
-					<Button color="primary">Finalizar Compra</Button>
+					<Button component={Link} to={"/checkout"} color="primary">
+						Finalizar Compra
+					</Button>
 					Valor total:
 					{formatCurrency(
 						shoppingCart!.cartProducts!.count !== 0

@@ -1,13 +1,9 @@
 import React from "react";
-import NavBar from "../../components/NavBar";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+import Main from "../Main";
 import { ThemeProvider } from "@material-ui/styles";
-import { createMuiTheme, Container, CssBaseline } from "@material-ui/core";
-import environment from "../../relay/Environment";
-import Loading from "../../components/Loading";
-import { QueryRenderer } from "react-relay";
-import { graphql } from "babel-plugin-relay/macro";
-import ProductsList from "../../components/ProductsList";
-import { AppQuery } from "./__generated__/AppQuery.graphql";
+import { createMuiTheme } from "@material-ui/core";
+import Checkout from "../Checkout";
 
 const myMtgShopTheme = createMuiTheme({
 	palette: {
@@ -24,56 +20,20 @@ const myMtgShopTheme = createMuiTheme({
 	}
 });
 
-const App: React.FC = () => {
-	return (
+const AppComp = () => {
+ 	return (
 		<ThemeProvider theme={myMtgShopTheme}>
-			<QueryRenderer<AppQuery>
-				environment={environment}
-				query={AppViewerQuery}
-				variables={{}}
-				render={({ error, props }): React.ReactNode => {
-					if (error) {
-						return <div>Erro ao carregar produtos</div>;
-					}
-					if (!props) {
-						return <Loading />;
-					}
-					return (
-						<React.Fragment>
-							<CssBaseline />
-							<NavBar viewer={props.viewer} />
-							<Container maxWidth="md">
-								<ProductsList
-									allProducts={
-										props.viewer.allProducts as any
-									}
-									shoppingCart={
-										props.viewer.User!.shoppingCart as any
-									}
-								/>
-							</Container>
-						</React.Fragment>
-					);
-				}}
-			/>
+				<Switch>
+					<Route path="/main" component={Main} />
+					<Route path="/checkout" component={Checkout} />
+			
+					<Route exact path="/" render={() => <Redirect to="/main" />} />
+					<Route path="/*" component={Main} />
+				</Switch>
+			
 		</ThemeProvider>
 	);
 };
 
-export default App;
-
-const AppViewerQuery = graphql`
-	query AppQuery {
-		viewer {
-			...NavBar_viewer
-			allProducts {
-				...ProductsList_allProducts
-			}
-			User(id: "cjzyfwspn0f1a01671todqxul") {
-				shoppingCart {
-					...ProductsList_shoppingCart
-				}
-			}
-		}
-	}
-`;
+const App = withRouter(AppComp);
+export default App
