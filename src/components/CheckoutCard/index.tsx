@@ -6,6 +6,8 @@ import { graphql } from "babel-plugin-relay/macro";
 import { CheckoutCard_viewer } from "./__generated__/CheckoutCard_viewer.graphql";
 import CheckoutList from "../CheckoutList";
 import { formatCurrency } from "../../utils/formaters";
+import { completeOrder } from "../../relay/mutations/CreateOrder";
+import { uuidVersion4Generator } from "../../utils/idGenerators";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -68,11 +70,22 @@ const CheckoutCard = ({ viewer }: IProps) => {
 	);
 
 	const placeOrder = () => {
-		console.log("totalValue", totalValue);
 		const checkoutProducts = productsToCheckout.edges!.filter(
 			products => products!.node.quantityOnCart !== 0
 		);
-		console.log("productsToBeCheckedOut", checkoutProducts);
+		const checkoutProductsIds = checkoutProducts.map(
+			products => products!.node.id
+		);
+		const clientMutationId = uuidVersion4Generator();
+		completeOrder(
+			true,
+			checkoutProductsIds,
+			parseFloat(totalValue),
+			"cjzyfwspn0f1a01671todqxul",
+			clientMutationId,
+			() => console.log("success"),
+			() => console.log("error")
+		);
 	};
 
 	return (
