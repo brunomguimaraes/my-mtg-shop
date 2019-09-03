@@ -235,7 +235,7 @@ const CartProductsList = ({
 					<Button component={Link} to={"/checkout"} color="primary">
 						Finalizar Compra
 					</Button>
-					Valor total:
+					{"Valor total: "}
 					{formatCurrency(
 						shoppingCart!.cartProducts!.count !== 0
 							? shoppingCart!

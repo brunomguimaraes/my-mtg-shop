@@ -18,20 +18,16 @@ export type CartProductproductProduct = {
     readonly name?: string | null;
     readonly price?: number | null;
     readonly quantityInStock?: number | null;
-};
-export type CartProductshoppingCartShoppingCart = {
     readonly orderId?: string | null;
-    readonly order?: ShoppingCartorderOrder | null;
-    readonly userId?: string | null;
-    readonly user?: ShoppingCartuserUser | null;
-    readonly cartProductsIds?: ReadonlyArray<string> | null;
-    readonly cartProducts?: ReadonlyArray<ShoppingCartcartProductsCartProduct> | null;
+    readonly order?: ProductorderOrder | null;
 };
-export type ShoppingCartorderOrder = {
+export type ProductorderOrder = {
     readonly isPaid?: boolean | null;
-    readonly orderNumber: number;
+    readonly totalOrderValue: number;
     readonly userId?: string | null;
     readonly user?: OrderuserUser | null;
+    readonly productsIds?: ReadonlyArray<string> | null;
+    readonly products?: ReadonlyArray<OrderproductsProduct> | null;
 };
 export type OrderuserUser = {
     readonly name: string;
@@ -43,8 +39,6 @@ export type OrderuserUser = {
     readonly orders?: ReadonlyArray<UserordersOrder> | null;
 };
 export type UsershoppingCartShoppingCart = {
-    readonly orderId?: string | null;
-    readonly order?: ShoppingCartorderOrder | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
     readonly cartProducts?: ReadonlyArray<ShoppingCartcartProductsCartProduct> | null;
 };
@@ -60,11 +54,27 @@ export type UsercreditCardInfoPaymentInfo = {
 };
 export type UserordersOrder = {
     readonly isPaid?: boolean | null;
-    readonly orderNumber: number;
-    readonly shoppingCartId?: string | null;
-    readonly shoppingCart?: OrdershoppingCartShoppingCart | null;
+    readonly totalOrderValue: number;
+    readonly productsIds?: ReadonlyArray<string> | null;
+    readonly products?: ReadonlyArray<OrderproductsProduct> | null;
 };
-export type OrdershoppingCartShoppingCart = {
+export type OrderproductsProduct = {
+    readonly cardColor?: Colors | null;
+    readonly cardType?: string | null;
+    readonly description?: string | null;
+    readonly imgUrl?: string | null;
+    readonly name?: string | null;
+    readonly price?: number | null;
+    readonly quantityInStock?: number | null;
+    readonly cartProductId?: string | null;
+    readonly cartProduct?: ProductcartProductCartProduct | null;
+};
+export type ProductcartProductCartProduct = {
+    readonly quantityOnCart?: number | null;
+    readonly shoppingCartId?: string | null;
+    readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
+};
+export type CartProductshoppingCartShoppingCart = {
     readonly userId?: string | null;
     readonly user?: ShoppingCartuserUser | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;

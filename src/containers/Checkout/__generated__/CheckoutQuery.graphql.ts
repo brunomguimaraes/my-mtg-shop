@@ -1,11 +1,12 @@
 /* tslint:disable */
 
 import { ConcreteRequest } from "relay-runtime";
+type CheckoutCard_viewer$ref = any;
 type NavBar_viewer$ref = any;
 export type CheckoutQueryVariables = {};
 export type CheckoutQueryResponse = {
     readonly viewer: {
-        readonly " $fragmentRefs": NavBar_viewer$ref;
+        readonly " $fragmentRefs": CheckoutCard_viewer$ref & NavBar_viewer$ref;
     };
 };
 export type CheckoutQuery = {
@@ -18,8 +19,35 @@ export type CheckoutQuery = {
 /*
 query CheckoutQuery {
   viewer {
+    ...CheckoutCard_viewer
     ...NavBar_viewer
     id
+  }
+}
+
+fragment CheckoutCard_viewer on Viewer {
+  User(id: "cjzyfwspn0f1a01671todqxul") {
+    name
+    id
+    shoppingCart {
+      ...CheckoutList_shoppingCart
+      cartProducts {
+        count
+        edges {
+          node {
+            id
+            quantityOnCart
+            product {
+              id
+              name
+              price
+              quantityInStock
+            }
+          }
+        }
+      }
+      id
+    }
   }
 }
 
@@ -44,6 +72,25 @@ fragment NavBar_viewer on Viewer {
 }
 
 fragment CartProductsList_shoppingCart on ShoppingCart {
+  id
+  cartProducts {
+    count
+    edges {
+      node {
+        id
+        quantityOnCart
+        product {
+          id
+          name
+          price
+          quantityInStock
+        }
+      }
+    }
+  }
+}
+
+fragment CheckoutList_shoppingCart on ShoppingCart {
   id
   cartProducts {
     count
@@ -98,6 +145,11 @@ return {
         "selections": [
           {
             "kind": "FragmentSpread",
+            "name": "CheckoutCard_viewer",
+            "args": null
+          },
+          {
+            "kind": "FragmentSpread",
             "name": "NavBar_viewer",
             "args": null
           }
@@ -145,6 +197,7 @@ return {
                 "concreteType": "ShoppingCart",
                 "plural": false,
                 "selections": [
+                  (v1/*: any*/),
                   {
                     "kind": "LinkedField",
                     "alias": null,
@@ -179,6 +232,7 @@ return {
                             "concreteType": "CartProduct",
                             "plural": false,
                             "selections": [
+                              (v1/*: any*/),
                               {
                                 "kind": "ScalarField",
                                 "alias": null,
@@ -186,7 +240,6 @@ return {
                                 "args": null,
                                 "storageKey": null
                               },
-                              (v1/*: any*/),
                               {
                                 "kind": "LinkedField",
                                 "alias": null,
@@ -219,8 +272,7 @@ return {
                         ]
                       }
                     ]
-                  },
-                  (v1/*: any*/)
+                  }
                 ]
               }
             ]
@@ -234,10 +286,10 @@ return {
     "operationKind": "query",
     "name": "CheckoutQuery",
     "id": null,
-    "text": "query CheckoutQuery {\n  viewer {\n    ...NavBar_viewer\n    id\n  }\n}\n\nfragment NavBar_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            id\n          }\n        }\n      }\n      ...CartProductsList_shoppingCart\n      id\n    }\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n",
+    "text": "query CheckoutQuery {\n  viewer {\n    ...CheckoutCard_viewer\n    ...NavBar_viewer\n    id\n  }\n}\n\nfragment CheckoutCard_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      ...CheckoutList_shoppingCart\n      cartProducts {\n        count\n        edges {\n          node {\n            id\n            quantityOnCart\n            product {\n              id\n              name\n              price\n              quantityInStock\n            }\n          }\n        }\n      }\n      id\n    }\n  }\n}\n\nfragment NavBar_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            id\n          }\n        }\n      }\n      ...CartProductsList_shoppingCart\n      id\n    }\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n\nfragment CheckoutList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '41d327f0634d19455a3d49664ebd94c3';
+(node as any).hash = '743608a49d09bbf7c5bc12661869f17a';
 export default node;

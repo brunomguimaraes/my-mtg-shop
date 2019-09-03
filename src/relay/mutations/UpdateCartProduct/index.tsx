@@ -51,9 +51,6 @@ export const updateCartProduct = (
         variables,
         onCompleted: (response, errors) => {
             console.log("Response received from server.");
-            console.log(response)
-            const isCompleted = true
-            return isCompleted
         },
         onError: (err) => console.error(err)
     });
