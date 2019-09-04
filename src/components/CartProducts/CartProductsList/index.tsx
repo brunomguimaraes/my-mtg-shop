@@ -116,22 +116,14 @@ const CartProductsList = ({
 		productsInStock: number
 	) => {
 		setLoading(true);
-		if (productsInStock !== 0) {
-			updateCartProduct(
-				clientMutationId,
-				cartProductId,
-				numberOnCart - 1
-			);
-			updateProduct(
-				clientMutationId,
-				productId,
-				productsInStock >= 0 ? productsInStock + 1 : 0,
-				() => successHandler("Produto removido com sucesso"),
-				() => errorHandler()
-			);
-		} else {
-			errorHandler("Produto não disponível em estoque");
-		}
+		updateCartProduct(clientMutationId, cartProductId, numberOnCart - 1);
+		updateProduct(
+			clientMutationId,
+			productId,
+			productsInStock >= 0 ? productsInStock + 1 : 0,
+			() => successHandler("Produto removido com sucesso"),
+			() => errorHandler()
+		);
 	};
 
 	const successHandler = (message: string) => {
