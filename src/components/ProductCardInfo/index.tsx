@@ -88,27 +88,36 @@ const ProductCardInfo = ({
 
 	const handleAddToCart = () => {
 		setLoading(true);
-		const productToBeAdded = productsOnCart!.edges!.find(
-			e => e!.node!.product!.id === product.id
-		);
-		if (productToBeAdded) {
-			const cartProductId = productToBeAdded.node.id;
-			const numberOnCart = productToBeAdded.node.quantityOnCart;
-			updateCartProduct(
+		if (product.quantityInStock! !== 0) {
+			const productToBeAdded = productsOnCart!.edges!.find(
+				e => e!.node!.product!.id === product.id
+			);
+			if (productToBeAdded) {
+				const cartProductId = productToBeAdded.node.id;
+				const numberOnCart = productToBeAdded.node.quantityOnCart;
+				updateCartProduct(
+					clientMutationId,
+					cartProductId,
+					numberOnCart + 1
+				);
+			} else {
+				createCartProduct(
+					clientMutationId,
+					1,
+					product.id,
+					shoppingCartId
+				);
+			}
+			updateProduct(
 				clientMutationId,
-				cartProductId,
-				numberOnCart + 1
+				product.id,
+				product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0,
+				() => successHandler("Produto adicionado com sucesso"),
+				() => errorHandler()
 			);
 		} else {
-			createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
+			errorHandler("Produto não disponível em estoque");
 		}
-		updateProduct(
-			clientMutationId,
-			product.id,
-			product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0,
-			() => successHandler("Produto adicionado com sucesso"),
-			() => errorHandler()
-		);
 	};
 
 	const successHandler = (message: string) => {
@@ -118,10 +127,12 @@ const ProductCardInfo = ({
 		setTimeout(() => setSnackBarVisible(false), 3000);
 	};
 
-	const errorHandler = () => {
+	const errorHandler = (message?: string) => {
 		setLoading(false);
 		setError(true);
-		setFeedbackMessage("Algum erro ocorreu");
+		message
+			? setFeedbackMessage(message)
+			: setFeedbackMessage("Algum erro ocorreu");
 		setSnackBarVisible(true);
 		setTimeout(() => setSnackBarVisible(false), 3000);
 	};
@@ -180,18 +191,22 @@ const ProductCardInfo = ({
 				</Grid>
 			</div>
 			<div className={classes.section3}>
-				<Button color="primary" disabled={loading} onClick={handleAddToCart}>
+				<Button
+					color="primary"
+					disabled={loading}
+					onClick={handleAddToCart}
+				>
 					<AddShoppingCartIcon />
 					Adicionar ao carrinho
 				</Button>
 			</div>
 			{isSnackBarVisible && (
-					<MySnackbarContentWrapper
-						className={classes.snackBarStyle}
-						message={feedbackMessage}
-						variant={error ? "error" : "success"}
-					/>
-				)}
+				<MySnackbarContentWrapper
+					className={classes.snackBarStyle}
+					message={feedbackMessage}
+					variant={error ? "error" : "success"}
+				/>
+			)}
 		</Box>
 	);
 };

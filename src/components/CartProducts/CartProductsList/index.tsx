@@ -91,14 +91,22 @@ const CartProductsList = ({
 		productsInStock: number
 	) => {
 		setLoading(true);
-		updateCartProduct(clientMutationId, cartProductId, numberOnCart + 1);
-		updateProduct(
-			clientMutationId,
-			productId,
-			productsInStock >= 0 ? productsInStock - 1 : 0,
-			() => successHandler("Produto adicionado com sucesso"),
-			() => errorHandler()
-		);
+		if (productsInStock !== 0) {
+			updateCartProduct(
+				clientMutationId,
+				cartProductId,
+				numberOnCart + 1
+			);
+			updateProduct(
+				clientMutationId,
+				productId,
+				productsInStock >= 0 ? productsInStock - 1 : 0,
+				() => successHandler("Produto adicionado com sucesso"),
+				() => errorHandler()
+			);
+		} else {
+			errorHandler("Produto não disponível em estoque");
+		}
 	};
 
 	const handleDecreaseCartProduct = (
@@ -108,14 +116,22 @@ const CartProductsList = ({
 		productsInStock: number
 	) => {
 		setLoading(true);
-		updateCartProduct(clientMutationId, cartProductId, numberOnCart - 1);
-		updateProduct(
-			clientMutationId,
-			productId,
-			productsInStock >= 0 ? productsInStock + 1 : 0,
-			() => successHandler("Produto removido com sucesso"),
-			() => errorHandler()
-		);
+		if (productsInStock !== 0) {
+			updateCartProduct(
+				clientMutationId,
+				cartProductId,
+				numberOnCart - 1
+			);
+			updateProduct(
+				clientMutationId,
+				productId,
+				productsInStock >= 0 ? productsInStock + 1 : 0,
+				() => successHandler("Produto removido com sucesso"),
+				() => errorHandler()
+			);
+		} else {
+			errorHandler("Produto não disponível em estoque");
+		}
 	};
 
 	const successHandler = (message: string) => {
@@ -125,10 +141,12 @@ const CartProductsList = ({
 		setTimeout(() => setSnackBarVisible(false), 3000);
 	};
 
-	const errorHandler = () => {
+	const errorHandler = (message?: string) => {
 		setLoading(false);
 		setError(true);
-		setFeedbackMessage("Algum erro ocorreu");
+		message
+			? setFeedbackMessage(message)
+			: setFeedbackMessage("Algum erro ocorreu");
 		setSnackBarVisible(true);
 		setTimeout(() => setSnackBarVisible(false), 3000);
 	};
