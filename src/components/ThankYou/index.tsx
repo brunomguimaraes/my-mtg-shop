@@ -1,23 +1,54 @@
 import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
+import { Box, Grid, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		wrapper: {
 			width: "100%",
-			height: "100vh",
 			display: "flex",
-			justifyContent: "center",
-			alignItems: "center"
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "flex-start"
 		},
 		progress: {
 			margin: theme.spacing(2)
 		}
 	})
 );
+type IOrderedProducts = {
+	name: string;
+	price: number;
+	quantity: number;
+};
 
-export default function ThankYou() {
+type IProps = {
+	order: IOrderedProducts[];
+};
+
+export default function ThankYou({ order }: IProps) {
 	const classes = useStyles();
 
-	return <div className={classes.wrapper}>Obrigado pela compra!</div>;
+	return (
+		<React.Fragment>
+			<Typography gutterBottom variant="h6">
+				Obrigado pela compra!
+			</Typography>
+			<Box className={classes.wrapper}>
+				<Typography gutterBottom variant="h6">
+					Seu pedido:
+				</Typography>
+				{order.map(orderedProduct => (
+					<Grid container>
+						<Grid item xs>
+							{orderedProduct.quantity}x
+						</Grid>
+						<Grid item xs>
+							{orderedProduct.name}
+						</Grid>
+					</Grid>
+				))}
+			</Box>
+		</React.Fragment>
+	);
 }

@@ -76,6 +76,7 @@ const CheckoutCard = ({ viewer }: IProps) => {
 					.reduce((totalValue, amount) => totalValue + amount)
 			: 0;
 	const [completedOrder, setcompletedOrder] = React.useState(false);
+	const [orderReview, setOrderReview] = React.useState();
 
 	const placeOrder = () => {
 		const checkoutProducts = productsToCheckout.edges!.filter(
@@ -90,6 +91,7 @@ const CheckoutCard = ({ viewer }: IProps) => {
 			quantity: products!.node.quantityOnCart as number
 		}));
 		const clientMutationId = uuidVersion4Generator();
+		setOrderReview(orderedProducts);
 		createOrder(
 			true,
 			checkoutProductsIds,
@@ -117,7 +119,7 @@ const CheckoutCard = ({ viewer }: IProps) => {
 	return (
 		<React.Fragment>
 			{completedOrder ? (
-				<ThankYou />
+				<ThankYou order={orderReview} />
 			) : (
 				<React.Fragment>
 					<Button component={Link} to={"/main"}>
