@@ -90,6 +90,7 @@ const CartProductsList = ({
 		numberOnCart: number,
 		productsInStock: number
 	) => {
+		setError(false);
 		setLoading(true);
 		if (productsInStock !== 0) {
 			updateCartProduct(
@@ -115,6 +116,7 @@ const CartProductsList = ({
 		numberOnCart: number,
 		productsInStock: number
 	) => {
+		setError(false);
 		setLoading(true);
 		updateCartProduct(clientMutationId, cartProductId, numberOnCart - 1);
 		updateProduct(
@@ -128,6 +130,7 @@ const CartProductsList = ({
 
 	const successHandler = (message: string) => {
 		setLoading(false);
+		setError(false);
 		setFeedbackMessage(message);
 		setSnackBarVisible(true);
 		setTimeout(() => setSnackBarVisible(false), 3000);

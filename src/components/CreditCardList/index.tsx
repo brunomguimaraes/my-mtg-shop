@@ -22,18 +22,28 @@ const useStyles = makeStyles((theme: Theme) =>
 			maxWidth: 300,
 			margin: theme.spacing(1)
 		},
-		selectedCard: {}
+		selectedCard: {
+			maxWidth: 300,
+			margin: theme.spacing(1),
+			borderColor: "red",
+			borderStyle: "solid"
+		}
 	})
 );
 
 type IProps = {
 	creditCardInfo: CreditCardList_creditCardInfo;
-	anchorElementReference?: null | HTMLElement;
-	anchorElOnClose?: () => void;
+	creditCardChecker: (cardIsValid: boolean) => void;
 };
 
-const CreditCardList = ({ creditCardInfo }: IProps) => {
+const CreditCardList = ({ creditCardInfo, creditCardChecker }: IProps) => {
 	const classes = useStyles();
+	const [isSelectedId, setSelectedId] = React.useState();
+
+	const creditCardSelector = (isValid: boolean, id: string) => {
+		creditCardChecker(isValid);
+		setSelectedId(id);
+	};
 
 	return (
 		<React.Fragment>
@@ -42,12 +52,19 @@ const CreditCardList = ({ creditCardInfo }: IProps) => {
 			</Typography>
 			<div className={classes.cardContainer}>
 				{creditCardInfo!.edges!.map(creditCard => (
-					<Card key={creditCard!.node.id} className={classes.card}>
+					<Card
+						key={creditCard!.node.id}
+						className={
+							isSelectedId === creditCard!.node.id
+								? classes.selectedCard
+								: classes.card
+						}
+					>
 						<CardActionArea
 							onClick={() =>
-								console.log(
-									"clicked ON:",
-									creditCard!.node.cardNumber
+								creditCardSelector(
+									creditCard!.node.isValid,
+									creditCard!.node.id
 								)
 							}
 						>
