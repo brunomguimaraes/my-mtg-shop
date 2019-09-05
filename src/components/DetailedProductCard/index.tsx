@@ -92,6 +92,7 @@ function DetailedProductCard({
 	const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
 
 	const handleAddToCart = () => {
+		setError(false);
 		setLoading(true);
 		if (product.quantityInStock !== 0) {
 			const productToBeAdded = productsOnCart!.edges!.find(
@@ -128,6 +129,7 @@ function DetailedProductCard({
 	};
 
 	const successHandler = (message: string) => {
+		setError(false);
 		setLoading(false);
 		setFeedbackMessage(message);
 		setSnackBarVisible(true);
