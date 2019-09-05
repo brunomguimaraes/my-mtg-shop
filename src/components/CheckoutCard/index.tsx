@@ -12,6 +12,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link } from "react-router-dom";
 import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
 import ThankYou from "../ThankYou";
+import { MySnackbarContentWrapper } from "../SnackBar";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -76,7 +77,13 @@ const CheckoutCard = ({ viewer }: IProps) => {
 					.reduce((totalValue, amount) => totalValue + amount)
 			: 0;
 	const [completedOrder, setcompletedOrder] = React.useState(false);
+	const [validCreditCard, setValidCreditCard] = React.useState(false);
 	const [orderReview, setOrderReview] = React.useState();
+	const [isSnackBarVisible, setSnackBarVisible] = React.useState<boolean>(
+		false
+	);
+	const [error, setError] = React.useState<boolean>(false);
+	const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
 
 	const placeOrder = () => {
 		const checkoutProducts = productsToCheckout.edges!.filter(
@@ -92,15 +99,19 @@ const CheckoutCard = ({ viewer }: IProps) => {
 		}));
 		const clientMutationId = uuidVersion4Generator();
 		setOrderReview(orderedProducts);
-		createOrder(
-			true,
-			checkoutProductsIds,
-			totalValue,
-			clientMutationId,
-			orderedProducts,
-			() => cleanUpCart(checkoutProductsIds),
-			() => console.log("error")
-		);
+		if (validCreditCard) {
+			createOrder(
+				validCreditCard,
+				checkoutProductsIds,
+				totalValue,
+				clientMutationId,
+				orderedProducts,
+				() => cleanUpCart(checkoutProductsIds),
+				() => errorHandler("Erro ao efetuar o pedido")
+			);
+		} else {
+			errorHandler("Erro, cartão inválido");
+		}
 	};
 
 	const cleanUpCart = (productIds: string[]) => {
@@ -111,9 +122,22 @@ const CheckoutCard = ({ viewer }: IProps) => {
 				id,
 				clientMutationId,
 				() => console.log("success"),
-				() => console.log("error")
+				() => errorHandler("Erro ao limpar o carrinho")
 			)
 		);
+	};
+
+	const creditCardSelector = (creditCardisValid: boolean) => {
+		setValidCreditCard(creditCardisValid);
+	};
+
+	const errorHandler = (message?: string) => {
+		setError(true);
+		message
+			? setFeedbackMessage(message)
+			: setFeedbackMessage("Algum erro ocorreu");
+		setSnackBarVisible(true);
+		setTimeout(() => setSnackBarVisible(false), 3000);
 	};
 
 	return (
@@ -157,6 +181,7 @@ const CheckoutCard = ({ viewer }: IProps) => {
 						<div className={classes.section2}>
 							<Grid>
 								<CreditCardList
+									creditCardChecker={creditCardSelector}
 									creditCardInfo={
 										viewer.User!.creditCardInfo as any
 									}
@@ -171,6 +196,13 @@ const CheckoutCard = ({ viewer }: IProps) => {
 						</div>
 					</Box>
 				</React.Fragment>
+			)}
+			{isSnackBarVisible && (
+				<MySnackbarContentWrapper
+					className={classes.snackBarStyle}
+					message={feedbackMessage}
+					variant={error ? "error" : "success"}
+				/>
 			)}
 		</React.Fragment>
 	);

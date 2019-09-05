@@ -13,11 +13,11 @@ import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import { CartProductsList_shoppingCart } from "./__generated__/CartProductsList_shoppingCart.graphql";
-import { formatCurrency } from "../../../utils/formaters";
-import { uuidVersion4Generator } from "../../../utils/idGenerators";
-import { updateProduct } from "../../../relay/mutations/UpdateProduct";
-import { updateCartProduct } from "../../../relay/mutations/UpdateCartProduct";
-import { MySnackbarContentWrapper } from "../../SnackBar";
+import { formatCurrency } from "../../utils/formaters";
+import { uuidVersion4Generator } from "../../utils/idGenerators";
+import { updateProduct } from "../../relay/mutations/UpdateProduct";
+import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
+import { MySnackbarContentWrapper } from "../SnackBar";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -90,6 +90,7 @@ const CartProductsList = ({
 		numberOnCart: number,
 		productsInStock: number
 	) => {
+		setError(false);
 		setLoading(true);
 		if (productsInStock !== 0) {
 			updateCartProduct(
@@ -115,6 +116,7 @@ const CartProductsList = ({
 		numberOnCart: number,
 		productsInStock: number
 	) => {
+		setError(false);
 		setLoading(true);
 		updateCartProduct(clientMutationId, cartProductId, numberOnCart - 1);
 		updateProduct(
@@ -128,6 +130,7 @@ const CartProductsList = ({
 
 	const successHandler = (message: string) => {
 		setLoading(false);
+		setError(false);
 		setFeedbackMessage(message);
 		setSnackBarVisible(true);
 		setTimeout(() => setSnackBarVisible(false), 3000);
