@@ -18,8 +18,8 @@ export const updateProduct = (
 	clientMutationId: string,
 	id: string,
 	quantityInStock: number,
-    onCompletedCallBack: () => void,
-    onErrorCallBack: () => void
+	onCompletedCallBack: () => void,
+	onErrorCallBack: () => void
 ) => {
 	const variables = {
 		input: {
@@ -33,9 +33,8 @@ export const updateProduct = (
 		mutation,
 		variables,
 		onCompleted: (response, errors) => {
-            onCompletedCallBack();
+			onCompletedCallBack();
 		},
-        onError: err => onErrorCallBack()
-        
+		onError: err => onErrorCallBack()
 	});
 };

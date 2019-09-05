@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
-import CartProductsList from "../CartProducts/CartProductsList";
+import CartProductsList from "../CartProductsList";
 import { IconButton, Badge } from "@material-ui/core";
 import { NavBar_viewer } from "./__generated__/NavBar_viewer.graphql";
 
