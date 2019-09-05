@@ -9,6 +9,8 @@ export type CreateOrderInput = {
     readonly user?: OrderuserUser | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
     readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
+    readonly productsOrderedsIds?: ReadonlyArray<string> | null;
+    readonly productsOrdereds?: ReadonlyArray<OrderproductsOrderedsProductsOrdered> | null;
     readonly clientMutationId: string;
 };
 export type OrderuserUser = {
@@ -38,6 +40,8 @@ export type CartProductorderOrder = {
     readonly user?: OrderuserUser | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
     readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
+    readonly productsOrderedsIds?: ReadonlyArray<string> | null;
+    readonly productsOrdereds?: ReadonlyArray<OrderproductsOrderedsProductsOrdered> | null;
 };
 export type OrdercartProductsCartProduct = {
     readonly quantityOnCart?: number | null;
@@ -78,6 +82,13 @@ export type UserordersOrder = {
     readonly totalOrderValue: number;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
     readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
+    readonly productsOrderedsIds?: ReadonlyArray<string> | null;
+    readonly productsOrdereds?: ReadonlyArray<OrderproductsOrderedsProductsOrdered> | null;
+};
+export type OrderproductsOrderedsProductsOrdered = {
+    readonly name: string;
+    readonly price: number;
+    readonly quantity: number;
 };
 export type CreateOrderMutationVariables = {
     readonly input: CreateOrderInput;

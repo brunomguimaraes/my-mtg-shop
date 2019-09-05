@@ -31,9 +31,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type IProps = {
 	viewer: NavBar_viewer;
+	showCart?: boolean;
 };
 
-const NavBar = ({ viewer }: IProps) => {
+const NavBar = ({ viewer, showCart }: IProps) => {
 	const classes = useStyles();
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -55,43 +56,49 @@ const NavBar = ({ viewer }: IProps) => {
 						My MTG Store
 					</Typography>
 					<div className={classes.grow} />
-					<div className={classes.sectionCart}>
-						<IconButton
-							aria-label="show products list on cart"
-							aria-controls={CartListId}
-							aria-haspopup="true"
-							onClick={handleCartListOpen}
-							color="inherit"
-						>
-							<Badge
-								badgeContent={
-									viewer.User!.shoppingCart!.cartProducts!
-										.count !== 0
-										? viewer
-												.User!.shoppingCart!.cartProducts!.edges!.map(
-													product =>
-														product!.node!
-															.quantityOnCart!
-												)
-												.reduce(
-													(totalValue, amount) =>
-														totalValue + amount
-												)
-										: 0
-								}
-								color="secondary"
+					{showCart && (
+						<div className={classes.sectionCart}>
+							<IconButton
+								aria-label="show products list on cart"
+								aria-controls={CartListId}
+								aria-haspopup="true"
+								onClick={handleCartListOpen}
+								color="inherit"
 							>
-								<ShoppingCartIcon />
-							</Badge>
-						</IconButton>
-					</div>
+								<Badge
+									badgeContent={
+										viewer.User!.shoppingCart!
+											.cartProducts! &&
+										viewer.User!.shoppingCart!.cartProducts!
+											.count !== 0
+											? viewer
+													.User!.shoppingCart!.cartProducts!.edges!.map(
+														product =>
+															product!.node!
+																.quantityOnCart!
+													)
+													.reduce(
+														(totalValue, amount) =>
+															totalValue + amount
+													)
+											: 0
+									}
+									color="secondary"
+								>
+									<ShoppingCartIcon />
+								</Badge>
+							</IconButton>
+						</div>
+					)}
 				</Toolbar>
 			</AppBar>
-			<CartProductsList
-				anchorElOnClose={handleCartListClose}
-				anchorElementReference={anchorEl}
-				shoppingCart={viewer.User!.shoppingCart as any}
-			/>
+			{viewer.User!.shoppingCart!.cartProducts && (
+				<CartProductsList
+					anchorElOnClose={handleCartListClose}
+					anchorElementReference={anchorEl}
+					shoppingCart={viewer.User!.shoppingCart as any}
+				/>
+			)}
 		</div>
 	);
 };

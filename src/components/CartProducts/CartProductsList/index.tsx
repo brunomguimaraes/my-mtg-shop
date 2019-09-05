@@ -145,123 +145,152 @@ const CartProductsList = ({
 
 	return (
 		<React.Fragment>
-			<Menu
-				anchorEl={anchorEl}
-				anchorOrigin={{ vertical: "top", horizontal: "right" }}
-				id={DropdownListId}
-				keepMounted
-				transformOrigin={{
-					vertical: "top",
-					horizontal: "right"
-				}}
-				open={isCartListOpen}
-				onClose={handleCartListClose}
-			>
-				{shoppingCart &&
-					shoppingCart!.cartProducts!.edges!.map(
-						cartProduct =>
-							cartProduct!.node.quantityOnCart !== 0 && (
-								<MenuItem
-									key={shoppingCart!.cartProducts!.edges!.indexOf(
-										cartProduct
-									)}
-									className={classes.sectionMenuItem}
-								>
-									<div
-										className={
-											classes.sectionPlusMinusIcons
-										}
-									>
-										<AddCircleIcon
-											onClick={() =>
-												handleIncreaseCartProduct(
-													cartProduct!.node.id,
-													cartProduct!.node.product!
-														.id!,
-													cartProduct!.node
-														.quantityOnCart,
-													cartProduct!.node.product!
-														.quantityInStock!
-												)
-											}
-											color={
-												loading ? "disabled" : "inherit"
-											}
-											fontSize="small"
-										/>
-										<RemoveCircleIcon
-											onClick={() =>
-												loading
-													? null
-													: handleDecreaseCartProduct(
-															cartProduct!.node
-																.id,
-															cartProduct!.node
-																.product!.id!,
-															cartProduct!.node
-																.quantityOnCart,
-															cartProduct!.node
-																.product!
-																.quantityInStock!
-													  )
-											}
-											color={
-												loading ? "disabled" : "inherit"
-											}
-											fontSize="small"
-										/>
-									</div>
-									<div
-										className={classes.sectionMenuItemSlug}
-									>
-										{cartProduct!.node.quantityOnCart}
-										{"x "}
-									</div>
-									<div
-										className={classes.sectionMenuItemSlug}
-									>
-										{cartProduct!.node.product!.name}
-									</div>
-									<div
-										className={classes.sectionMenuItemSlug}
-									>
-										{formatCurrency(
-											cartProduct!.node.product!.price! *
-												cartProduct!.node.quantityOnCart
+			{shoppingCart!.cartProducts && (
+				<Menu
+					anchorEl={anchorEl}
+					anchorOrigin={{ vertical: "top", horizontal: "right" }}
+					id={DropdownListId}
+					keepMounted
+					transformOrigin={{
+						vertical: "top",
+						horizontal: "right"
+					}}
+					open={isCartListOpen}
+					onClose={handleCartListClose}
+				>
+					{shoppingCart &&
+						shoppingCart!.cartProducts &&
+						shoppingCart!.cartProducts!.edges!.map(
+							cartProduct =>
+								cartProduct!.node.product &&
+								cartProduct!.node.quantityOnCart !== 0 && (
+									<MenuItem
+										key={shoppingCart!.cartProducts!.edges!.indexOf(
+											cartProduct
 										)}
-									</div>
-								</MenuItem>
-							)
+										className={classes.sectionMenuItem}
+									>
+										<div
+											className={
+												classes.sectionPlusMinusIcons
+											}
+										>
+											<AddCircleIcon
+												onClick={() =>
+													handleIncreaseCartProduct(
+														cartProduct!.node.id,
+														cartProduct!.node
+															.product!.id!,
+														cartProduct!.node
+															.quantityOnCart,
+														cartProduct!.node
+															.product!
+															.quantityInStock!
+													)
+												}
+												color={
+													loading
+														? "disabled"
+														: "inherit"
+												}
+												fontSize="small"
+											/>
+											<RemoveCircleIcon
+												onClick={() =>
+													loading
+														? null
+														: handleDecreaseCartProduct(
+																cartProduct!
+																	.node.id,
+																cartProduct!
+																	.node
+																	.product!
+																	.id!,
+																cartProduct!
+																	.node
+																	.quantityOnCart,
+																cartProduct!
+																	.node
+																	.product!
+																	.quantityInStock!
+														  )
+												}
+												color={
+													loading
+														? "disabled"
+														: "inherit"
+												}
+												fontSize="small"
+											/>
+										</div>
+										<div
+											className={
+												classes.sectionMenuItemSlug
+											}
+										>
+											{cartProduct!.node.quantityOnCart}
+											{"x "}
+										</div>
+										<div
+											className={
+												classes.sectionMenuItemSlug
+											}
+										>
+											{cartProduct!.node.product!.name}
+										</div>
+										<div
+											className={
+												classes.sectionMenuItemSlug
+											}
+										>
+											{cartProduct!.node.product! &&
+												formatCurrency(
+													cartProduct!.node.product!
+														.price! *
+														cartProduct!.node
+															.quantityOnCart
+												)}
+										</div>
+									</MenuItem>
+								)
+						)}
+					{isSnackBarVisible && (
+						<MySnackbarContentWrapper
+							className={classes.snackBarStyle}
+							message={feedbackMessage}
+							variant={error ? "error" : "success"}
+						/>
 					)}
-				{isSnackBarVisible && (
-					<MySnackbarContentWrapper
-						className={classes.snackBarStyle}
-						message={feedbackMessage}
-						variant={error ? "error" : "success"}
-					/>
-				)}
-				<Divider variant="middle" />
-				<div className={classes.sectionProceedToCheckout}>
-					<Button component={Link} to={"/checkout"} color="primary">
-						Finalizar Compra
-					</Button>
-					{"Valor total: "}
-					{formatCurrency(
-						shoppingCart!.cartProducts!.count !== 0
-							? shoppingCart!
-									.cartProducts!.edges!.map(
-										cartProduct =>
-											cartProduct!.node.product!.price! *
-											cartProduct!.node.quantityOnCart
-									)
-									.reduce(
-										(totalValue, amount) =>
-											totalValue + amount
-									)
-							: 0
-					)}
-				</div>
-			</Menu>
+					<Divider variant="middle" />
+					<div className={classes.sectionProceedToCheckout}>
+						<Button
+							component={Link}
+							to={"/checkout"}
+							color="primary"
+						>
+							Finalizar Compra
+						</Button>
+						{"Valor total: "}
+						{formatCurrency(
+							shoppingCart!.cartProducts!.count !== 0
+								? shoppingCart!
+										.cartProducts!.edges!.map(cartProduct =>
+											cartProduct!.node.product!
+												? cartProduct!.node.product!
+														.price! *
+												  cartProduct!.node
+														.quantityOnCart
+												: 0
+										)
+										.reduce(
+											(totalValue, amount) =>
+												totalValue + amount
+										)
+								: 0
+						)}
+					</div>
+				</Menu>
+			)}
 		</React.Fragment>
 	);
 };

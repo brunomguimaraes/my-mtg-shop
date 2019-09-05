@@ -2,6 +2,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 type CheckoutList_shoppingCart$ref = any;
+type CreditCardList_creditCardInfo$ref = any;
 export type CheckoutCard_viewer$ref = any;
 export type CheckoutCard_viewer = {
     readonly User: {
@@ -24,6 +25,9 @@ export type CheckoutCard_viewer = {
                 } | null> | null;
             } | null;
             readonly " $fragmentRefs": CheckoutList_shoppingCart$ref;
+        } | null;
+        readonly creditCardInfo: {
+            readonly " $fragmentRefs": CreditCardList_creditCardInfo$ref;
         } | null;
     } | null;
     readonly " $refType": CheckoutCard_viewer$ref;
@@ -160,11 +164,27 @@ return {
               "args": null
             }
           ]
+        },
+        {
+          "kind": "LinkedField",
+          "alias": null,
+          "name": "creditCardInfo",
+          "storageKey": null,
+          "args": null,
+          "concreteType": "PaymentInfoConnection",
+          "plural": false,
+          "selections": [
+            {
+              "kind": "FragmentSpread",
+              "name": "CreditCardList_creditCardInfo",
+              "args": null
+            }
+          ]
         }
       ]
     }
   ]
 };
 })();
-(node as any).hash = 'a8ef0e3186aaaba7601ce73959dea9cd';
+(node as any).hash = '6836916353c0c57dbaaa7623ebea89af';
 export default node;

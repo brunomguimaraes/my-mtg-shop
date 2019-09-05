@@ -7,6 +7,11 @@ import { CheckoutCard_viewer } from "./__generated__/CheckoutCard_viewer.graphql
 import CheckoutList from "../CheckoutList";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
 import { createOrder } from "../../relay/mutations/CreateOrder";
+import CreditCardList from "../CreditCardList";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Link } from "react-router-dom";
+import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
+import ThankYou from "../ThankYou";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -44,6 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			bottom: "2%",
 			right: "2%",
 			width: "30vw"
+		},
+		backIcon: {
+			margin: theme.spacing(1),
+			cursor: "pointer"
 		}
 	})
 );
@@ -58,13 +67,15 @@ const CheckoutCard = ({ viewer }: IProps) => {
 	const totalValue =
 		productsToCheckout.count !== 0
 			? productsToCheckout
-					.edges!.map(
-						cartProduct =>
-							cartProduct!.node.product!.price! *
-							cartProduct!.node.quantityOnCart
+					.edges!.map(cartProduct =>
+						cartProduct!.node.product!
+							? cartProduct!.node.product!.price! *
+							  cartProduct!.node.quantityOnCart
+							: 0
 					)
 					.reduce((totalValue, amount) => totalValue + amount)
 			: 0;
+	const [completedOrder, setcompletedOrder] = React.useState(false);
 
 	const placeOrder = () => {
 		const checkoutProducts = productsToCheckout.edges!.filter(
@@ -73,49 +84,93 @@ const CheckoutCard = ({ viewer }: IProps) => {
 		const checkoutProductsIds = checkoutProducts.map(
 			products => products!.node.id
 		);
+		const orderedProducts = checkoutProducts.map(products => ({
+			name: products!.node.product!.name as string,
+			price: products!.node.product!.price as number,
+			quantity: products!.node.quantityOnCart as number
+		}));
 		const clientMutationId = uuidVersion4Generator();
 		createOrder(
 			true,
 			checkoutProductsIds,
 			totalValue,
 			clientMutationId,
-			() => console.log("success"),
+			orderedProducts,
+			() => cleanUpCart(checkoutProductsIds),
 			() => console.log("error")
 		);
 	};
 
+	const cleanUpCart = (productIds: string[]) => {
+		setcompletedOrder(true);
+		const clientMutationId = uuidVersion4Generator();
+		productIds.map(id =>
+			deleteCartProduct(
+				id,
+				clientMutationId,
+				() => console.log("success"),
+				() => console.log("error")
+			)
+		);
+	};
+
 	return (
-		<Box boxShadow={2} className={classes.root}>
-			<div className={classes.section1}>
-				<Grid container alignItems="center">
-					<Typography
-						className={classes.clickable}
-						gutterBottom
-						variant="h5"
-					>
-						Checkout
-					</Typography>
-				</Grid>
-			</div>
-			<Divider variant="middle" />
-			<div className={classes.section2}>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="flex-start"
-				>
-					<CheckoutList
-						shoppingCart={viewer.User!.shoppingCart as any}
-					/>
-				</Grid>
-			</div>
-			<div className={classes.section3}>
-				<Button color="primary" onClick={placeOrder}>
-					Efetuar Compra
-				</Button>
-			</div>
-		</Box>
+		<React.Fragment>
+			{completedOrder ? (
+				<ThankYou />
+			) : (
+				<React.Fragment>
+					<Button component={Link} to={"/main"}>
+						<ArrowBackIcon
+							className={classes.backIcon}
+							fontSize={"large"}
+						/>
+					</Button>
+					<Box boxShadow={2} className={classes.root}>
+						<div className={classes.section1}>
+							<Grid container alignItems="center">
+								<Typography gutterBottom variant="h5">
+									Checkout
+								</Typography>
+							</Grid>
+						</div>
+						<Divider variant="middle" />
+						<div className={classes.section2}>
+							<Grid
+								container
+								direction="column"
+								justify="center"
+								alignItems="flex-start"
+							>
+								{viewer.User!.shoppingCart!.cartProducts && (
+									<CheckoutList
+										shoppingCart={
+											viewer.User!.shoppingCart as any
+										}
+									/>
+								)}
+							</Grid>
+						</div>
+						<Divider variant="middle" />
+						<div className={classes.section2}>
+							<Grid>
+								<CreditCardList
+									creditCardInfo={
+										viewer.User!.creditCardInfo as any
+									}
+								/>
+							</Grid>
+						</div>
+
+						<div className={classes.section3}>
+							<Button color="primary" onClick={placeOrder}>
+								Efetuar Compra
+							</Button>
+						</div>
+					</Box>
+				</React.Fragment>
+			)}
+		</React.Fragment>
 	);
 };
 
@@ -142,6 +197,9 @@ export default createFragmentContainer(CheckoutCard, {
 							}
 						}
 					}
+				}
+				creditCardInfo {
+					...CreditCardList_creditCardInfo
 				}
 			}
 		}

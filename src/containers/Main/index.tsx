@@ -24,7 +24,7 @@ const Main: React.FC = () => {
 				return (
 					<React.Fragment>
 						<CssBaseline />
-						<NavBar viewer={props.viewer} />
+						<NavBar viewer={props.viewer} showCart={true} />
 						<Container maxWidth="md">
 							<ProductsList
 								allProducts={props.viewer.allProducts as any}

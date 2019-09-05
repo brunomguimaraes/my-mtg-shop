@@ -24,9 +24,9 @@ const Checkout: React.FC = () => {
 				return (
 					<React.Fragment>
 						<CssBaseline />
-						<NavBar viewer={props.viewer} />
+						<NavBar viewer={props.viewer} showCart={false} />
 						<Container maxWidth="md">
-                            <CheckoutCard viewer={props.viewer} />
+							<CheckoutCard viewer={props.viewer} />
 						</Container>
 					</React.Fragment>
 				);

@@ -48,6 +48,9 @@ fragment CheckoutCard_viewer on Viewer {
       }
       id
     }
+    creditCardInfo {
+      ...CreditCardList_creditCardInfo
+    }
   }
 }
 
@@ -105,6 +108,17 @@ fragment CheckoutList_shoppingCart on ShoppingCart {
           quantityInStock
         }
       }
+    }
+  }
+}
+
+fragment CreditCardList_creditCardInfo on PaymentInfoConnection {
+  edges {
+    node {
+      cardNumber
+      cvv
+      id
+      isValid
     }
   }
 }
@@ -274,6 +288,61 @@ return {
                     ]
                   }
                 ]
+              },
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "creditCardInfo",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "PaymentInfoConnection",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "name": "edges",
+                    "storageKey": null,
+                    "args": null,
+                    "concreteType": "PaymentInfoEdge",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "kind": "LinkedField",
+                        "alias": null,
+                        "name": "node",
+                        "storageKey": null,
+                        "args": null,
+                        "concreteType": "PaymentInfo",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "kind": "ScalarField",
+                            "alias": null,
+                            "name": "cardNumber",
+                            "args": null,
+                            "storageKey": null
+                          },
+                          {
+                            "kind": "ScalarField",
+                            "alias": null,
+                            "name": "cvv",
+                            "args": null,
+                            "storageKey": null
+                          },
+                          (v1/*: any*/),
+                          {
+                            "kind": "ScalarField",
+                            "alias": null,
+                            "name": "isValid",
+                            "args": null,
+                            "storageKey": null
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           },
@@ -286,7 +355,7 @@ return {
     "operationKind": "query",
     "name": "CheckoutQuery",
     "id": null,
-    "text": "query CheckoutQuery {\n  viewer {\n    ...CheckoutCard_viewer\n    ...NavBar_viewer\n    id\n  }\n}\n\nfragment CheckoutCard_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      ...CheckoutList_shoppingCart\n      cartProducts {\n        count\n        edges {\n          node {\n            id\n            quantityOnCart\n            product {\n              id\n              name\n              price\n              quantityInStock\n            }\n          }\n        }\n      }\n      id\n    }\n  }\n}\n\nfragment NavBar_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            id\n          }\n        }\n      }\n      ...CartProductsList_shoppingCart\n      id\n    }\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n\nfragment CheckoutList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n",
+    "text": "query CheckoutQuery {\n  viewer {\n    ...CheckoutCard_viewer\n    ...NavBar_viewer\n    id\n  }\n}\n\nfragment CheckoutCard_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      ...CheckoutList_shoppingCart\n      cartProducts {\n        count\n        edges {\n          node {\n            id\n            quantityOnCart\n            product {\n              id\n              name\n              price\n              quantityInStock\n            }\n          }\n        }\n      }\n      id\n    }\n    creditCardInfo {\n      ...CreditCardList_creditCardInfo\n    }\n  }\n}\n\nfragment NavBar_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            id\n          }\n        }\n      }\n      ...CartProductsList_shoppingCart\n      id\n    }\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n\nfragment CheckoutList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n\nfragment CreditCardList_creditCardInfo on PaymentInfoConnection {\n  edges {\n    node {\n      cardNumber\n      cvv\n      id\n      isValid\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
