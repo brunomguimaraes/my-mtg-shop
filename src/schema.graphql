@@ -4,10 +4,34 @@ input AddToCartProductOnProductCartProductInput {
   clientMutationId: String!
 }
 
-input AddToOrderOnShoppingCartOrderInput {
-  shoppingCartShoppingCartId: ID!
+input AddToOrderOnCartProductOrderInput {
+  cartProductsCartProductId: ID!
   orderOrderId: ID!
   clientMutationId: String!
+}
+
+type AddToOrderOnCartProductPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  orderOrder: Order
+  cartProductsCartProduct: CartProduct
+  orderOrderEdge: OrderEdge
+  cartProductsCartProductEdge: CartProductEdge
+}
+
+input AddToOrderOnProductsOrderedOrderInput {
+  productsOrderedsProductsOrderedId: ID!
+  orderOrderId: ID!
+  clientMutationId: String!
+}
+
+type AddToOrderOnProductsOrderedPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  orderOrder: Order
+  productsOrderedsProductsOrdered: ProductsOrdered
+  orderOrderEdge: OrderEdge
+  productsOrderedsProductsOrderedEdge: ProductsOrderedEdge
 }
 
 type AddToShoppingCartOnCartProductPayload {
@@ -63,6 +87,7 @@ input AddToUserOnShoppingCartUserInput {
 
 type CartProduct implements Node {
   id: ID!
+  order(filter: OrderFilter): Order
   product(filter: ProductFilter): Product
   quantityOnCart: Int!
   shoppingCart(filter: ShoppingCartFilter): ShoppingCart
@@ -157,6 +182,7 @@ input CartProductFilter {
 
   """All values greater than or equal the given value."""
   quantityOnCart_gte: Int
+  order: OrderFilter
   product: ProductFilter
   shoppingCart: ShoppingCartFilter
 }
@@ -166,6 +192,17 @@ enum CartProductOrderBy {
   id_DESC
   quantityOnCart_ASC
   quantityOnCart_DESC
+}
+
+input CartProductorderOrder {
+  isPaid: Boolean
+  totalOrderValue: Float!
+  userId: ID
+  user: OrderuserUser
+  cartProductsIds: [ID!]
+  cartProducts: [OrdercartProductsCartProduct!]
+  productsOrderedsIds: [ID!]
+  productsOrdereds: [OrderproductsOrderedsProductsOrdered!]
 }
 
 input CartProductproductProduct {
@@ -179,8 +216,6 @@ input CartProductproductProduct {
 }
 
 input CartProductshoppingCartShoppingCart {
-  orderId: ID
-  order: ShoppingCartorderOrder
   userId: ID
   user: ShoppingCartuserUser
   cartProductsIds: [ID!]
@@ -199,6 +234,8 @@ enum Colors {
 
 input CreateCartProduct {
   quantityOnCart: Int
+  orderId: ID
+  order: CartProductorderOrder
   productId: ID
   product: CartProductproductProduct
   shoppingCartId: ID
@@ -207,6 +244,8 @@ input CreateCartProduct {
 
 input CreateCartProductInput {
   quantityOnCart: Int
+  orderId: ID
+  order: CartProductorderOrder
   productId: ID
   product: CartProductproductProduct
   shoppingCartId: ID
@@ -219,6 +258,7 @@ type CreateCartProductPayload {
   clientMutationId: String!
   cartProduct: CartProduct
   edge: CartProductEdge
+  order: Order
   product: Product
   shoppingCart: ShoppingCart
 }
@@ -241,20 +281,24 @@ type CreateFilePayload {
 
 input CreateOrder {
   isPaid: Boolean
-  orderNumber: Int!
-  shoppingCartId: ID
-  shoppingCart: OrdershoppingCartShoppingCart
+  totalOrderValue: Float!
   userId: ID
   user: OrderuserUser
+  cartProductsIds: [ID!]
+  cartProducts: [OrdercartProductsCartProduct!]
+  productsOrderedsIds: [ID!]
+  productsOrdereds: [OrderproductsOrderedsProductsOrdered!]
 }
 
 input CreateOrderInput {
   isPaid: Boolean
-  orderNumber: Int!
-  shoppingCartId: ID
-  shoppingCart: OrdershoppingCartShoppingCart
+  totalOrderValue: Float!
   userId: ID
   user: OrderuserUser
+  cartProductsIds: [ID!]
+  cartProducts: [OrdercartProductsCartProduct!]
+  productsOrderedsIds: [ID!]
+  productsOrdereds: [OrderproductsOrderedsProductsOrdered!]
   clientMutationId: String!
 }
 
@@ -263,7 +307,6 @@ type CreateOrderPayload {
   clientMutationId: String!
   order: Order
   edge: OrderEdge
-  shoppingCart: ShoppingCart
   user: User
 }
 
@@ -325,9 +368,32 @@ type CreateProductPayload {
   cartProduct: CartProduct
 }
 
-input CreateShoppingCart {
+input CreateProductsOrdered {
+  name: String!
+  price: Float!
+  quantity: Int!
   orderId: ID
-  order: ShoppingCartorderOrder
+  order: ProductsOrderedorderOrder
+}
+
+input CreateProductsOrderedInput {
+  name: String!
+  price: Float!
+  quantity: Int!
+  orderId: ID
+  order: ProductsOrderedorderOrder
+  clientMutationId: String!
+}
+
+type CreateProductsOrderedPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  productsOrdered: ProductsOrdered
+  edge: ProductsOrderedEdge
+  order: Order
+}
+
+input CreateShoppingCart {
   userId: ID
   user: ShoppingCartuserUser
   cartProductsIds: [ID!]
@@ -335,8 +401,6 @@ input CreateShoppingCart {
 }
 
 input CreateShoppingCartInput {
-  orderId: ID
-  order: ShoppingCartorderOrder
   userId: ID
   user: ShoppingCartuserUser
   cartProductsIds: [ID!]
@@ -349,7 +413,6 @@ type CreateShoppingCartPayload {
   clientMutationId: String!
   shoppingCart: ShoppingCart
   edge: ShoppingCartEdge
-  order: Order
   user: User
 }
 
@@ -384,6 +447,7 @@ type DeleteCartProductPayload {
   clientMutationId: String!
   cartProduct: CartProduct
   edge: CartProductEdge
+  order: Order
   product: Product
   shoppingCart: ShoppingCart
   deletedId: ID
@@ -412,7 +476,6 @@ type DeleteOrderPayload {
   clientMutationId: String!
   order: Order
   edge: OrderEdge
-  shoppingCart: ShoppingCart
   user: User
   deletedId: ID
 }
@@ -445,6 +508,20 @@ type DeleteProductPayload {
   deletedId: ID
 }
 
+input DeleteProductsOrderedInput {
+  id: ID!
+  clientMutationId: String!
+}
+
+type DeleteProductsOrderedPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  productsOrdered: ProductsOrdered
+  edge: ProductsOrderedEdge
+  order: Order
+  deletedId: ID
+}
+
 input DeleteShoppingCartInput {
   id: ID!
   clientMutationId: String!
@@ -455,7 +532,6 @@ type DeleteShoppingCartPayload {
   clientMutationId: String!
   shoppingCart: ShoppingCart
   edge: ShoppingCartEdge
-  order: Order
   user: User
   deletedId: ID
 }
@@ -816,12 +892,14 @@ type Mutation {
   createOrder(input: CreateOrderInput!): CreateOrderPayload
   createPaymentInfo(input: CreatePaymentInfoInput!): CreatePaymentInfoPayload
   createProduct(input: CreateProductInput!): CreateProductPayload
+  createProductsOrdered(input: CreateProductsOrderedInput!): CreateProductsOrderedPayload
   createShoppingCart(input: CreateShoppingCartInput!): CreateShoppingCartPayload
   updateCartProduct(input: UpdateCartProductInput!): UpdateCartProductPayload
   updateFile(input: UpdateFileInput!): UpdateFilePayload
   updateOrder(input: UpdateOrderInput!): UpdateOrderPayload
   updatePaymentInfo(input: UpdatePaymentInfoInput!): UpdatePaymentInfoPayload
   updateProduct(input: UpdateProductInput!): UpdateProductPayload
+  updateProductsOrdered(input: UpdateProductsOrderedInput!): UpdateProductsOrderedPayload
   updateShoppingCart(input: UpdateShoppingCartInput!): UpdateShoppingCartPayload
   updateUser(input: UpdateUserInput!): UpdateUserPayload
   updateOrCreateCartProduct(input: UpdateOrCreateCartProductInput!): UpdateOrCreateCartProductPayload
@@ -829,6 +907,7 @@ type Mutation {
   updateOrCreateOrder(input: UpdateOrCreateOrderInput!): UpdateOrCreateOrderPayload
   updateOrCreatePaymentInfo(input: UpdateOrCreatePaymentInfoInput!): UpdateOrCreatePaymentInfoPayload
   updateOrCreateProduct(input: UpdateOrCreateProductInput!): UpdateOrCreateProductPayload
+  updateOrCreateProductsOrdered(input: UpdateOrCreateProductsOrderedInput!): UpdateOrCreateProductsOrderedPayload
   updateOrCreateShoppingCart(input: UpdateOrCreateShoppingCartInput!): UpdateOrCreateShoppingCartPayload
   updateOrCreateUser(input: UpdateOrCreateUserInput!): UpdateOrCreateUserPayload
   deleteCartProduct(input: DeleteCartProductInput!): DeleteCartProductPayload
@@ -836,17 +915,20 @@ type Mutation {
   deleteOrder(input: DeleteOrderInput!): DeleteOrderPayload
   deletePaymentInfo(input: DeletePaymentInfoInput!): DeletePaymentInfoPayload
   deleteProduct(input: DeleteProductInput!): DeleteProductPayload
+  deleteProductsOrdered(input: DeleteProductsOrderedInput!): DeleteProductsOrderedPayload
   deleteShoppingCart(input: DeleteShoppingCartInput!): DeleteShoppingCartPayload
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
   setCartProductOnProduct(input: AddToCartProductOnProductCartProductInput!): SetCartProductOnProductPayload
-  setOrderOnShoppingCart(input: AddToOrderOnShoppingCartOrderInput!): SetOrderOnShoppingCartPayload
   setUserOnShoppingCart(input: AddToUserOnShoppingCartUserInput!): SetUserOnShoppingCartPayload
   unsetCartProductOnProduct(input: UnsetCartProductOnProductCartProductInput!): UnsetCartProductOnProductPayload
-  unsetOrderOnShoppingCart(input: UnsetOrderOnShoppingCartOrderInput!): UnsetOrderOnShoppingCartPayload
   unsetUserOnShoppingCart(input: UnsetUserOnShoppingCartUserInput!): UnsetUserOnShoppingCartPayload
+  addToOrderOnCartProduct(input: AddToOrderOnCartProductOrderInput!): AddToOrderOnCartProductPayload
+  addToOrderOnProductsOrdered(input: AddToOrderOnProductsOrderedOrderInput!): AddToOrderOnProductsOrderedPayload
   addToShoppingCartOnCartProduct(input: AddToShoppingCartOnCartProductShoppingCartInput!): AddToShoppingCartOnCartProductPayload
   addToUserCreditCardInfo(input: AddToUserCreditCardInfoUserInput!): AddToUserCreditCardInfoPayload
   addToUserOnOrder(input: AddToUserOnOrderUserInput!): AddToUserOnOrderPayload
+  removeFromOrderOnCartProduct(input: RemoveFromOrderOnCartProductOrderInput!): RemoveFromOrderOnCartProductPayload
+  removeFromOrderOnProductsOrdered(input: RemoveFromOrderOnProductsOrderedOrderInput!): RemoveFromOrderOnProductsOrderedPayload
   removeFromShoppingCartOnCartProduct(input: RemoveFromShoppingCartOnCartProductShoppingCartInput!): RemoveFromShoppingCartOnCartProductPayload
   removeFromUserCreditCardInfo(input: RemoveFromUserCreditCardInfoUserInput!): RemoveFromUserCreditCardInfoPayload
   removeFromUserOnOrder(input: RemoveFromUserOnOrderUserInput!): RemoveFromUserOnOrderPayload
@@ -861,11 +943,20 @@ interface Node {
 }
 
 type Order implements Node {
+  cartProducts(filter: CartProductFilter, orderBy: CartProductOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection
   id: ID!
   isPaid: Boolean!
-  orderNumber: Int!
-  shoppingCart(filter: ShoppingCartFilter): ShoppingCart
+  productsOrdereds(filter: ProductsOrderedFilter, orderBy: ProductsOrderedOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): ProductsOrderedConnection
+  totalOrderValue: Float!
   user(filter: UserFilter): User
+}
+
+input OrdercartProductsCartProduct {
+  quantityOnCart: Int
+  productId: ID
+  product: CartProductproductProduct
+  shoppingCartId: ID
+  shoppingCart: CartProductshoppingCartShoppingCart
 }
 
 """A connection to a list of items."""
@@ -939,29 +1030,34 @@ input OrderFilter {
 
   """All values that are not equal to given value."""
   isPaid_not: Boolean
-  orderNumber: Int
+  totalOrderValue: Float
 
   """All values that are not equal to given value."""
-  orderNumber_not: Int
+  totalOrderValue_not: Float
 
   """All values that are contained in given list."""
-  orderNumber_in: [Int!]
+  totalOrderValue_in: [Float!]
 
   """All values that are not contained in given list."""
-  orderNumber_not_in: [Int!]
+  totalOrderValue_not_in: [Float!]
 
   """All values less than the given value."""
-  orderNumber_lt: Int
+  totalOrderValue_lt: Float
 
   """All values less than or equal the given value."""
-  orderNumber_lte: Int
+  totalOrderValue_lte: Float
 
   """All values greater than the given value."""
-  orderNumber_gt: Int
+  totalOrderValue_gt: Float
 
   """All values greater than or equal the given value."""
-  orderNumber_gte: Int
-  shoppingCart: ShoppingCartFilter
+  totalOrderValue_gte: Float
+  cartProducts_every: CartProductFilter
+  cartProducts_some: CartProductFilter
+  cartProducts_none: CartProductFilter
+  productsOrdereds_every: ProductsOrderedFilter
+  productsOrdereds_some: ProductsOrderedFilter
+  productsOrdereds_none: ProductsOrderedFilter
   user: UserFilter
 }
 
@@ -970,15 +1066,14 @@ enum OrderOrderBy {
   id_DESC
   isPaid_ASC
   isPaid_DESC
-  orderNumber_ASC
-  orderNumber_DESC
+  totalOrderValue_ASC
+  totalOrderValue_DESC
 }
 
-input OrdershoppingCartShoppingCart {
-  userId: ID
-  user: ShoppingCartuserUser
-  cartProductsIds: [ID!]
-  cartProducts: [ShoppingCartcartProductsCartProduct!]
+input OrderproductsOrderedsProductsOrdered {
+  name: String!
+  price: Float!
+  quantity: Int!
 }
 
 input OrderuserUser {
@@ -1168,6 +1263,8 @@ type Product implements Node {
 
 input ProductcartProductCartProduct {
   quantityOnCart: Int
+  orderId: ID
+  order: CartProductorderOrder
   shoppingCartId: ID
   shoppingCart: CartProductshoppingCartShoppingCart
 }
@@ -1475,6 +1572,190 @@ enum ProductOrderBy {
   quantityInStock_DESC
 }
 
+type ProductsOrdered implements Node {
+  id: ID!
+  name: String!
+  order(filter: OrderFilter): Order
+  price: Float!
+  quantity: Int!
+}
+
+"""A connection to a list of items."""
+type ProductsOrderedConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ProductsOrderedEdge]
+
+  """Count of filtered result set without considering pagination arguments"""
+  count: Int!
+}
+
+"""An edge in a connection."""
+type ProductsOrderedEdge {
+  """The item at the end of the edge."""
+  node: ProductsOrdered!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+input ProductsOrderedFilter {
+  """Logical AND on all given filters."""
+  AND: [ProductsOrderedFilter!]
+
+  """Logical OR on all given filters."""
+  OR: [ProductsOrderedFilter!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
+  quantity: Int
+
+  """All values that are not equal to given value."""
+  quantity_not: Int
+
+  """All values that are contained in given list."""
+  quantity_in: [Int!]
+
+  """All values that are not contained in given list."""
+  quantity_not_in: [Int!]
+
+  """All values less than the given value."""
+  quantity_lt: Int
+
+  """All values less than or equal the given value."""
+  quantity_lte: Int
+
+  """All values greater than the given value."""
+  quantity_gt: Int
+
+  """All values greater than or equal the given value."""
+  quantity_gte: Int
+  order: OrderFilter
+}
+
+enum ProductsOrderedOrderBy {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  price_ASC
+  price_DESC
+  quantity_ASC
+  quantity_DESC
+}
+
+input ProductsOrderedorderOrder {
+  isPaid: Boolean
+  totalOrderValue: Float!
+  userId: ID
+  user: OrderuserUser
+  cartProductsIds: [ID!]
+  cartProducts: [OrdercartProductsCartProduct!]
+  productsOrderedsIds: [ID!]
+  productsOrdereds: [OrderproductsOrderedsProductsOrdered!]
+}
+
 type Query {
   viewer: Viewer!
 
@@ -1483,6 +1764,36 @@ type Query {
     """The ID of an object"""
     id: ID!
   ): Node
+}
+
+input RemoveFromOrderOnCartProductOrderInput {
+  cartProductsCartProductId: ID!
+  orderOrderId: ID!
+  clientMutationId: String!
+}
+
+type RemoveFromOrderOnCartProductPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  orderOrder: Order
+  cartProductsCartProduct: CartProduct
+  orderOrderEdge: OrderEdge
+  cartProductsCartProductEdge: CartProductEdge
+}
+
+input RemoveFromOrderOnProductsOrderedOrderInput {
+  productsOrderedsProductsOrderedId: ID!
+  orderOrderId: ID!
+  clientMutationId: String!
+}
+
+type RemoveFromOrderOnProductsOrderedPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  orderOrder: Order
+  productsOrderedsProductsOrdered: ProductsOrdered
+  orderOrderEdge: OrderEdge
+  productsOrderedsProductsOrderedEdge: ProductsOrderedEdge
 }
 
 type RemoveFromShoppingCartOnCartProductPayload {
@@ -1539,15 +1850,6 @@ type SetCartProductOnProductPayload {
   productProductEdge: ProductEdge
 }
 
-type SetOrderOnShoppingCartPayload {
-  viewer: Viewer!
-  clientMutationId: String!
-  orderOrder: Order
-  shoppingCartShoppingCart: ShoppingCart
-  orderOrderEdge: OrderEdge
-  shoppingCartShoppingCartEdge: ShoppingCartEdge
-}
-
 type SetUserOnShoppingCartPayload {
   viewer: Viewer!
   clientMutationId: String!
@@ -1560,12 +1862,13 @@ type SetUserOnShoppingCartPayload {
 type ShoppingCart implements Node {
   cartProducts(filter: CartProductFilter, orderBy: CartProductOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection
   id: ID!
-  order(filter: OrderFilter): Order
   user(filter: UserFilter): User
 }
 
 input ShoppingCartcartProductsCartProduct {
   quantityOnCart: Int
+  orderId: ID
+  order: CartProductorderOrder
   productId: ID
   product: CartProductproductProduct
 }
@@ -1640,20 +1943,12 @@ input ShoppingCartFilter {
   cartProducts_every: CartProductFilter
   cartProducts_some: CartProductFilter
   cartProducts_none: CartProductFilter
-  order: OrderFilter
   user: UserFilter
 }
 
 enum ShoppingCartOrderBy {
   id_ASC
   id_DESC
-}
-
-input ShoppingCartorderOrder {
-  isPaid: Boolean
-  orderNumber: Int!
-  userId: ID
-  user: OrderuserUser
 }
 
 input ShoppingCartuserUser {
@@ -1690,21 +1985,6 @@ type UnsetCartProductOnProductPayload {
   productProductEdge: ProductEdge
 }
 
-input UnsetOrderOnShoppingCartOrderInput {
-  shoppingCartShoppingCartId: ID!
-  orderOrderId: ID!
-  clientMutationId: String!
-}
-
-type UnsetOrderOnShoppingCartPayload {
-  viewer: Viewer!
-  clientMutationId: String!
-  orderOrder: Order
-  shoppingCartShoppingCart: ShoppingCart
-  orderOrderEdge: OrderEdge
-  shoppingCartShoppingCartEdge: ShoppingCartEdge
-}
-
 type UnsetUserOnShoppingCartPayload {
   viewer: Viewer!
   clientMutationId: String!
@@ -1723,6 +2003,8 @@ input UnsetUserOnShoppingCartUserInput {
 input UpdateCartProduct {
   id: ID!
   quantityOnCart: Int
+  orderId: ID
+  order: CartProductorderOrder
   productId: ID
   product: CartProductproductProduct
   shoppingCartId: ID
@@ -1732,6 +2014,8 @@ input UpdateCartProduct {
 input UpdateCartProductInput {
   id: ID!
   quantityOnCart: Int
+  orderId: ID
+  order: CartProductorderOrder
   productId: ID
   product: CartProductproductProduct
   shoppingCartId: ID
@@ -1744,6 +2028,7 @@ type UpdateCartProductPayload {
   clientMutationId: String!
   cartProduct: CartProduct
   edge: CartProductEdge
+  order: Order
   product: Product
   shoppingCart: ShoppingCart
 }
@@ -1777,6 +2062,7 @@ type UpdateOrCreateCartProductPayload {
   clientMutationId: String!
   cartProduct: CartProduct
   edge: CartProductEdge
+  order: Order
   product: Product
   shoppingCart: ShoppingCart
 }
@@ -1805,7 +2091,6 @@ type UpdateOrCreateOrderPayload {
   clientMutationId: String!
   order: Order
   edge: OrderEdge
-  shoppingCart: ShoppingCart
   user: User
 }
 
@@ -1837,6 +2122,20 @@ type UpdateOrCreateProductPayload {
   cartProduct: CartProduct
 }
 
+input UpdateOrCreateProductsOrderedInput {
+  update: UpdateProductsOrdered!
+  create: CreateProductsOrdered!
+  clientMutationId: String!
+}
+
+type UpdateOrCreateProductsOrderedPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  productsOrdered: ProductsOrdered
+  edge: ProductsOrderedEdge
+  order: Order
+}
+
 input UpdateOrCreateShoppingCartInput {
   update: UpdateShoppingCart!
   create: CreateShoppingCart!
@@ -1848,7 +2147,6 @@ type UpdateOrCreateShoppingCartPayload {
   clientMutationId: String!
   shoppingCart: ShoppingCart
   edge: ShoppingCartEdge
-  order: Order
   user: User
 }
 
@@ -1869,21 +2167,25 @@ type UpdateOrCreateUserPayload {
 input UpdateOrder {
   id: ID!
   isPaid: Boolean
-  orderNumber: Int
-  shoppingCartId: ID
-  shoppingCart: OrdershoppingCartShoppingCart
+  totalOrderValue: Float
   userId: ID
   user: OrderuserUser
+  cartProductsIds: [ID!]
+  cartProducts: [OrdercartProductsCartProduct!]
+  productsOrderedsIds: [ID!]
+  productsOrdereds: [OrderproductsOrderedsProductsOrdered!]
 }
 
 input UpdateOrderInput {
   id: ID!
   isPaid: Boolean
-  orderNumber: Int
-  shoppingCartId: ID
-  shoppingCart: OrdershoppingCartShoppingCart
+  totalOrderValue: Float
   userId: ID
   user: OrderuserUser
+  cartProductsIds: [ID!]
+  cartProducts: [OrdercartProductsCartProduct!]
+  productsOrderedsIds: [ID!]
+  productsOrdereds: [OrderproductsOrderedsProductsOrdered!]
   clientMutationId: String!
 }
 
@@ -1892,7 +2194,6 @@ type UpdateOrderPayload {
   clientMutationId: String!
   order: Order
   edge: OrderEdge
-  shoppingCart: ShoppingCart
   user: User
 }
 
@@ -1958,10 +2259,35 @@ type UpdateProductPayload {
   cartProduct: CartProduct
 }
 
+input UpdateProductsOrdered {
+  id: ID!
+  name: String
+  price: Float
+  quantity: Int
+  orderId: ID
+  order: ProductsOrderedorderOrder
+}
+
+input UpdateProductsOrderedInput {
+  id: ID!
+  name: String
+  price: Float
+  quantity: Int
+  orderId: ID
+  order: ProductsOrderedorderOrder
+  clientMutationId: String!
+}
+
+type UpdateProductsOrderedPayload {
+  viewer: Viewer!
+  clientMutationId: String!
+  productsOrdered: ProductsOrdered
+  edge: ProductsOrderedEdge
+  order: Order
+}
+
 input UpdateShoppingCart {
   id: ID!
-  orderId: ID
-  order: ShoppingCartorderOrder
   userId: ID
   user: ShoppingCartuserUser
   cartProductsIds: [ID!]
@@ -1970,8 +2296,6 @@ input UpdateShoppingCart {
 
 input UpdateShoppingCartInput {
   id: ID!
-  orderId: ID
-  order: ShoppingCartorderOrder
   userId: ID
   user: ShoppingCartuserUser
   cartProductsIds: [ID!]
@@ -1984,7 +2308,6 @@ type UpdateShoppingCartPayload {
   clientMutationId: String!
   shoppingCart: ShoppingCart
   edge: ShoppingCartEdge
-  order: Order
   user: User
 }
 
@@ -2208,14 +2531,14 @@ enum UserOrderBy {
 
 input UserordersOrder {
   isPaid: Boolean
-  orderNumber: Int!
-  shoppingCartId: ID
-  shoppingCart: OrdershoppingCartShoppingCart
+  totalOrderValue: Float!
+  cartProductsIds: [ID!]
+  cartProducts: [OrdercartProductsCartProduct!]
+  productsOrderedsIds: [ID!]
+  productsOrdereds: [OrderproductsOrderedsProductsOrdered!]
 }
 
 input UsershoppingCartShoppingCart {
-  orderId: ID
-  order: ShoppingCartorderOrder
   cartProductsIds: [ID!]
   cartProducts: [ShoppingCartcartProductsCartProduct!]
 }
@@ -2227,14 +2550,16 @@ type Viewer {
   allOrders(filter: OrderFilter, orderBy: OrderOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): OrderConnection!
   allPaymentInfoes(filter: PaymentInfoFilter, orderBy: PaymentInfoOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): PaymentInfoConnection!
   allProducts(filter: ProductFilter, orderBy: ProductOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
+  allProductsOrdereds(filter: ProductsOrderedFilter, orderBy: ProductsOrderedOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): ProductsOrderedConnection!
   allShoppingCarts(filter: ShoppingCartFilter, orderBy: ShoppingCartOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): ShoppingCartConnection!
   allUsers(filter: UserFilter, orderBy: UserOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   user: User
   CartProduct(id: ID): CartProduct
   File(id: ID, secret: String, url: String): File
-  Order(id: ID, orderNumber: Int): Order
+  Order(id: ID): Order
   PaymentInfo(id: ID): PaymentInfo
   Product(id: ID): Product
+  ProductsOrdered(id: ID): ProductsOrdered
   ShoppingCart(id: ID): ShoppingCart
   User(id: ID): User
   id: ID!

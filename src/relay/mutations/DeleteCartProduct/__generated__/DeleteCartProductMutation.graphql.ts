@@ -1,100 +1,15 @@
 /* tslint:disable */
 
 import { ConcreteRequest } from "relay-runtime";
-export type Colors = "Black" | "Blue" | "Colorless" | "Gold" | "Green" | "Red" | "White" | "%future added value";
-export type UpdateCartProductInput = {
+export type DeleteCartProductInput = {
     readonly id: string;
-    readonly quantityOnCart?: number | null;
-    readonly orderId?: string | null;
-    readonly order?: CartProductorderOrder | null;
-    readonly productId?: string | null;
-    readonly product?: CartProductproductProduct | null;
-    readonly shoppingCartId?: string | null;
-    readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
     readonly clientMutationId: string;
 };
-export type CartProductorderOrder = {
-    readonly isPaid?: boolean | null;
-    readonly totalOrderValue: number;
-    readonly userId?: string | null;
-    readonly user?: OrderuserUser | null;
-    readonly cartProductsIds?: ReadonlyArray<string> | null;
-    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
-    readonly productsOrderedsIds?: ReadonlyArray<string> | null;
-    readonly productsOrdereds?: ReadonlyArray<OrderproductsOrderedsProductsOrdered> | null;
+export type DeleteCartProductMutationVariables = {
+    readonly input: DeleteCartProductInput;
 };
-export type OrderuserUser = {
-    readonly name: string;
-    readonly shoppingCartId?: string | null;
-    readonly shoppingCart?: UsershoppingCartShoppingCart | null;
-    readonly creditCardInfoIds?: ReadonlyArray<string> | null;
-    readonly creditCardInfo?: ReadonlyArray<UsercreditCardInfoPaymentInfo> | null;
-    readonly ordersIds?: ReadonlyArray<string> | null;
-    readonly orders?: ReadonlyArray<UserordersOrder> | null;
-};
-export type UsershoppingCartShoppingCart = {
-    readonly cartProductsIds?: ReadonlyArray<string> | null;
-    readonly cartProducts?: ReadonlyArray<ShoppingCartcartProductsCartProduct> | null;
-};
-export type ShoppingCartcartProductsCartProduct = {
-    readonly quantityOnCart?: number | null;
-    readonly orderId?: string | null;
-    readonly order?: CartProductorderOrder | null;
-    readonly productId?: string | null;
-    readonly product?: CartProductproductProduct | null;
-};
-export type CartProductproductProduct = {
-    readonly cardColor?: Colors | null;
-    readonly cardType?: string | null;
-    readonly description?: string | null;
-    readonly imgUrl?: string | null;
-    readonly name?: string | null;
-    readonly price?: number | null;
-    readonly quantityInStock?: number | null;
-};
-export type UsercreditCardInfoPaymentInfo = {
-    readonly cardNumber: number;
-    readonly cvv: number;
-    readonly isValid: boolean;
-};
-export type UserordersOrder = {
-    readonly isPaid?: boolean | null;
-    readonly totalOrderValue: number;
-    readonly cartProductsIds?: ReadonlyArray<string> | null;
-    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
-    readonly productsOrderedsIds?: ReadonlyArray<string> | null;
-    readonly productsOrdereds?: ReadonlyArray<OrderproductsOrderedsProductsOrdered> | null;
-};
-export type OrdercartProductsCartProduct = {
-    readonly quantityOnCart?: number | null;
-    readonly productId?: string | null;
-    readonly product?: CartProductproductProduct | null;
-    readonly shoppingCartId?: string | null;
-    readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
-};
-export type CartProductshoppingCartShoppingCart = {
-    readonly userId?: string | null;
-    readonly user?: ShoppingCartuserUser | null;
-    readonly cartProductsIds?: ReadonlyArray<string> | null;
-    readonly cartProducts?: ReadonlyArray<ShoppingCartcartProductsCartProduct> | null;
-};
-export type ShoppingCartuserUser = {
-    readonly name: string;
-    readonly creditCardInfoIds?: ReadonlyArray<string> | null;
-    readonly creditCardInfo?: ReadonlyArray<UsercreditCardInfoPaymentInfo> | null;
-    readonly ordersIds?: ReadonlyArray<string> | null;
-    readonly orders?: ReadonlyArray<UserordersOrder> | null;
-};
-export type OrderproductsOrderedsProductsOrdered = {
-    readonly name: string;
-    readonly price: number;
-    readonly quantity: number;
-};
-export type UpdateCartProductMutationVariables = {
-    readonly input: UpdateCartProductInput;
-};
-export type UpdateCartProductMutationResponse = {
-    readonly updateCartProduct: {
+export type DeleteCartProductMutationResponse = {
+    readonly deleteCartProduct: {
         readonly clientMutationId: string;
         readonly cartProduct: {
             readonly quantityOnCart: number;
@@ -121,18 +36,18 @@ export type UpdateCartProductMutationResponse = {
         } | null;
     } | null;
 };
-export type UpdateCartProductMutation = {
-    readonly response: UpdateCartProductMutationResponse;
-    readonly variables: UpdateCartProductMutationVariables;
+export type DeleteCartProductMutation = {
+    readonly response: DeleteCartProductMutationResponse;
+    readonly variables: DeleteCartProductMutationVariables;
 };
 
 
 
 /*
-mutation UpdateCartProductMutation(
-  $input: UpdateCartProductInput!
+mutation DeleteCartProductMutation(
+  $input: DeleteCartProductInput!
 ) {
-  updateCartProduct(input: $input) {
+  deleteCartProduct(input: $input) {
     clientMutationId
     cartProduct {
       quantityOnCart
@@ -170,7 +85,7 @@ var v0 = [
   {
     "kind": "LocalArgument",
     "name": "input",
-    "type": "UpdateCartProductInput!",
+    "type": "DeleteCartProductInput!",
     "defaultValue": null
   }
 ],
@@ -234,7 +149,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "UpdateCartProductMutation",
+    "name": "DeleteCartProductMutation",
     "type": "Mutation",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
@@ -242,10 +157,10 @@ return {
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "updateCartProduct",
+        "name": "deleteCartProduct",
         "storageKey": null,
         "args": (v1/*: any*/),
-        "concreteType": "UpdateCartProductPayload",
+        "concreteType": "DeleteCartProductPayload",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -341,16 +256,16 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "UpdateCartProductMutation",
+    "name": "DeleteCartProductMutation",
     "argumentDefinitions": (v0/*: any*/),
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "updateCartProduct",
+        "name": "deleteCartProduct",
         "storageKey": null,
         "args": (v1/*: any*/),
-        "concreteType": "UpdateCartProductPayload",
+        "concreteType": "DeleteCartProductPayload",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -450,12 +365,12 @@ return {
   },
   "params": {
     "operationKind": "mutation",
-    "name": "UpdateCartProductMutation",
+    "name": "DeleteCartProductMutation",
     "id": null,
-    "text": "mutation UpdateCartProductMutation(\n  $input: UpdateCartProductInput!\n) {\n  updateCartProduct(input: $input) {\n    clientMutationId\n    cartProduct {\n      quantityOnCart\n      id\n      product {\n        name\n        quantityInStock\n        id\n      }\n    }\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            product {\n              name\n              price\n              quantityInStock\n              id\n            }\n            id\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
+    "text": "mutation DeleteCartProductMutation(\n  $input: DeleteCartProductInput!\n) {\n  deleteCartProduct(input: $input) {\n    clientMutationId\n    cartProduct {\n      quantityOnCart\n      id\n      product {\n        name\n        quantityInStock\n        id\n      }\n    }\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            product {\n              name\n              price\n              quantityInStock\n              id\n            }\n            id\n          }\n        }\n      }\n      id\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '32f8ed814d40abd81548ea659de9e3a4';
+(node as any).hash = 'eaa27a0fe5e4b1ea50b4cc55f91ce53c';
 export default node;

@@ -17,22 +17,20 @@ export type UpdateProductInput = {
 };
 export type ProductcartProductCartProduct = {
     readonly quantityOnCart?: number | null;
+    readonly orderId?: string | null;
+    readonly order?: CartProductorderOrder | null;
     readonly shoppingCartId?: string | null;
     readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
 };
-export type CartProductshoppingCartShoppingCart = {
-    readonly orderId?: string | null;
-    readonly order?: ShoppingCartorderOrder | null;
-    readonly userId?: string | null;
-    readonly user?: ShoppingCartuserUser | null;
-    readonly cartProductsIds?: ReadonlyArray<string> | null;
-    readonly cartProducts?: ReadonlyArray<ShoppingCartcartProductsCartProduct> | null;
-};
-export type ShoppingCartorderOrder = {
+export type CartProductorderOrder = {
     readonly isPaid?: boolean | null;
-    readonly orderNumber: number;
+    readonly totalOrderValue: number;
     readonly userId?: string | null;
     readonly user?: OrderuserUser | null;
+    readonly cartProductsIds?: ReadonlyArray<string> | null;
+    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
+    readonly productsOrderedsIds?: ReadonlyArray<string> | null;
+    readonly productsOrdereds?: ReadonlyArray<OrderproductsOrderedsProductsOrdered> | null;
 };
 export type OrderuserUser = {
     readonly name: string;
@@ -44,13 +42,13 @@ export type OrderuserUser = {
     readonly orders?: ReadonlyArray<UserordersOrder> | null;
 };
 export type UsershoppingCartShoppingCart = {
-    readonly orderId?: string | null;
-    readonly order?: ShoppingCartorderOrder | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
     readonly cartProducts?: ReadonlyArray<ShoppingCartcartProductsCartProduct> | null;
 };
 export type ShoppingCartcartProductsCartProduct = {
     readonly quantityOnCart?: number | null;
+    readonly orderId?: string | null;
+    readonly order?: CartProductorderOrder | null;
     readonly productId?: string | null;
     readonly product?: CartProductproductProduct | null;
 };
@@ -70,11 +68,20 @@ export type UsercreditCardInfoPaymentInfo = {
 };
 export type UserordersOrder = {
     readonly isPaid?: boolean | null;
-    readonly orderNumber: number;
-    readonly shoppingCartId?: string | null;
-    readonly shoppingCart?: OrdershoppingCartShoppingCart | null;
+    readonly totalOrderValue: number;
+    readonly cartProductsIds?: ReadonlyArray<string> | null;
+    readonly cartProducts?: ReadonlyArray<OrdercartProductsCartProduct> | null;
+    readonly productsOrderedsIds?: ReadonlyArray<string> | null;
+    readonly productsOrdereds?: ReadonlyArray<OrderproductsOrderedsProductsOrdered> | null;
 };
-export type OrdershoppingCartShoppingCart = {
+export type OrdercartProductsCartProduct = {
+    readonly quantityOnCart?: number | null;
+    readonly productId?: string | null;
+    readonly product?: CartProductproductProduct | null;
+    readonly shoppingCartId?: string | null;
+    readonly shoppingCart?: CartProductshoppingCartShoppingCart | null;
+};
+export type CartProductshoppingCartShoppingCart = {
     readonly userId?: string | null;
     readonly user?: ShoppingCartuserUser | null;
     readonly cartProductsIds?: ReadonlyArray<string> | null;
@@ -86,6 +93,11 @@ export type ShoppingCartuserUser = {
     readonly creditCardInfo?: ReadonlyArray<UsercreditCardInfoPaymentInfo> | null;
     readonly ordersIds?: ReadonlyArray<string> | null;
     readonly orders?: ReadonlyArray<UserordersOrder> | null;
+};
+export type OrderproductsOrderedsProductsOrdered = {
+    readonly name: string;
+    readonly price: number;
+    readonly quantity: number;
 };
 export type UpdateProductMutationVariables = {
     readonly input: UpdateProductInput;

@@ -4,8 +4,8 @@ import { ConcreteRequest } from "relay-runtime";
 type NavBar_viewer$ref = any;
 type ProductsList_allProducts$ref = any;
 type ProductsList_shoppingCart$ref = any;
-export type AppQueryVariables = {};
-export type AppQueryResponse = {
+export type MainQueryVariables = {};
+export type MainQueryResponse = {
     readonly viewer: {
         readonly allProducts: {
             readonly " $fragmentRefs": ProductsList_allProducts$ref;
@@ -18,15 +18,15 @@ export type AppQueryResponse = {
         readonly " $fragmentRefs": NavBar_viewer$ref;
     };
 };
-export type AppQuery = {
-    readonly response: AppQueryResponse;
-    readonly variables: AppQueryVariables;
+export type MainQuery = {
+    readonly response: MainQueryResponse;
+    readonly variables: MainQueryVariables;
 };
 
 
 
 /*
-query AppQuery {
+query MainQuery {
   viewer {
     ...NavBar_viewer
     allProducts {
@@ -166,7 +166,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "AppQuery",
+    "name": "MainQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": [],
@@ -234,7 +234,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "AppQuery",
+    "name": "MainQuery",
     "argumentDefinitions": [],
     "selections": [
       {
@@ -401,12 +401,12 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "AppQuery",
+    "name": "MainQuery",
     "id": null,
-    "text": "query AppQuery {\n  viewer {\n    ...NavBar_viewer\n    allProducts {\n      ...ProductsList_allProducts\n    }\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      shoppingCart {\n        ...ProductsList_shoppingCart\n        id\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment NavBar_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            id\n          }\n        }\n      }\n      ...CartProductsList_shoppingCart\n      id\n    }\n  }\n}\n\nfragment ProductsList_allProducts on ProductConnection {\n  count\n  edges {\n    node {\n      ...DetailedProductCard_product\n      id\n    }\n  }\n}\n\nfragment ProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n  cardColor\n  description\n  cardType\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n",
+    "text": "query MainQuery {\n  viewer {\n    ...NavBar_viewer\n    allProducts {\n      ...ProductsList_allProducts\n    }\n    User(id: \"cjzyfwspn0f1a01671todqxul\") {\n      shoppingCart {\n        ...ProductsList_shoppingCart\n        id\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment NavBar_viewer on Viewer {\n  User(id: \"cjzyfwspn0f1a01671todqxul\") {\n    name\n    id\n    shoppingCart {\n      cartProducts {\n        count\n        edges {\n          node {\n            quantityOnCart\n            id\n          }\n        }\n      }\n      ...CartProductsList_shoppingCart\n      id\n    }\n  }\n}\n\nfragment ProductsList_allProducts on ProductConnection {\n  count\n  edges {\n    node {\n      ...DetailedProductCard_product\n      id\n    }\n  }\n}\n\nfragment ProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n  cardColor\n  description\n  cardType\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    count\n    edges {\n      node {\n        id\n        quantityOnCart\n        product {\n          id\n          name\n          price\n          quantityInStock\n        }\n      }\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '8feab2319d8a0a1a93742a34ae405f74';
+(node as any).hash = '77e82011455e1d328eb8455bab7e07a6';
 export default node;
