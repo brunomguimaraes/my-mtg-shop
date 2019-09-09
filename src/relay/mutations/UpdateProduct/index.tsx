@@ -3,38 +3,38 @@ import { commitMutation } from "react-relay";
 import environment from "../../Environment";
 
 const mutation = graphql`
-	mutation UpdateProductMutation($input: UpdateProductInput!) {
-		updateProduct(input: $input) {
-			clientMutationId
-			product {
-				id
-				quantityInStock
-			}
-		}
-	}
+  mutation UpdateProductMutation($input: UpdateProductInput!) {
+    updateProduct(input: $input) {
+      clientMutationId
+      product {
+        id
+        quantityInStock
+      }
+    }
+  }
 `;
 
 export const updateProduct = (
-	clientMutationId: string,
-	id: string,
-	quantityInStock: number,
-	onCompletedCallBack: () => void,
-	onErrorCallBack: () => void
+  clientMutationId: string,
+  id: string,
+  quantityInStock: number,
+  onCompletedCallBack: () => void,
+  onErrorCallBack: () => void
 ) => {
-	const variables = {
-		input: {
-			id,
-			clientMutationId,
-			quantityInStock
-		}
-	};
+  const variables = {
+    input: {
+      id,
+      clientMutationId,
+      quantityInStock
+    }
+  };
 
-	commitMutation(environment, {
-		mutation,
-		variables,
-		onCompleted: (response, errors) => {
-			onCompletedCallBack();
-		},
-		onError: err => onErrorCallBack()
-	});
+  commitMutation(environment, {
+    mutation,
+    variables,
+    onCompleted: (response, errors) => {
+      onCompletedCallBack();
+    },
+    onError: err => onErrorCallBack()
+  });
 };
