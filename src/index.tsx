@@ -10,10 +10,10 @@ require("dotenv").config();
 const browserHistory = createBrowserHistory();
 
 ReactDOM.render(
-	<Router history={browserHistory}>
-		<App />
-	</Router>,
-	document.getElementById("root")
+  <Router history={browserHistory}>
+    <App />
+  </Router>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
