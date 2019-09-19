@@ -8,7 +8,7 @@ import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import CartProductsList from "../CartProductsList";
 import { IconButton, Badge } from "@material-ui/core";
-import { NavBar_viewer } from "./__generated__/NavBar_viewer.graphql";
+import { NavBar_user } from "./__generated__/NavBar_user.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type IProps = {
-  viewer: NavBar_viewer;
+  user: NavBar_user;
   showCart?: boolean;
 };
 
-const NavBar = ({ viewer, showCart }: IProps) => {
+const NavBar = ({ user, showCart }: IProps) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -47,7 +47,6 @@ const NavBar = ({ viewer, showCart }: IProps) => {
   const handleCartListClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -67,11 +66,11 @@ const NavBar = ({ viewer, showCart }: IProps) => {
               >
                 <Badge
                   badgeContent={
-                    viewer.User!.shoppingCart!.cartProducts! &&
-                    viewer.User!.shoppingCart!.cartProducts!.count !== 0
-                      ? viewer
-                          .User!.shoppingCart!.cartProducts!.edges!.map(
-                            product => product!.node!.quantityOnCart!
+                    user.shoppingCart!.cartProducts! &&
+                    user.shoppingCart!.cartProducts!.length !== 0
+                      ? user
+                          .shoppingCart!.cartProducts!.map(
+                            product => product!.quantityOnCart!
                           )
                           .reduce((totalValue, amount) => totalValue + amount)
                       : 0
@@ -85,11 +84,11 @@ const NavBar = ({ viewer, showCart }: IProps) => {
           )}
         </Toolbar>
       </AppBar>
-      {viewer.User!.shoppingCart!.cartProducts && (
+      {user.shoppingCart!.cartProducts && (
         <CartProductsList
           anchorElOnClose={handleCartListClose}
           anchorElementReference={anchorEl}
-          shoppingCart={viewer.User!.shoppingCart as any}
+          shoppingCart={user.shoppingCart as any}
         />
       )}
     </div>
@@ -97,22 +96,15 @@ const NavBar = ({ viewer, showCart }: IProps) => {
 };
 
 export default createFragmentContainer(NavBar, {
-  viewer: graphql`
-    fragment NavBar_viewer on Viewer {
-      User(id: "cjzyfwspn0f1a01671todqxul") {
-        name
-        id
-        shoppingCart {
-          cartProducts {
-            count
-            edges {
-              node {
-                quantityOnCart
-              }
-            }
-          }
-          ...CartProductsList_shoppingCart
+  user: graphql`
+    fragment NavBar_user on User {
+      name
+      id
+      shoppingCart {
+        cartProducts {
+          quantityOnCart
         }
+        ...CartProductsList_shoppingCart
       }
     }
   `

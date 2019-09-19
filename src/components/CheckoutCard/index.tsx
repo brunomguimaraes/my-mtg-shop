@@ -3,14 +3,14 @@ import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { Box, Grid, Divider, Button, Typography } from "@material-ui/core";
 import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
-import { CheckoutCard_viewer } from "./__generated__/CheckoutCard_viewer.graphql";
+import { CheckoutCard_user } from "./__generated__/CheckoutCard_user.graphql";
 import CheckoutList from "../CheckoutList";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
-import { createOrder } from "../../relay/mutations/CreateOrder";
+// import { createOrder } from "../../relay/mutations/CreateOrder";
 import CreditCardList from "../CreditCardList";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link } from "react-router-dom";
-import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
+// import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
 import ThankYou from "../ThankYou";
 import { MySnackbarContentWrapper } from "../SnackBar";
 
@@ -59,19 +59,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type IProps = {
-  viewer: CheckoutCard_viewer;
+  user: CheckoutCard_user;
 };
 
-const CheckoutCard = ({ viewer }: IProps) => {
+const CheckoutCard = ({ user }: IProps) => {
   const classes = useStyles();
-  const productsToCheckout = viewer.User!.shoppingCart!.cartProducts!;
+  const productsToCheckout = user.shoppingCart!.cartProducts!;
   const totalValue =
-    productsToCheckout.count !== 0
-      ? productsToCheckout
-          .edges!.map(cartProduct =>
-            cartProduct!.node.product!
-              ? cartProduct!.node.product!.price! *
-                cartProduct!.node.quantityOnCart
+    productsToCheckout.length !== 0
+      ? productsToCheckout!
+          .map(cartProduct =>
+            cartProduct!.product!
+              ? cartProduct!.product!.price! * cartProduct!.quantityOnCart!
               : 0
           )
           .reduce((totalValue, amount) => totalValue + amount)
@@ -86,45 +85,43 @@ const CheckoutCard = ({ viewer }: IProps) => {
   const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
 
   const placeOrder = () => {
-    const checkoutProducts = productsToCheckout.edges!.filter(
-      products => products!.node.quantityOnCart !== 0
+    const checkoutProducts = productsToCheckout.filter(
+      products => products!.quantityOnCart !== 0
     );
-    const checkoutProductsIds = checkoutProducts.map(
-      products => products!.node.id
-    );
+    const checkoutProductsIds = checkoutProducts.map(products => products!.id);
     const orderedProducts = checkoutProducts.map(products => ({
-      name: products!.node.product!.name as string,
-      price: products!.node.product!.price as number,
-      quantity: products!.node.quantityOnCart as number
+      name: products!.product!.name as string,
+      price: products!.product!.price as number,
+      quantity: products!.quantityOnCart as number
     }));
     const clientMutationId = uuidVersion4Generator();
     setOrderReview(orderedProducts);
-    if (validCreditCard) {
-      createOrder(
-        validCreditCard,
-        checkoutProductsIds,
-        totalValue,
-        clientMutationId,
-        orderedProducts,
-        () => cleanUpCart(checkoutProductsIds),
-        () => errorHandler("Erro ao efetuar o pedido")
-      );
-    } else {
-      errorHandler("Erro, cartão inválido");
-    }
+    // if (validCreditCard) {
+    //   createOrder(
+    //     validCreditCard,
+    //     checkoutProductsIds,
+    //     totalValue,
+    //     clientMutationId,
+    //     orderedProducts,
+    //     () => cleanUpCart(checkoutProductsIds),
+    //     () => errorHandler("Erro ao efetuar o pedido")
+    //   );
+    // } else {
+    //   errorHandler("Erro, cartão inválido");
+    // }
   };
 
   const cleanUpCart = (productIds: string[]) => {
     setcompletedOrder(true);
-    const clientMutationId = uuidVersion4Generator();
-    productIds.map(id =>
-      deleteCartProduct(
-        id,
-        clientMutationId,
-        () => console.log("success"),
-        () => errorHandler("Erro ao limpar o carrinho")
-      )
-    );
+    // const clientMutationId = uuidVersion4Generator();
+    // productIds.map(id =>
+    //   deleteCartProduct(
+    //     id,
+    //     clientMutationId,
+    //     () => console.log("success"),
+    //     () => errorHandler("Erro ao limpar o carrinho")
+    //   )
+    // );
   };
 
   const creditCardSelector = (creditCardisValid: boolean) => {
@@ -165,10 +162,8 @@ const CheckoutCard = ({ viewer }: IProps) => {
                 justify="center"
                 alignItems="flex-start"
               >
-                {viewer.User!.shoppingCart!.cartProducts && (
-                  <CheckoutList
-                    shoppingCart={viewer.User!.shoppingCart as any}
-                  />
+                {user.shoppingCart!.cartProducts && (
+                  <CheckoutList shoppingCart={user.shoppingCart as any} />
                 )}
               </Grid>
             </div>
@@ -177,7 +172,7 @@ const CheckoutCard = ({ viewer }: IProps) => {
               <Grid>
                 <CreditCardList
                   creditCardChecker={creditCardSelector}
-                  creditCardInfo={viewer.User!.creditCardInfo as any}
+                  creditCardInfo={user.creditCardInfo as any}
                 />
               </Grid>
             </div>
@@ -202,32 +197,29 @@ const CheckoutCard = ({ viewer }: IProps) => {
 };
 
 export default createFragmentContainer(CheckoutCard, {
-  viewer: graphql`
-    fragment CheckoutCard_viewer on Viewer {
-      User(id: "cjzyfwspn0f1a01671todqxul") {
-        name
-        id
-        shoppingCart {
-          ...CheckoutList_shoppingCart
-          cartProducts {
-            count
-            edges {
-              node {
-                id
-                quantityOnCart
-                product {
-                  id
-                  name
-                  price
-                  quantityInStock
-                }
-              }
-            }
+  user: graphql`
+    fragment CheckoutCard_user on User {
+      name
+      id
+      shoppingCart {
+        ...CheckoutList_shoppingCart
+        cartProducts {
+          id
+          quantityOnCart
+          product {
+            id
+            name
+            price
+            quantityInStock
           }
         }
-        creditCardInfo {
-          ...CreditCardList_creditCardInfo
-        }
+      }
+      ...CreditCardList_creditCardInfo
+      creditCardInfo {
+        cardNumber
+        cvv
+        id
+        isValid
       }
     }
   `

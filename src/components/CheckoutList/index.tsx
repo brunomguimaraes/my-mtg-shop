@@ -51,25 +51,24 @@ const CheckoutList = ({ shoppingCart }: IProps) => {
   return (
     <React.Fragment>
       {shoppingCart &&
-        shoppingCart!.cartProducts!.edges!.map(
+        shoppingCart!.cartProducts!.map(
           cartProduct =>
-            cartProduct!.node.quantityOnCart !== 0 && (
+            cartProduct!.quantityOnCart !== 0 && (
               <MenuItem
-                key={shoppingCart!.cartProducts!.edges!.indexOf(cartProduct)}
+                key={shoppingCart!.cartProducts!.indexOf(cartProduct)}
                 className={classes.sectionMenuItem}
               >
                 <div className={classes.sectionPlusMinusIcons}></div>
                 <div className={classes.sectionMenuItemSlug}>
-                  {cartProduct!.node.quantityOnCart}
+                  {cartProduct!.quantityOnCart}
                   {"x "}
                 </div>
                 <div className={classes.sectionMenuItemSlug}>
-                  {cartProduct!.node.product!.name}
+                  {cartProduct!.product!.name}
                 </div>
                 <div className={classes.sectionMenuItemSlug}>
                   {formatCurrency(
-                    cartProduct!.node.product!.price! *
-                      cartProduct!.node.quantityOnCart
+                    cartProduct!.product!.price! * cartProduct!.quantityOnCart!
                   )}
                 </div>
               </MenuItem>
@@ -79,12 +78,11 @@ const CheckoutList = ({ shoppingCart }: IProps) => {
       <div className={classes.sectionProceedToCheckout}>
         {"Valor total: "}
         {formatCurrency(
-          shoppingCart!.cartProducts!.count !== 0
+          shoppingCart!.cartProducts!.length !== 0
             ? shoppingCart!
-                .cartProducts!.edges!.map(
+                .cartProducts!.map(
                   cartProduct =>
-                    cartProduct!.node.product!.price! *
-                    cartProduct!.node.quantityOnCart
+                    cartProduct!.product!.price! * cartProduct!.quantityOnCart!
                 )
                 .reduce((totalValue, amount) => totalValue + amount)
             : 0
@@ -99,18 +97,13 @@ export default createFragmentContainer(CheckoutList, {
     fragment CheckoutList_shoppingCart on ShoppingCart {
       id
       cartProducts {
-        count
-        edges {
-          node {
-            id
-            quantityOnCart
-            product {
-              id
-              name
-              price
-              quantityInStock
-            }
-          }
+        id
+        quantityOnCart
+        product {
+          id
+          name
+          price
+          quantityInStock
         }
       }
     }

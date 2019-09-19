@@ -51,29 +51,26 @@ const CreditCardList = ({ creditCardInfo, creditCardChecker }: IProps) => {
         Selecione o Cartão para pagamento:
       </Typography>
       <div className={classes.cardContainer}>
-        {creditCardInfo!.edges!.map(creditCard => (
+        {creditCardInfo!.creditCardInfo.map(creditCard => (
           <Card
-            key={creditCard!.node.id}
+            key={creditCard!.id}
             className={
-              isSelectedId === creditCard!.node.id
+              isSelectedId === creditCard!.id
                 ? classes.selectedCard
                 : classes.card
             }
           >
             <CardActionArea
               onClick={() =>
-                creditCardSelector(
-                  creditCard!.node.isValid,
-                  creditCard!.node.id
-                )
+                creditCardSelector(creditCard!.isValid, creditCard!.id)
               }
             >
               <CardContent>
                 <Typography gutterBottom variant="h6" component="h2">
-                  {creditCard!.node.cardNumber}
+                  {creditCard!.cardNumber}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" component="p">
-                  CVV: {creditCard!.node.cvv}
+                  CVV: {creditCard!.cvv}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -86,14 +83,12 @@ const CreditCardList = ({ creditCardInfo, creditCardChecker }: IProps) => {
 
 export default createFragmentContainer(CreditCardList, {
   creditCardInfo: graphql`
-    fragment CreditCardList_creditCardInfo on PaymentInfoConnection {
-      edges {
-        node {
-          cardNumber
-          cvv
-          id
-          isValid
-        }
+    fragment CreditCardList_creditCardInfo on User {
+      creditCardInfo {
+        cardNumber
+        cvv
+        id
+        isValid
       }
     }
   `
