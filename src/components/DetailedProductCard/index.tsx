@@ -11,9 +11,8 @@ import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import { DetailedProductCard_product } from "./__generated__/DetailedProductCard_product.graphql";
 import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
-import { uuidVersion4Generator } from "../../utils/idGenerators";
-// import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
-// import { updateProduct } from "../../relay/mutations/UpdateProduct";
+import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
+import { updateProduct } from "../../relay/mutations/UpdateProduct";
 import { MySnackbarContentWrapper } from "../SnackBar";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -110,19 +109,18 @@ function DetailedProductCard({
         (e: any) => e!.product!.id === product.id
       );
       if (productToBeAdded) {
-        //   const cartProductId = productToBeAdded.node.id;
-        //   const numberOnCart = productToBeAdded!.node.quantityOnCart;
-        //   updateCartProduct(clientMutationId, cartProductId, numberOnCart + 1);
+        const cartProductId = productToBeAdded.id;
+        const numberOnCart = productToBeAdded!.quantityOnCart;
+        updateCartProduct(cartProductId, numberOnCart + 1);
       } else {
         createCartProduct(1, product.id, shoppingCartId);
       }
-      // updateProduct(
-      //   clientMutationId,
-      //   product.id,
-      //   product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0,
-      //   () => successHandler("Produto adicionado com sucesso"),
-      //   () => errorHandler()
-      // );
+      updateProduct(
+        product.id,
+        product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0,
+        () => successHandler("Produto adicionado com sucesso"),
+        () => errorHandler()
+      );
     } else {
       errorHandler("Produto não disponível em estoque");
     }

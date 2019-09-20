@@ -60,6 +60,7 @@ type Mutation {
     description: String
     cardColor: Colors
   ): Product!
+  updateProduct(input: UpdateProductInput): Product
   deleteProduct(id: ID!): Boolean!
   createCartProduct(input: CreateCartProductInput): CartProductResponse
   updateCartProduct(input: UpdateCartProductInput): CartProductResponse
@@ -92,6 +93,11 @@ input CreateCartProductInput {
 input UpdateCartProductInput {
   id: ID!
   quantityOnCart: Int
+}
+
+input UpdateProductInput {
+  id: ID!
+  quantityInStock: Int
 }
 
 enum Colors {

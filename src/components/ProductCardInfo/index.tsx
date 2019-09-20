@@ -12,9 +12,8 @@ import {
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { formatCurrency } from "../../utils/formaters";
 import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
-import { uuidVersion4Generator } from "../../utils/idGenerators";
-// import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
-// import { updateProduct } from "../../relay/mutations/UpdateProduct";
+import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
+import { updateProduct } from "../../relay/mutations/UpdateProduct";
 import { MySnackbarContentWrapper } from "../SnackBar";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,7 +64,6 @@ const ProductCardInfo = ({
   shoppingCartId
 }: IProduct) => {
   const classes = useStyles();
-  const clientMutationId = uuidVersion4Generator();
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [isSnackBarVisible, setSnackBarVisible] = React.useState<boolean>(
@@ -77,23 +75,22 @@ const ProductCardInfo = ({
   const handleAddToCart = () => {
     setLoading(true);
     if (product.quantityInStock! !== 0) {
-      // const productToBeAdded = productsOnCart!.edges!.find(
-      //   e => e!.node!.product!.id === product.id
-      // );
-      // if (productToBeAdded) {
-      //   const cartProductId = productToBeAdded.node.id;
-      //   const numberOnCart = productToBeAdded.node.quantityOnCart;
-      //   updateCartProduct(clientMutationId, cartProductId, numberOnCart + 1);
-      // } else {
-      //   createCartProduct(1, product.id, shoppingCartId);
-      // }
-      // updateProduct(
-      //   clientMutationId,
-      //   product.id,
-      //   product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0,
-      //   () => successHandler("Produto adicionado com sucesso"),
-      //   () => errorHandler()
-      // );
+      const productToBeAdded = productsOnCart!.find(
+        (e: any) => e!.product!.id === product.id
+      );
+      if (productToBeAdded) {
+        const cartProductId = productToBeAdded.id;
+        const numberOnCart = productToBeAdded.quantityOnCart;
+        updateCartProduct(cartProductId, numberOnCart + 1);
+      } else {
+        createCartProduct(1, product.id, shoppingCartId);
+      }
+      updateProduct(
+        product.id,
+        product.quantityInStock! > 0 ? product.quantityInStock! - 1 : 0,
+        () => successHandler("Produto adicionado com sucesso"),
+        () => errorHandler()
+      );
     } else {
       errorHandler("Produto não disponível em estoque");
     }

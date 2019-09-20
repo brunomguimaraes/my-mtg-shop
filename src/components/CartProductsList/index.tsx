@@ -14,8 +14,7 @@ import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import { CartProductsList_shoppingCart } from "./__generated__/CartProductsList_shoppingCart.graphql";
 import { formatCurrency } from "../../utils/formaters";
-import { uuidVersion4Generator } from "../../utils/idGenerators";
-// import { updateProduct } from "../../relay/mutations/UpdateProduct";
+import { updateProduct } from "../../relay/mutations/UpdateProduct";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
 import { MySnackbarContentWrapper } from "../SnackBar";
 import { Link } from "react-router-dom";
@@ -60,7 +59,6 @@ const CartProductsList = ({
   anchorElOnClose
 }: IProps) => {
   const classes = useStyles();
-  const clientMutationId = uuidVersion4Generator();
 
   React.useEffect(() => {
     setAnchorEl(anchorElementReference);
@@ -94,13 +92,12 @@ const CartProductsList = ({
     setLoading(true);
     if (productsInStock !== 0) {
       updateCartProduct(cartProductId, numberOnCart + 1);
-      // updateProduct(
-      //   clientMutationId,
-      //   productId,
-      //   productsInStock >= 0 ? productsInStock - 1 : 0,
-      //   () => successHandler("Produto adicionado com sucesso"),
-      //   () => errorHandler()
-      // );
+      updateProduct(
+        productId,
+        productsInStock >= 0 ? productsInStock - 1 : 0,
+        () => successHandler("Produto adicionado com sucesso"),
+        () => errorHandler()
+      );
     } else {
       errorHandler("Produto não disponível em estoque");
     }
@@ -115,13 +112,12 @@ const CartProductsList = ({
     setError(false);
     setLoading(true);
     updateCartProduct(cartProductId, numberOnCart - 1);
-    // updateProduct(
-    //   clientMutationId,
-    //   productId,
-    //   productsInStock >= 0 ? productsInStock + 1 : 0,
-    //   () => successHandler("Produto removido com sucesso"),
-    //   () => errorHandler()
-    // );
+    updateProduct(
+      productId,
+      productsInStock >= 0 ? productsInStock + 1 : 0,
+      () => successHandler("Produto removido com sucesso"),
+      () => errorHandler()
+    );
   };
 
   const successHandler = (message: string) => {
