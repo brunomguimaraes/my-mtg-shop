@@ -16,7 +16,7 @@ import { CartProductsList_shoppingCart } from "./__generated__/CartProductsList_
 import { formatCurrency } from "../../utils/formaters";
 import { uuidVersion4Generator } from "../../utils/idGenerators";
 // import { updateProduct } from "../../relay/mutations/UpdateProduct";
-// import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
+import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
 import { MySnackbarContentWrapper } from "../SnackBar";
 import { Link } from "react-router-dom";
 
@@ -93,7 +93,7 @@ const CartProductsList = ({
     setError(false);
     setLoading(true);
     if (productsInStock !== 0) {
-      // updateCartProduct(clientMutationId, cartProductId, numberOnCart + 1);
+      updateCartProduct(cartProductId, numberOnCart + 1);
       // updateProduct(
       //   clientMutationId,
       //   productId,
@@ -114,7 +114,7 @@ const CartProductsList = ({
   ) => {
     setError(false);
     setLoading(true);
-    // updateCartProduct(clientMutationId, cartProductId, numberOnCart - 1);
+    updateCartProduct(cartProductId, numberOnCart - 1);
     // updateProduct(
     //   clientMutationId,
     //   productId,

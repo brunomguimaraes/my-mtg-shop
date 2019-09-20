@@ -1,16 +1,15 @@
 /* tslint:disable */
 
 import { ConcreteRequest } from "relay-runtime";
-export type CreateCartProductInput = {
-  readonly productId?: string | null;
+export type UpdateCartProductInput = {
+  readonly id: string;
   readonly quantityOnCart?: number | null;
-  readonly shoppingCartId?: string | null;
 };
-export type CreateCartProductMutationVariables = {
-  readonly input: CreateCartProductInput;
+export type UpdateCartProductMutationVariables = {
+  readonly input: UpdateCartProductInput;
 };
-export type CreateCartProductMutationResponse = {
-  readonly createCartProduct: {
+export type UpdateCartProductMutationResponse = {
+  readonly updateCartProduct: {
     readonly quantityOnCart: number | null;
     readonly id: string;
     readonly product: {
@@ -29,16 +28,16 @@ export type CreateCartProductMutationResponse = {
     } | null;
   } | null;
 };
-export type CreateCartProductMutation = {
-  readonly response: CreateCartProductMutationResponse;
-  readonly variables: CreateCartProductMutationVariables;
+export type UpdateCartProductMutation = {
+  readonly response: UpdateCartProductMutationResponse;
+  readonly variables: UpdateCartProductMutationVariables;
 };
 
 /*
-mutation CreateCartProductMutation(
-  $input: CreateCartProductInput!
+mutation UpdateCartProductMutation(
+  $input: UpdateCartProductInput!
 ) {
-  createCartProduct(input: $input) {
+  updateCartProduct(input: $input) {
     quantityOnCart
     id
     product {
@@ -68,7 +67,7 @@ const node: ConcreteRequest = (function() {
       {
         kind: "LocalArgument",
         name: "input",
-        type: "CreateCartProductInput!",
+        type: "UpdateCartProductInput!",
         defaultValue: null
       }
     ],
@@ -118,7 +117,7 @@ const node: ConcreteRequest = (function() {
     kind: "Request",
     fragment: {
       kind: "Fragment",
-      name: "CreateCartProductMutation",
+      name: "UpdateCartProductMutation",
       type: "Mutation",
       metadata: null,
       argumentDefinitions: v0 /*: any*/,
@@ -126,7 +125,7 @@ const node: ConcreteRequest = (function() {
         {
           kind: "LinkedField",
           alias: null,
-          name: "createCartProduct",
+          name: "updateCartProduct",
           storageKey: null,
           args: v1 /*: any*/,
           concreteType: "CartProductResponse",
@@ -183,13 +182,13 @@ const node: ConcreteRequest = (function() {
     },
     operation: {
       kind: "Operation",
-      name: "CreateCartProductMutation",
+      name: "UpdateCartProductMutation",
       argumentDefinitions: v0 /*: any*/,
       selections: [
         {
           kind: "LinkedField",
           alias: null,
-          name: "createCartProduct",
+          name: "updateCartProduct",
           storageKey: null,
           args: v1 /*: any*/,
           concreteType: "CartProductResponse",
@@ -253,13 +252,13 @@ const node: ConcreteRequest = (function() {
     },
     params: {
       operationKind: "mutation",
-      name: "CreateCartProductMutation",
+      name: "UpdateCartProductMutation",
       id: null,
       text:
-        "mutation CreateCartProductMutation(\n  $input: CreateCartProductInput!\n) {\n  createCartProduct(input: $input) {\n    quantityOnCart\n    id\n    product {\n      name\n      quantityInStock\n      id\n    }\n    shoppingCart {\n      cartProducts {\n        quantityOnCart\n        product {\n          name\n          price\n          quantityInStock\n          id\n        }\n        id\n      }\n      id\n    }\n  }\n}\n",
+        "mutation UpdateCartProductMutation(\n  $input: UpdateCartProductInput!\n) {\n  updateCartProduct(input: $input) {\n    quantityOnCart\n    id\n    product {\n      name\n      quantityInStock\n      id\n    }\n    shoppingCart {\n      cartProducts {\n        quantityOnCart\n        product {\n          name\n          price\n          quantityInStock\n          id\n        }\n        id\n      }\n      id\n    }\n  }\n}\n",
       metadata: {}
     }
   };
 })();
-(node as any).hash = "58f15f0e055739e7b72d04d1bfcfd7ec";
+(node as any).hash = "bb569b4c7faabba30b9246cde81a89ff";
 export default node;

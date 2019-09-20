@@ -61,7 +61,8 @@ type Mutation {
     cardColor: Colors
   ): Product!
   deleteProduct(id: ID!): Boolean!
-  createCartProduct(input: CreateCartProductInput): CreateCartProductResponse
+  createCartProduct(input: CreateCartProductInput): CartProductResponse
+  updateCartProduct(input: UpdateCartProductInput): CartProductResponse
   deleteCartProduct(id: ID!): Boolean!
 }
 
@@ -76,7 +77,7 @@ type Product {
   cardColor: Colors
 }
 
-type CreateCartProductResponse {
+type CartProductResponse {
   id: ID!
   product: Product
   shoppingCart: ShoppingCart
@@ -87,6 +88,10 @@ input CreateCartProductInput {
   productId: ID
   quantityOnCart: Int
   shoppingCartId: ID
+}
+input UpdateCartProductInput {
+  id: ID!
+  quantityOnCart: Int
 }
 
 enum Colors {
