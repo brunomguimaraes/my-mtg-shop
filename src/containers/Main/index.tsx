@@ -15,7 +15,6 @@ const Main: React.FC = () => {
       query={MainViewerQuery}
       variables={{}}
       render={({ error, props }): React.ReactNode => {
-        console.log("Props:", props);
         if (error) {
           return <div>Erro ao carregar produtos</div>;
         }

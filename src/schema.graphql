@@ -83,7 +83,7 @@ type Mutation {
   deleteProduct(id: ID!): Boolean!
   createCartProduct(input: CreateCartProductInput): CartProductResponse
   updateCartProduct(input: UpdateCartProductInput): CartProductResponse
-  deleteCartProduct(id: ID!): Boolean!
+  deleteCartProduct(input: DeleteCartProductInput): Boolean!
   createOrder(input: CreateOrderInput): Order
 }
 
@@ -125,6 +125,10 @@ input CreateOrderInput {
   isPaid: Boolean
   orderedProductIds: [ID]
   cartProductsIds: [ID]
+}
+
+input DeleteCartProductInput {
+  id: ID!
 }
 
 enum Colors {

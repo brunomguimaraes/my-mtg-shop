@@ -9,7 +9,7 @@ import { createOrder } from "../../relay/mutations/CreateOrder";
 import CreditCardList from "../CreditCardList";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link } from "react-router-dom";
-// import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
+import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
 import ThankYou from "../ThankYou";
 import { MySnackbarContentWrapper } from "../SnackBar";
 
@@ -109,13 +109,13 @@ const CheckoutCard = ({ user }: IProps) => {
 
   const cleanUpCart = (productIds: string[]) => {
     setcompletedOrder(true);
-    // productIds.map(id =>
-    //   deleteCartProduct(
-    //     id,
-    //     () => console.log("success"),
-    //     () => errorHandler("Erro ao limpar o carrinho")
-    //   )
-    // );
+    productIds.map(id =>
+      deleteCartProduct(
+        id,
+        () => console.log("success"),
+        () => errorHandler("Erro ao limpar o carrinho")
+      )
+    );
   };
 
   const creditCardSelector = (creditCardisValid: boolean) => {
