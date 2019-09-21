@@ -44,7 +44,7 @@ const CreditCardList = ({ creditCardInfo, creditCardChecker }: IProps) => {
     creditCardChecker(isValid);
     setSelectedId(id);
   };
-  console.log("infocredit", creditCardInfo);
+
   return (
     <React.Fragment>
       <Typography gutterBottom variant="h6" component="h2">
