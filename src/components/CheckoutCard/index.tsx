@@ -5,8 +5,7 @@ import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import { CheckoutCard_user } from "./__generated__/CheckoutCard_user.graphql";
 import CheckoutList from "../CheckoutList";
-import { uuidVersion4Generator } from "../../utils/idGenerators";
-// import { createOrder } from "../../relay/mutations/CreateOrder";
+import { createOrder } from "../../relay/mutations/CreateOrder";
 import CreditCardList from "../CreditCardList";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link } from "react-router-dom";
@@ -94,30 +93,25 @@ const CheckoutCard = ({ user }: IProps) => {
       price: products!.product!.price as number,
       quantity: products!.quantityOnCart as number
     }));
-    const clientMutationId = uuidVersion4Generator();
     setOrderReview(orderedProducts);
-    // if (validCreditCard) {
-    //   createOrder(
-    //     validCreditCard,
-    //     checkoutProductsIds,
-    //     totalValue,
-    //     clientMutationId,
-    //     orderedProducts,
-    //     () => cleanUpCart(checkoutProductsIds),
-    //     () => errorHandler("Erro ao efetuar o pedido")
-    //   );
-    // } else {
-    //   errorHandler("Erro, cartão inválido");
-    // }
+    if (validCreditCard) {
+      createOrder(
+        validCreditCard,
+        totalValue,
+        orderedProducts,
+        () => cleanUpCart(checkoutProductsIds),
+        () => errorHandler("Erro ao efetuar o pedido")
+      );
+    } else {
+      errorHandler("Erro, cartão inválido");
+    }
   };
 
   const cleanUpCart = (productIds: string[]) => {
     setcompletedOrder(true);
-    // const clientMutationId = uuidVersion4Generator();
     // productIds.map(id =>
     //   deleteCartProduct(
     //     id,
-    //     clientMutationId,
     //     () => console.log("success"),
     //     () => errorHandler("Erro ao limpar o carrinho")
     //   )
@@ -172,7 +166,7 @@ const CheckoutCard = ({ user }: IProps) => {
               <Grid>
                 <CreditCardList
                   creditCardChecker={creditCardSelector}
-                  creditCardInfo={user.creditCardInfo as any}
+                  creditCardInfo={user as any}
                 />
               </Grid>
             </div>

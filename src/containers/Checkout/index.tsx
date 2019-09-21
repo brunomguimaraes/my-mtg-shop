@@ -39,7 +39,7 @@ export default Checkout;
 
 const CheckoutViewerQuery = graphql`
   query CheckoutQuery {
-    user(id: "1") {
+    user(id: "35c96560-dca0-11e9-b5e6-6329846dbf80") {
       ...NavBar_user
       ...CheckoutCard_user
     }

@@ -11,6 +11,8 @@ type Query {
   product(id: ID!): Product!
   cartProducts: [CartProduct!]!
   cartProduct(id: ID!): CartProduct!
+  orders: [Order!]!
+  order(id: ID!): Order!
 }
 
 type User {
@@ -45,6 +47,23 @@ type ShoppingCartInput {
   userId: ID
 }
 
+type Order {
+  id: ID!
+  cartProducts: [CartProduct]
+  user: User
+  isPaid: Boolean
+  totalOrderValue: Float
+  productsOrdered: [OrderedProduct]
+}
+
+type OrderedProduct {
+  id: ID!
+  name: String
+  order: Order
+  price: Float
+  quantity: Int
+}
+
 type Mutation {
   _: Boolean
   createShoppingCart(userId: ID): ShoppingCartInput
@@ -65,6 +84,7 @@ type Mutation {
   createCartProduct(input: CreateCartProductInput): CartProductResponse
   updateCartProduct(input: UpdateCartProductInput): CartProductResponse
   deleteCartProduct(id: ID!): Boolean!
+  createOrder(input: CreateOrderInput): Order
 }
 
 type Product {
@@ -98,6 +118,13 @@ input UpdateCartProductInput {
 input UpdateProductInput {
   id: ID!
   quantityInStock: Int
+}
+
+input CreateOrderInput {
+  totalOrderValue: Float
+  isPaid: Boolean
+  orderedProductIds: [ID]
+  cartProductsIds: [ID]
 }
 
 enum Colors {

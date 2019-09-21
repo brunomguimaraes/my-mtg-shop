@@ -22,7 +22,7 @@ export type MainQuery = {
 /*
 query MainQuery {
   ...ProductsList_products
-  user(id: "1") {
+  user(id: "35c96560-dca0-11e9-b5e6-6329846dbf80") {
     ...NavBar_user
     shoppingCart {
       ...ProductsList_shoppingCart
@@ -94,7 +94,7 @@ const node: ConcreteRequest = (function() {
       {
         kind: "Literal",
         name: "id",
-        value: "1"
+        value: "35c96560-dca0-11e9-b5e6-6329846dbf80"
       }
     ],
     v1 = {
@@ -138,7 +138,7 @@ const node: ConcreteRequest = (function() {
           kind: "LinkedField",
           alias: null,
           name: "user",
-          storageKey: 'user(id:"1")',
+          storageKey: 'user(id:"35c96560-dca0-11e9-b5e6-6329846dbf80")',
           args: v0 /*: any*/,
           concreteType: "User",
           plural: false,
@@ -225,7 +225,7 @@ const node: ConcreteRequest = (function() {
           kind: "LinkedField",
           alias: null,
           name: "user",
-          storageKey: 'user(id:"1")',
+          storageKey: 'user(id:"35c96560-dca0-11e9-b5e6-6329846dbf80")',
           args: v0 /*: any*/,
           concreteType: "User",
           plural: false,
@@ -287,10 +287,10 @@ const node: ConcreteRequest = (function() {
       name: "MainQuery",
       id: null,
       text:
-        'query MainQuery {\n  ...ProductsList_products\n  user(id: "1") {\n    ...NavBar_user\n    shoppingCart {\n      ...ProductsList_shoppingCart\n      id\n    }\n    id\n  }\n}\n\nfragment ProductsList_products on Query {\n  products {\n    ...DetailedProductCard_product\n    id\n  }\n}\n\nfragment NavBar_user on User {\n  name\n  id\n  shoppingCart {\n    cartProducts {\n      quantityOnCart\n      id\n    }\n    ...CartProductsList_shoppingCart\n    id\n  }\n}\n\nfragment ProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    id\n    quantityOnCart\n    product {\n      id\n    }\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    id\n    quantityOnCart\n    product {\n      id\n      name\n      price\n      quantityInStock\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n  cardColor\n  description\n  cardType\n}\n',
+        'query MainQuery {\n  ...ProductsList_products\n  user(id: "35c96560-dca0-11e9-b5e6-6329846dbf80") {\n    ...NavBar_user\n    shoppingCart {\n      ...ProductsList_shoppingCart\n      id\n    }\n    id\n  }\n}\n\nfragment ProductsList_products on Query {\n  products {\n    ...DetailedProductCard_product\n    id\n  }\n}\n\nfragment NavBar_user on User {\n  name\n  id\n  shoppingCart {\n    cartProducts {\n      quantityOnCart\n      id\n    }\n    ...CartProductsList_shoppingCart\n    id\n  }\n}\n\nfragment ProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    id\n    quantityOnCart\n    product {\n      id\n    }\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    id\n    quantityOnCart\n    product {\n      id\n      name\n      price\n      quantityInStock\n    }\n  }\n}\n\nfragment DetailedProductCard_product on Product {\n  id\n  imgUrl\n  name\n  price\n  quantityInStock\n  cardColor\n  description\n  cardType\n}\n',
       metadata: {}
     }
   };
 })();
-(node as any).hash = "e07d8b6201ff1a94314147b156deb4f3";
+(node as any).hash = "b95ce9e463296f55506dc78197862c90";
 export default node;
