@@ -11,7 +11,6 @@ import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import { DetailedProductCard_product } from "./__generated__/DetailedProductCard_product.graphql";
 import { createCartProduct } from "../../relay/mutations/CreateCartProduct";
-import { uuidVersion4Generator } from "../../utils/idGenerators";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
 import { updateProduct } from "../../relay/mutations/UpdateProduct";
 import { MySnackbarContentWrapper } from "../SnackBar";
@@ -56,23 +55,35 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface ICartProducts {
-  readonly edges: ReadonlyArray<{
-    readonly node: {
-      readonly id: string;
-      readonly quantityOnCart: number;
-      readonly product: {
-        readonly id: string;
-      } | null;
-    };
-  } | null> | null;
-}
-
 type IProduct = {
   product: DetailedProductCard_product;
-  productsOnCart: ICartProducts | null;
+  productsOnCart: any;
   shoppingCartId: string;
   selectedProductHandler: (product: any) => void;
+};
+
+type CartProduct = {
+  id: string;
+  quantityOnCart: number | null;
+  product: Product;
+};
+
+type Product = {
+  id: string;
+  imgUrl: string;
+  name: string;
+  price: number;
+  quantityInStock: number;
+  cardType: string;
+  description: string;
+  cardColor:
+    | "Blue"
+    | "Black"
+    | "Gold"
+    | "Red"
+    | "Green"
+    | "Colorless"
+    | "White";
 };
 
 function DetailedProductCard({
@@ -82,7 +93,6 @@ function DetailedProductCard({
   selectedProductHandler
 }: IProduct) {
   const classes = useStyles();
-  const clientMutationId = uuidVersion4Generator();
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [isSnackBarVisible, setSnackBarVisible] = React.useState<boolean>(
@@ -95,18 +105,17 @@ function DetailedProductCard({
     setError(false);
     setLoading(true);
     if (product.quantityInStock !== 0) {
-      const productToBeAdded = productsOnCart!.edges!.find(
-        e => e!.node!.product!.id === product.id
+      const productToBeAdded = productsOnCart!.find(
+        (e: any) => e!.product!.id === product.id
       );
       if (productToBeAdded) {
-        const cartProductId = productToBeAdded.node.id;
-        const numberOnCart = productToBeAdded!.node.quantityOnCart;
-        updateCartProduct(clientMutationId, cartProductId, numberOnCart + 1);
+        const cartProductId = productToBeAdded.id;
+        const numberOnCart = productToBeAdded!.quantityOnCart;
+        updateCartProduct(cartProductId, numberOnCart + 1);
       } else {
-        createCartProduct(clientMutationId, 1, product.id, shoppingCartId);
+        createCartProduct(1, product.id, shoppingCartId);
       }
       updateProduct(
-        clientMutationId,
         product.id,
         product.quantityInStock! >= 0 ? product.quantityInStock! - 1 : 0,
         () => successHandler("Produto adicionado com sucesso"),

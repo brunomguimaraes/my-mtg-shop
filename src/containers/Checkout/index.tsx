@@ -24,9 +24,9 @@ const Checkout: React.FC = () => {
         return (
           <React.Fragment>
             <CssBaseline />
-            <NavBar viewer={props.viewer} showCart={false} />
+            <NavBar user={props.user!} showCart={false} />
             <Container maxWidth="md">
-              <CheckoutCard viewer={props.viewer} />
+              <CheckoutCard user={props.user!} />
             </Container>
           </React.Fragment>
         );
@@ -39,9 +39,9 @@ export default Checkout;
 
 const CheckoutViewerQuery = graphql`
   query CheckoutQuery {
-    viewer {
-      ...CheckoutCard_viewer
-      ...NavBar_viewer
+    user(id: "35c96560-dca0-11e9-b5e6-6329846dbf80") {
+      ...NavBar_user
+      ...CheckoutCard_user
     }
   }
 `;

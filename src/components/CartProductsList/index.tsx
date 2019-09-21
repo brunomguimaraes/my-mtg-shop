@@ -14,7 +14,6 @@ import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import { CartProductsList_shoppingCart } from "./__generated__/CartProductsList_shoppingCart.graphql";
 import { formatCurrency } from "../../utils/formaters";
-import { uuidVersion4Generator } from "../../utils/idGenerators";
 import { updateProduct } from "../../relay/mutations/UpdateProduct";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
 import { MySnackbarContentWrapper } from "../SnackBar";
@@ -60,7 +59,6 @@ const CartProductsList = ({
   anchorElOnClose
 }: IProps) => {
   const classes = useStyles();
-  const clientMutationId = uuidVersion4Generator();
 
   React.useEffect(() => {
     setAnchorEl(anchorElementReference);
@@ -93,9 +91,8 @@ const CartProductsList = ({
     setError(false);
     setLoading(true);
     if (productsInStock !== 0) {
-      updateCartProduct(clientMutationId, cartProductId, numberOnCart + 1);
+      updateCartProduct(cartProductId, numberOnCart + 1);
       updateProduct(
-        clientMutationId,
         productId,
         productsInStock >= 0 ? productsInStock - 1 : 0,
         () => successHandler("Produto adicionado com sucesso"),
@@ -114,9 +111,8 @@ const CartProductsList = ({
   ) => {
     setError(false);
     setLoading(true);
-    updateCartProduct(clientMutationId, cartProductId, numberOnCart - 1);
+    updateCartProduct(cartProductId, numberOnCart - 1);
     updateProduct(
-      clientMutationId,
       productId,
       productsInStock >= 0 ? productsInStock + 1 : 0,
       () => successHandler("Produto removido com sucesso"),
@@ -159,24 +155,22 @@ const CartProductsList = ({
         >
           {shoppingCart &&
             shoppingCart!.cartProducts &&
-            shoppingCart!.cartProducts!.edges!.map(
+            shoppingCart!.cartProducts!.map(
               cartProduct =>
-                cartProduct!.node.product &&
-                cartProduct!.node.quantityOnCart !== 0 && (
+                cartProduct!.product &&
+                cartProduct!.quantityOnCart !== 0 && (
                   <MenuItem
-                    key={shoppingCart!.cartProducts!.edges!.indexOf(
-                      cartProduct
-                    )}
+                    key={shoppingCart!.cartProducts!.indexOf(cartProduct)}
                     className={classes.sectionMenuItem}
                   >
                     <div className={classes.sectionPlusMinusIcons}>
                       <AddCircleIcon
                         onClick={() =>
                           handleIncreaseCartProduct(
-                            cartProduct!.node.id,
-                            cartProduct!.node.product!.id!,
-                            cartProduct!.node.quantityOnCart,
-                            cartProduct!.node.product!.quantityInStock!
+                            cartProduct!.id,
+                            cartProduct!.product!.id!,
+                            cartProduct!.quantityOnCart!,
+                            cartProduct!.product!.quantityInStock!
                           )
                         }
                         color={loading ? "disabled" : "inherit"}
@@ -187,10 +181,10 @@ const CartProductsList = ({
                           loading
                             ? null
                             : handleDecreaseCartProduct(
-                                cartProduct!.node.id,
-                                cartProduct!.node.product!.id!,
-                                cartProduct!.node.quantityOnCart,
-                                cartProduct!.node.product!.quantityInStock!
+                                cartProduct!.id,
+                                cartProduct!.product!.id!,
+                                cartProduct!.quantityOnCart!,
+                                cartProduct!.product!.quantityInStock!
                               )
                         }
                         color={loading ? "disabled" : "inherit"}
@@ -198,17 +192,17 @@ const CartProductsList = ({
                       />
                     </div>
                     <div className={classes.sectionMenuItemSlug}>
-                      {cartProduct!.node.quantityOnCart}
+                      {cartProduct!.quantityOnCart}
                       {"x "}
                     </div>
                     <div className={classes.sectionMenuItemSlug}>
-                      {cartProduct!.node.product!.name}
+                      {cartProduct!.product!.name}
                     </div>
                     <div className={classes.sectionMenuItemSlug}>
-                      {cartProduct!.node.product! &&
+                      {cartProduct!.product! &&
                         formatCurrency(
-                          cartProduct!.node.product!.price! *
-                            cartProduct!.node.quantityOnCart
+                          cartProduct!.product!.price! *
+                            cartProduct!.quantityOnCart!
                         )}
                     </div>
                   </MenuItem>
@@ -228,12 +222,12 @@ const CartProductsList = ({
             </Button>
             {"Valor total: "}
             {formatCurrency(
-              shoppingCart!.cartProducts!.count !== 0
+              shoppingCart!.cartProducts!.length !== 0
                 ? shoppingCart!
-                    .cartProducts!.edges!.map(cartProduct =>
-                      cartProduct!.node.product!
-                        ? cartProduct!.node.product!.price! *
-                          cartProduct!.node.quantityOnCart
+                    .cartProducts!.map(cartProduct =>
+                      cartProduct!.product!
+                        ? cartProduct!.product!.price! *
+                          cartProduct!.quantityOnCart!
                         : 0
                     )
                     .reduce((totalValue, amount) => totalValue + amount)
@@ -251,18 +245,13 @@ export default createFragmentContainer(CartProductsList, {
     fragment CartProductsList_shoppingCart on ShoppingCart {
       id
       cartProducts {
-        count
-        edges {
-          node {
-            id
-            quantityOnCart
-            product {
-              id
-              name
-              price
-              quantityInStock
-            }
-          }
+        id
+        quantityOnCart
+        product {
+          id
+          name
+          price
+          quantityInStock
         }
       }
     }

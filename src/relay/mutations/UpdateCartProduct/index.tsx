@@ -5,27 +5,19 @@ import environment from "../../Environment";
 const mutation = graphql`
   mutation UpdateCartProductMutation($input: UpdateCartProductInput!) {
     updateCartProduct(input: $input) {
-      clientMutationId
-      cartProduct {
-        quantityOnCart
-        id
-        product {
-          name
-          quantityInStock
-        }
+      quantityOnCart
+      id
+      product {
+        name
+        quantityInStock
       }
       shoppingCart {
         cartProducts {
-          count
-          edges {
-            node {
-              quantityOnCart
-              product {
-                name
-                price
-                quantityInStock
-              }
-            }
+          quantityOnCart
+          product {
+            name
+            price
+            quantityInStock
           }
         }
       }
@@ -33,14 +25,9 @@ const mutation = graphql`
   }
 `;
 
-export const updateCartProduct = (
-  clientMutationId: string,
-  id: string,
-  quantityOnCart: number
-) => {
+export const updateCartProduct = (id: string, quantityOnCart: number) => {
   const variables = {
     input: {
-      clientMutationId,
       id,
       quantityOnCart
     }

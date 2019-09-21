@@ -15,6 +15,7 @@ const Main: React.FC = () => {
       query={MainViewerQuery}
       variables={{}}
       render={({ error, props }): React.ReactNode => {
+        console.log("Props:", props);
         if (error) {
           return <div>Erro ao carregar produtos</div>;
         }
@@ -24,11 +25,11 @@ const Main: React.FC = () => {
         return (
           <React.Fragment>
             <CssBaseline />
-            <NavBar viewer={props.viewer} showCart={true} />
+            <NavBar user={props.user!} showCart={true} />
             <Container maxWidth="md">
               <ProductsList
-                allProducts={props.viewer.allProducts as any}
-                shoppingCart={props.viewer.User!.shoppingCart as any}
+                products={props as any}
+                shoppingCart={props.user!.shoppingCart as any}
               />
             </Container>
           </React.Fragment>
@@ -42,15 +43,11 @@ export default Main;
 
 const MainViewerQuery = graphql`
   query MainQuery {
-    viewer {
-      ...NavBar_viewer
-      allProducts {
-        ...ProductsList_allProducts
-      }
-      User(id: "cjzyfwspn0f1a01671todqxul") {
-        shoppingCart {
-          ...ProductsList_shoppingCart
-        }
+    ...ProductsList_products
+    user(id: "35c96560-dca0-11e9-b5e6-6329846dbf80") {
+      ...NavBar_user
+      shoppingCart {
+        ...ProductsList_shoppingCart
       }
     }
   }

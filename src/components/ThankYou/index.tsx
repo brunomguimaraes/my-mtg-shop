@@ -1,6 +1,8 @@
 import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography, Button } from "@material-ui/core";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -13,6 +15,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     progress: {
       margin: theme.spacing(2)
+    },
+    backIcon: {
+      margin: theme.spacing(1),
+      cursor: "pointer"
     }
   })
 );
@@ -31,6 +37,9 @@ export default function ThankYou({ order }: IProps) {
 
   return (
     <React.Fragment>
+      <Button component={Link} to={"/main"}>
+        <ArrowBackIcon className={classes.backIcon} fontSize={"large"} />
+      </Button>
       <Typography gutterBottom variant="h6">
         Obrigado pela compra!
       </Typography>
