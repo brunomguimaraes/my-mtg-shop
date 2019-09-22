@@ -6,6 +6,8 @@ This project uses React and Relay(Graphql) for the client side. For the server s
 Or if you are familiar with graphCool, check: https://github.com/brunomguimaraes/my-mtg-shop/tree/graphcool_client
 For style, MaterialUI was used.
 
+![](demos/intro.gif)
+
 
 ## Available Scripts
 
