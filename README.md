@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### Major Notes
 
 This project uses React and Relay(Graphql) for the client side. For the server side check: https://github.com/brunomguimaraes/my-mtg-server, it uses Apollo Server, sequelize and a Postgres DB. 
-Or if you are familiar with graphCool, check: https://github.com/brunomguimaraes/my-mtg-shop/tree/graphcool_client
+Or if you are familiar with graphCool, check: https://github.com/brunomguimaraes/my-mtg-shop/tree/graphcool_client.
 For style, MaterialUI was used.
 
 ![](demos/intro.gif)
