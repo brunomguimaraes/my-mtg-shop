@@ -75,7 +75,7 @@ const CheckoutCard = ({ user }: IProps) => {
           .reduce((totalValue, amount) => totalValue + amount)
       : 0;
   const [completedOrder, setcompletedOrder] = React.useState(false);
-  const [validCreditCard, setValidCreditCard] = React.useState(false);
+  const [validCreditCard, setValidCreditCard] = React.useState();
   const [orderReview, setOrderReview] = React.useState();
   const [isSnackBarVisible, setSnackBarVisible] = React.useState<boolean>(
     false
@@ -102,8 +102,11 @@ const CheckoutCard = ({ user }: IProps) => {
         () => cleanUpCart(checkoutProductsIds),
         () => errorHandler("Erro ao efetuar o pedido")
       );
-    } else {
+    }
+    if (validCreditCard === false) {
       errorHandler("Erro, cartão inválido");
+    } else {
+      errorHandler("Erro, cartão não selecionado");
     }
   };
 

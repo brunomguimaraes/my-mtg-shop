@@ -118,6 +118,9 @@ const CartProductsList = ({
     setError(false);
     setLoading(true);
     updateCartProduct(cartProductId, numberOnCart - 1);
+    if (numberOnCart - 1 <= 0) {
+      handleCartListClose();
+    }
     updateProduct(
       productId,
       productsInStock >= 0 ? productsInStock + 1 : 0,

@@ -90,7 +90,11 @@ const NavBar = ({ user, showCart }: IProps) => {
                 aria-controls={CartListId}
                 aria-haspopup="true"
                 onClick={
-                  user.shoppingCart!.cartProducts!.length !== 0
+                  user
+                    .shoppingCart!.cartProducts!.map(
+                      product => product!.quantityOnCart!
+                    )
+                    .reduce((totalValue, amount) => totalValue + amount) > 0
                     ? handleCartListOpen
                     : () => navBarErrorHandler("Carrinho vazio.")
                 }
