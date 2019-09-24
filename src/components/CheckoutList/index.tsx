@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
     sectionMenuItem: {
       display: "flex",
       flexDirection: "row",
+      width: "100%",
       justifyContent: "flex-start"
     },
     sectionMenuItemSlug: {
@@ -30,11 +31,17 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       alignItems: "center"
     },
+    sectionMenuItemName: {
+      margin: theme.spacing(1, 1, 1),
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis"
+    },
     snackBarStyle: {
       position: "fixed",
       bottom: "2%",
       right: "2%",
-      width: "30vw"
+      width: "200px"
     }
   })
 );
@@ -63,7 +70,7 @@ const CheckoutList = ({ shoppingCart }: IProps) => {
                   {cartProduct!.quantityOnCart}
                   {"x "}
                 </div>
-                <div className={classes.sectionMenuItemSlug}>
+                <div className={classes.sectionMenuItemName}>
                   {cartProduct!.product!.name}
                 </div>
                 <div className={classes.sectionMenuItemSlug}>

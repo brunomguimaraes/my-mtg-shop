@@ -32,6 +32,12 @@ const useStyles = makeStyles((theme: Theme) =>
     sectionMenuItemSlug: {
       margin: theme.spacing(1, 1, 1)
     },
+    sectionMenuItemName: {
+      margin: theme.spacing(1, 1, 1),
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis"
+    },
     sectionPlusMinusIcons: {
       display: "flex",
       flexDirection: "column",
@@ -42,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "fixed",
       bottom: "2%",
       right: "2%",
-      width: "30vw"
+      width: "200px"
     }
   })
 );
@@ -174,7 +180,7 @@ const CartProductsList = ({
                           )
                         }
                         color={loading ? "disabled" : "inherit"}
-                        fontSize="small"
+                        fontSize="large"
                       />
                       <RemoveCircleIcon
                         onClick={() =>
@@ -188,14 +194,14 @@ const CartProductsList = ({
                               )
                         }
                         color={loading ? "disabled" : "inherit"}
-                        fontSize="small"
+                        fontSize="large"
                       />
                     </div>
                     <div className={classes.sectionMenuItemSlug}>
                       {cartProduct!.quantityOnCart}
                       {"x "}
                     </div>
-                    <div className={classes.sectionMenuItemSlug}>
+                    <div className={classes.sectionMenuItemName}>
                       {cartProduct!.product!.name}
                     </div>
                     <div className={classes.sectionMenuItemSlug}>

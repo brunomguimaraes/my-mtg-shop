@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "fixed",
       bottom: "2%",
       right: "2%",
-      width: "30vw"
+      width: "200px"
     },
     backIcon: {
       margin: theme.spacing(1),

@@ -9,6 +9,7 @@ import { createFragmentContainer } from "react-relay";
 import CartProductsList from "../CartProductsList";
 import { IconButton, Badge } from "@material-ui/core";
 import { NavBar_user } from "./__generated__/NavBar_user.graphql";
+import { MySnackbarContentWrapper } from "../SnackBar";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,6 +21,12 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up("sm")]: {
         display: "block"
       }
+    },
+    snackBarStyle: {
+      position: "fixed",
+      bottom: "2%",
+      right: "2%",
+      width: "200px"
     },
     sectionCart: {
       [theme.breakpoints.up("md")]: {
@@ -38,6 +45,11 @@ const NavBar = ({ user, showCart }: IProps) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [isSnackBarVisible, setSnackBarVisible] = React.useState<boolean>(
+    false
+  );
+  const [error, setError] = React.useState<boolean>(false);
+  const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
   const CartListId = "primary-cart-list-dropdown";
 
   const handleCartListOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -47,9 +59,25 @@ const NavBar = ({ user, showCart }: IProps) => {
   const handleCartListClose = () => {
     setAnchorEl(null);
   };
+
+  const navBarErrorHandler = (message?: string) => {
+    setError(true);
+    message
+      ? setFeedbackMessage(message)
+      : setFeedbackMessage("Algum erro ocorreu");
+    setSnackBarVisible(true);
+    setTimeout(() => setSnackBarVisible(false), 3000);
+  };
   return (
     <div className={classes.grow}>
       <AppBar position="static">
+        {isSnackBarVisible && (
+          <MySnackbarContentWrapper
+            className={classes.snackBarStyle}
+            message={feedbackMessage}
+            variant={error ? "error" : "success"}
+          />
+        )}
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
             My MTG Store
@@ -61,7 +89,11 @@ const NavBar = ({ user, showCart }: IProps) => {
                 aria-label="show products list on cart"
                 aria-controls={CartListId}
                 aria-haspopup="true"
-                onClick={handleCartListOpen}
+                onClick={
+                  user.shoppingCart!.cartProducts!.length !== 0
+                    ? handleCartListOpen
+                    : () => navBarErrorHandler("Carrinho vazio.")
+                }
                 color="inherit"
               >
                 <Badge
