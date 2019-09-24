@@ -16,7 +16,7 @@ export type CheckoutQuery = {
 
 /*
 query CheckoutQuery {
-  user(id: "35c96560-dca0-11e9-b5e6-6329846dbf80") {
+  user(id: "e21b4d40-df18-11e9-8371-4d6e71ada4c9") {
     ...NavBar_user
     ...CheckoutCard_user
     id
@@ -105,7 +105,7 @@ const node: ConcreteRequest = (function() {
       {
         kind: "Literal",
         name: "id",
-        value: "35c96560-dca0-11e9-b5e6-6329846dbf80"
+        value: "e21b4d40-df18-11e9-8371-4d6e71ada4c9"
       }
     ],
     v1 = {
@@ -135,7 +135,7 @@ const node: ConcreteRequest = (function() {
           kind: "LinkedField",
           alias: null,
           name: "user",
-          storageKey: 'user(id:"35c96560-dca0-11e9-b5e6-6329846dbf80")',
+          storageKey: 'user(id:"e21b4d40-df18-11e9-8371-4d6e71ada4c9")',
           args: v0 /*: any*/,
           concreteType: "User",
           plural: false,
@@ -163,7 +163,7 @@ const node: ConcreteRequest = (function() {
           kind: "LinkedField",
           alias: null,
           name: "user",
-          storageKey: 'user(id:"35c96560-dca0-11e9-b5e6-6329846dbf80")',
+          storageKey: 'user(id:"e21b4d40-df18-11e9-8371-4d6e71ada4c9")',
           args: v0 /*: any*/,
           concreteType: "User",
           plural: false,
@@ -270,10 +270,10 @@ const node: ConcreteRequest = (function() {
       name: "CheckoutQuery",
       id: null,
       text:
-        'query CheckoutQuery {\n  user(id: "35c96560-dca0-11e9-b5e6-6329846dbf80") {\n    ...NavBar_user\n    ...CheckoutCard_user\n    id\n  }\n}\n\nfragment NavBar_user on User {\n  name\n  id\n  shoppingCart {\n    cartProducts {\n      quantityOnCart\n      id\n    }\n    ...CartProductsList_shoppingCart\n    id\n  }\n}\n\nfragment CheckoutCard_user on User {\n  name\n  id\n  shoppingCart {\n    ...CheckoutList_shoppingCart\n    cartProducts {\n      id\n      quantityOnCart\n      product {\n        id\n        name\n        price\n        quantityInStock\n      }\n    }\n    id\n  }\n  ...CreditCardList_creditCardInfo\n  creditCardInfo {\n    cardNumber\n    cvv\n    id\n    isValid\n  }\n}\n\nfragment CheckoutList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    id\n    quantityOnCart\n    product {\n      id\n      name\n      price\n      quantityInStock\n    }\n  }\n}\n\nfragment CreditCardList_creditCardInfo on User {\n  creditCardInfo {\n    cardNumber\n    cvv\n    id\n    isValid\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    id\n    quantityOnCart\n    product {\n      id\n      name\n      price\n      quantityInStock\n    }\n  }\n}\n',
+        'query CheckoutQuery {\n  user(id: "e21b4d40-df18-11e9-8371-4d6e71ada4c9") {\n    ...NavBar_user\n    ...CheckoutCard_user\n    id\n  }\n}\n\nfragment NavBar_user on User {\n  name\n  id\n  shoppingCart {\n    cartProducts {\n      quantityOnCart\n      id\n    }\n    ...CartProductsList_shoppingCart\n    id\n  }\n}\n\nfragment CheckoutCard_user on User {\n  name\n  id\n  shoppingCart {\n    ...CheckoutList_shoppingCart\n    cartProducts {\n      id\n      quantityOnCart\n      product {\n        id\n        name\n        price\n        quantityInStock\n      }\n    }\n    id\n  }\n  ...CreditCardList_creditCardInfo\n  creditCardInfo {\n    cardNumber\n    cvv\n    id\n    isValid\n  }\n}\n\nfragment CheckoutList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    id\n    quantityOnCart\n    product {\n      id\n      name\n      price\n      quantityInStock\n    }\n  }\n}\n\nfragment CreditCardList_creditCardInfo on User {\n  creditCardInfo {\n    cardNumber\n    cvv\n    id\n    isValid\n  }\n}\n\nfragment CartProductsList_shoppingCart on ShoppingCart {\n  id\n  cartProducts {\n    id\n    quantityOnCart\n    product {\n      id\n      name\n      price\n      quantityInStock\n    }\n  }\n}\n',
       metadata: {}
     }
   };
 })();
-(node as any).hash = "58bdcd0da887068060f2314adb6379d8";
+(node as any).hash = "795c8a448d2e334560ff68ee3efb22b8";
 export default node;
