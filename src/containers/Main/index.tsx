@@ -43,7 +43,7 @@ export default Main;
 const MainViewerQuery = graphql`
   query MainQuery {
     ...ProductsList_products
-    user(id: "35c96560-dca0-11e9-b5e6-6329846dbf80") {
+    user(id: "e21b4d40-df18-11e9-8371-4d6e71ada4c9") {
       ...NavBar_user
       shoppingCart {
         ...ProductsList_shoppingCart
