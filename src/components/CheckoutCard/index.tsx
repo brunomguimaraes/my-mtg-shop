@@ -102,8 +102,7 @@ const CheckoutCard = ({ user }: IProps) => {
         () => cleanUpCart(checkoutProductsIds),
         () => errorHandler("Erro ao efetuar o pedido")
       );
-    }
-    if (validCreditCard === false) {
+    } else if (validCreditCard === false) {
       errorHandler("Erro, cartão inválido");
     } else {
       errorHandler("Erro, cartão não selecionado");
