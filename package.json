@@ -28,7 +28,7 @@
     "typescript": "3.5.3"
   },
   "scripts": {
-    "relay": "relay-compiler --language typescript --src ./src --schema ./src/schema.graphql --extensions tsx",
+    "relay": "relay-compiler --language typescript --src ./src --schema ./src/schema.graphql --extensions tsx --artifactDirectory ./src/__generated__",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
