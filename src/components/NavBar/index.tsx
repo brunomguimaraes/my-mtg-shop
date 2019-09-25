@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type IProps = {
-  user: NavBar_user;
+  user: NavBar_user | null;
   showCart?: boolean;
 };
 
@@ -85,42 +85,44 @@ const NavBar = ({ user, showCart }: IProps) => {
           <div className={classes.grow} />
           {showCart && (
             <div className={classes.sectionCart}>
-              <IconButton
-                aria-label="show products list on cart"
-                aria-controls={CartListId}
-                aria-haspopup="true"
-                onClick={
-                  user
-                    .shoppingCart!.cartProducts!.map(
-                      product => product!.quantityOnCart!
-                    )
-                    .reduce((totalValue, amount) => totalValue + amount) > 0
-                    ? handleCartListOpen
-                    : () => navBarErrorHandler("Carrinho vazio.")
-                }
-                color="inherit"
-              >
-                <Badge
-                  badgeContent={
-                    user.shoppingCart!.cartProducts! &&
-                    user.shoppingCart!.cartProducts!.length !== 0
-                      ? user
-                          .shoppingCart!.cartProducts!.map(
-                            product => product!.quantityOnCart!
-                          )
-                          .reduce((totalValue, amount) => totalValue + amount)
-                      : 0
+              {user && (
+                <IconButton
+                  aria-label="show products list on cart"
+                  aria-controls={CartListId}
+                  aria-haspopup="true"
+                  onClick={
+                    user
+                      .shoppingCart!.cartProducts!.map(
+                        product => product!.quantityOnCart!
+                      )
+                      .reduce((totalValue, amount) => totalValue + amount) > 0
+                      ? handleCartListOpen
+                      : () => navBarErrorHandler("Carrinho vazio.")
                   }
-                  color="secondary"
+                  color="inherit"
                 >
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
+                  <Badge
+                    badgeContent={
+                      user.shoppingCart!.cartProducts! &&
+                      user.shoppingCart!.cartProducts!.length !== 0
+                        ? user
+                            .shoppingCart!.cartProducts!.map(
+                              product => product!.quantityOnCart!
+                            )
+                            .reduce((totalValue, amount) => totalValue + amount)
+                        : 0
+                    }
+                    color="secondary"
+                  >
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+              )}
             </div>
           )}
         </Toolbar>
       </AppBar>
-      {user.shoppingCart!.cartProducts && (
+      {user && user.shoppingCart!.cartProducts && (
         <CartProductsList
           anchorElOnClose={handleCartListClose}
           anchorElementReference={anchorEl}
