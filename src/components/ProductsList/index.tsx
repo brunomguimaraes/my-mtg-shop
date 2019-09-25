@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type IProps = {
-  products: ProductsList_products;
-  shoppingCart: ProductsList_shoppingCart;
+  products: ProductsList_products | null;
+  shoppingCart: ProductsList_shoppingCart | null;
 };
 
 const ProductsList = ({ products, shoppingCart }: IProps) => {
@@ -38,18 +38,21 @@ const ProductsList = ({ products, shoppingCart }: IProps) => {
             fontSize={"large"}
             onClick={() => setSelectedProductInfo(null)}
           />
-          <ProductCardInfo
-            product={selectedProductInfo}
-            productsOnCart={shoppingCart.cartProducts}
-            shoppingCartId={shoppingCart.id}
-          />
+          {shoppingCart && (
+            <ProductCardInfo
+              product={selectedProductInfo}
+              productsOnCart={shoppingCart.cartProducts}
+              shoppingCartId={shoppingCart.id}
+            />
+          )}
         </Container>
       ) : (
         products &&
+        shoppingCart &&
         products.products.map(product => (
           <Container>
             <DetailedProductCard
-              product={product!}
+              product={product}
               productsOnCart={shoppingCart.cartProducts}
               shoppingCartId={shoppingCart.id}
               selectedProductHandler={handleSelectedProduct}
