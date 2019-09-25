@@ -24,12 +24,14 @@ const Main: React.FC = () => {
         return (
           <React.Fragment>
             <CssBaseline />
-            <NavBar user={props.user!} showCart={true} />
+            <NavBar user={props.user} showCart={true} />
             <Container maxWidth="md">
-              <ProductsList
-                products={props as any}
-                shoppingCart={props.user!.shoppingCart as any}
-              />
+              {props.user && (
+                <ProductsList
+                  products={props}
+                  shoppingCart={props.user.shoppingCart}
+                />
+              )}
             </Container>
           </React.Fragment>
         );
