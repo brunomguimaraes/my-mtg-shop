@@ -9,7 +9,7 @@ import {
 import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import { formatCurrency } from "../../utils/formaters";
-import { CheckoutList_shoppingCart } from "./__generated__/CheckoutList_shoppingCart.graphql";
+import { CheckoutList_shoppingCart } from "../../__generated__/CheckoutList_shoppingCart.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

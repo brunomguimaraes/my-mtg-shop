@@ -5,8 +5,8 @@ import Loading from "../../components/Loading";
 import environment from "../../relay/Environment";
 import { CssBaseline, Container } from "@material-ui/core";
 import NavBar from "../../components/NavBar";
-import { CheckoutQuery } from "./__generated__/CheckoutQuery.graphql";
 import CheckoutCard from "../../components/CheckoutCard";
+import { CheckoutQuery } from "../../__generated__/CheckoutQuery.graphql";
 
 const Checkout: React.FC = () => {
   return (
@@ -24,9 +24,9 @@ const Checkout: React.FC = () => {
         return (
           <React.Fragment>
             <CssBaseline />
-            <NavBar user={props.user!} showCart={false} />
+            {props.user && <NavBar user={props.user} showCart={false} />}
             <Container maxWidth="md">
-              <CheckoutCard user={props.user!} />
+              {props.user && <CheckoutCard user={props.user} />}
             </Container>
           </React.Fragment>
         );

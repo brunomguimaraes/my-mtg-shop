@@ -13,9 +13,9 @@ const mutation = graphql`
 `;
 
 type IOrderedProducts = {
-  name: string;
-  price: number;
-  quantity: number;
+  name: string | null;
+  price: number | null;
+  quantity: number | null;
 };
 
 export const createOrder = (

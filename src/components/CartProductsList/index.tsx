@@ -12,12 +12,12 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
-import { CartProductsList_shoppingCart } from "./__generated__/CartProductsList_shoppingCart.graphql";
 import { formatCurrency } from "../../utils/formaters";
 import { updateProduct } from "../../relay/mutations/UpdateProduct";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
 import { MySnackbarContentWrapper } from "../SnackBar";
 import { Link } from "react-router-dom";
+import { CartProductsList_shoppingCart } from "../../__generated__/CartProductsList_shoppingCart.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,17 +89,24 @@ const CartProductsList = ({
   };
 
   const handleIncreaseCartProduct = (
-    cartProductId: string,
-    productId: string,
-    numberOnCart: number,
-    productsInStock: number
+    cartProductId: string | null,
+    productId: string | null,
+    numberOnCart: number | null,
+    productsInStock: number | null
   ) => {
     setError(false);
     setLoading(true);
-    if (productsInStock !== 0) {
-      updateCartProduct(cartProductId, numberOnCart + 1);
+    if (
+      cartProductId ||
+      productId ||
+      numberOnCart ||
+      productsInStock === null
+    ) {
+      errorHandler("Algum erro ocorreu.");
+    } else if (productsInStock !== 0) {
+      updateCartProduct(cartProductId, numberOnCart! + 1);
       updateProduct(
-        productId,
+        productId!,
         productsInStock >= 0 ? productsInStock - 1 : 0,
         () => successHandler("Produto adicionado com sucesso"),
         () => errorHandler()
@@ -110,23 +117,32 @@ const CartProductsList = ({
   };
 
   const handleDecreaseCartProduct = (
-    cartProductId: string,
-    productId: string,
-    numberOnCart: number,
-    productsInStock: number
+    cartProductId: string | null,
+    productId: string | null,
+    numberOnCart: number | null,
+    productsInStock: number | null
   ) => {
     setError(false);
     setLoading(true);
-    updateCartProduct(cartProductId, numberOnCart - 1);
-    if (numberOnCart - 1 <= 0) {
-      handleCartListClose();
+    if (
+      cartProductId ||
+      productId ||
+      numberOnCart ||
+      productsInStock === null
+    ) {
+      errorHandler("Algum erro ocorreu.");
+    } else {
+      updateCartProduct(cartProductId, numberOnCart! - 1);
+      if (numberOnCart! - 1 <= 0) {
+        handleCartListClose();
+      }
+      updateProduct(
+        productId!,
+        productsInStock >= 0 ? productsInStock + 1 : 0,
+        () => successHandler("Produto removido com sucesso"),
+        () => errorHandler()
+      );
     }
-    updateProduct(
-      productId,
-      productsInStock >= 0 ? productsInStock + 1 : 0,
-      () => successHandler("Produto removido com sucesso"),
-      () => errorHandler()
-    );
   };
 
   const successHandler = (message: string) => {
@@ -149,7 +165,7 @@ const CartProductsList = ({
 
   return (
     <React.Fragment>
-      {shoppingCart!.cartProducts && (
+      {shoppingCart.cartProducts && (
         <Menu
           anchorEl={anchorEl}
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -163,55 +179,58 @@ const CartProductsList = ({
           onClose={handleCartListClose}
         >
           {shoppingCart &&
-            shoppingCart!.cartProducts &&
-            shoppingCart!.cartProducts!.map(
+            shoppingCart.cartProducts &&
+            shoppingCart.cartProducts.map(
               cartProduct =>
-                cartProduct!.product &&
-                cartProduct!.quantityOnCart !== 0 && (
+                cartProduct &&
+                cartProduct.product &&
+                cartProduct.quantityOnCart !== 0 && (
                   <MenuItem
-                    key={shoppingCart!.cartProducts!.indexOf(cartProduct)}
+                    key={shoppingCart.cartProducts!.indexOf(cartProduct)}
                     className={classes.sectionMenuItem}
                   >
-                    <div className={classes.sectionPlusMinusIcons}>
-                      <AddCircleIcon
-                        onClick={() =>
-                          handleIncreaseCartProduct(
-                            cartProduct!.id,
-                            cartProduct!.product!.id!,
-                            cartProduct!.quantityOnCart!,
-                            cartProduct!.product!.quantityInStock!
-                          )
-                        }
-                        color={loading ? "disabled" : "inherit"}
-                        fontSize="large"
-                      />
-                      <RemoveCircleIcon
-                        onClick={() =>
-                          loading
-                            ? null
-                            : handleDecreaseCartProduct(
-                                cartProduct!.id,
-                                cartProduct!.product!.id!,
-                                cartProduct!.quantityOnCart!,
-                                cartProduct!.product!.quantityInStock!
-                              )
-                        }
-                        color={loading ? "disabled" : "inherit"}
-                        fontSize="large"
-                      />
-                    </div>
+                    {cartProduct && (
+                      <div className={classes.sectionPlusMinusIcons}>
+                        <AddCircleIcon
+                          onClick={() =>
+                            handleIncreaseCartProduct(
+                              cartProduct.id,
+                              cartProduct.product!.id,
+                              cartProduct.quantityOnCart!,
+                              cartProduct.product!.quantityInStock
+                            )
+                          }
+                          color={loading ? "disabled" : "inherit"}
+                          fontSize="large"
+                        />
+                        <RemoveCircleIcon
+                          onClick={() =>
+                            loading
+                              ? null
+                              : handleDecreaseCartProduct(
+                                  cartProduct.id,
+                                  cartProduct.product!.id,
+                                  cartProduct.quantityOnCart,
+                                  cartProduct.product!.quantityInStock
+                                )
+                          }
+                          color={loading ? "disabled" : "inherit"}
+                          fontSize="large"
+                        />
+                      </div>
+                    )}
                     <div className={classes.sectionMenuItemSlug}>
-                      {cartProduct!.quantityOnCart}
+                      {cartProduct.quantityOnCart}
                       {"x "}
                     </div>
                     <div className={classes.sectionMenuItemName}>
-                      {cartProduct!.product!.name}
+                      {cartProduct.product.name}
                     </div>
                     <div className={classes.sectionMenuItemSlug}>
-                      {cartProduct!.product! &&
+                      {cartProduct.product &&
                         formatCurrency(
-                          cartProduct!.product!.price! *
-                            cartProduct!.quantityOnCart!
+                          cartProduct.product.price! *
+                            cartProduct.quantityOnCart!
                         )}
                     </div>
                   </MenuItem>
@@ -230,18 +249,19 @@ const CartProductsList = ({
               Finalizar Compra
             </Button>
             {"Valor total: "}
-            {formatCurrency(
-              shoppingCart!.cartProducts!.length !== 0
-                ? shoppingCart!
-                    .cartProducts!.map(cartProduct =>
-                      cartProduct!.product!
-                        ? cartProduct!.product!.price! *
-                          cartProduct!.quantityOnCart!
-                        : 0
-                    )
-                    .reduce((totalValue, amount) => totalValue + amount)
-                : 0
-            )}
+            {shoppingCart.cartProducts &&
+              formatCurrency(
+                shoppingCart.cartProducts.length !== 0
+                  ? shoppingCart.cartProducts
+                      .map(cartProduct =>
+                        cartProduct && cartProduct.product
+                          ? cartProduct.product.price! *
+                            cartProduct.quantityOnCart!
+                          : 0
+                      )
+                      .reduce((totalValue, amount) => totalValue + amount)
+                  : 0
+              )}
           </div>
         </Menu>
       )}

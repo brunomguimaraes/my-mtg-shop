@@ -8,8 +8,8 @@ import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import CartProductsList from "../CartProductsList";
 import { IconButton, Badge } from "@material-ui/core";
-import { NavBar_user } from "./__generated__/NavBar_user.graphql";
 import { MySnackbarContentWrapper } from "../SnackBar";
+import { NavBar_user } from "../../__generated__/NavBar_user.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type IProps = {
-  user: NavBar_user | null;
+  user: NavBar_user;
   showCart?: boolean;
 };
 
@@ -122,11 +122,11 @@ const NavBar = ({ user, showCart }: IProps) => {
           )}
         </Toolbar>
       </AppBar>
-      {user && user.shoppingCart!.cartProducts && (
+      {user.shoppingCart && user.shoppingCart!.cartProducts && (
         <CartProductsList
           anchorElOnClose={handleCartListClose}
           anchorElementReference={anchorEl}
-          shoppingCart={user.shoppingCart as any}
+          shoppingCart={user.shoppingCart}
         />
       )}
     </div>

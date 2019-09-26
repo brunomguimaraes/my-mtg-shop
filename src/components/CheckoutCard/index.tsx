@@ -3,7 +3,6 @@ import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { Box, Grid, Divider, Button, Typography } from "@material-ui/core";
 import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
-import { CheckoutCard_user } from "./__generated__/CheckoutCard_user.graphql";
 import CheckoutList from "../CheckoutList";
 import { createOrder } from "../../relay/mutations/CreateOrder";
 import CreditCardList from "../CreditCardList";
@@ -12,6 +11,7 @@ import { Link } from "react-router-dom";
 import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
 import ThankYou from "../ThankYou";
 import { MySnackbarContentWrapper } from "../SnackBar";
+import { CheckoutCard_user } from "../../__generated__/CheckoutCard_user.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,9 +63,9 @@ type IProps = {
 
 const CheckoutCard = ({ user }: IProps) => {
   const classes = useStyles();
-  const productsToCheckout = user.shoppingCart!.cartProducts!;
+  const productsToCheckout = user.shoppingCart!.cartProducts;
   const totalValue =
-    productsToCheckout.length !== 0
+    productsToCheckout!.length !== 0
       ? productsToCheckout!
           .map(cartProduct =>
             cartProduct!.product!
@@ -84,28 +84,36 @@ const CheckoutCard = ({ user }: IProps) => {
   const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
 
   const placeOrder = () => {
-    const checkoutProducts = productsToCheckout.filter(
-      products => products!.quantityOnCart !== 0
-    );
-    const checkoutProductsIds = checkoutProducts.map(products => products!.id);
-    const orderedProducts = checkoutProducts.map(products => ({
-      name: products!.product!.name as string,
-      price: products!.product!.price as number,
-      quantity: products!.quantityOnCart as number
-    }));
-    setOrderReview(orderedProducts);
-    if (validCreditCard) {
-      createOrder(
-        validCreditCard,
-        totalValue,
-        orderedProducts,
-        () => cleanUpCart(checkoutProductsIds),
-        () => errorHandler("Erro ao efetuar o pedido")
+    if (productsToCheckout) {
+      const checkoutProducts = productsToCheckout.filter(
+        products => products!.quantityOnCart !== 0
       );
-    } else if (validCreditCard === false) {
-      errorHandler("Erro, cartão inválido");
+
+      const checkoutProductsIds = checkoutProducts.map(
+        products => products!.id
+      );
+      const orderedProducts = checkoutProducts.map(products => ({
+        name: products!.product!.name,
+        price: products!.product!.price,
+        quantity: products!.quantityOnCart
+      }));
+
+      setOrderReview(orderedProducts);
+      if (validCreditCard) {
+        createOrder(
+          validCreditCard,
+          totalValue,
+          orderedProducts,
+          () => cleanUpCart(checkoutProductsIds),
+          () => errorHandler("Erro ao efetuar o pedido")
+        );
+      } else if (validCreditCard === false) {
+        errorHandler("Erro, cartão inválido");
+      } else {
+        errorHandler("Erro, cartão não selecionado");
+      }
     } else {
-      errorHandler("Erro, cartão não selecionado");
+      errorHandler("Algum erro ocorreu");
     }
   };
 
@@ -158,8 +166,8 @@ const CheckoutCard = ({ user }: IProps) => {
                 justify="center"
                 alignItems="flex-start"
               >
-                {user.shoppingCart!.cartProducts && (
-                  <CheckoutList shoppingCart={user.shoppingCart as any} />
+                {user.shoppingCart && user.shoppingCart.cartProducts && (
+                  <CheckoutList shoppingCart={user.shoppingCart} />
                 )}
               </Grid>
             </div>
@@ -168,7 +176,7 @@ const CheckoutCard = ({ user }: IProps) => {
               <Grid>
                 <CreditCardList
                   creditCardChecker={creditCardSelector}
-                  creditCardInfo={user as any}
+                  creditCardInfo={user}
                 />
               </Grid>
             </div>
