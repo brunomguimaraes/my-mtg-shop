@@ -25,7 +25,10 @@ const mutation = graphql`
   }
 `;
 
-export const updateCartProduct = (id: string, quantityOnCart: number) => {
+export const updateCartProduct = (
+  id: string | null,
+  quantityOnCart: number | null
+) => {
   const variables = {
     input: {
       id,

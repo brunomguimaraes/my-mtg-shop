@@ -6,7 +6,7 @@ import Loading from "../../components/Loading";
 import { QueryRenderer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import ProductsList from "../../components/ProductsList";
-import { MainQuery } from "./__generated__/MainQuery.graphql";
+import { MainQuery } from "../../__generated__/MainQuery.graphql";
 
 const Main: React.FC = () => {
   return (
@@ -24,7 +24,7 @@ const Main: React.FC = () => {
         return (
           <React.Fragment>
             <CssBaseline />
-            <NavBar user={props.user} showCart={true} />
+            {props.user && <NavBar user={props.user} showCart={true} />}
             <Container maxWidth="md">
               {props.user && (
                 <ProductsList
