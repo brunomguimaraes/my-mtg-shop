@@ -4,7 +4,8 @@ import { Box, Grid, Divider, Button, Typography } from "@material-ui/core";
 import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import CheckoutList from "../CheckoutList";
-import { createOrder } from "../../relay/mutations/CreateOrder";
+import { commitMutation } from "react-relay";
+
 import CreditCardList from "../CreditCardList";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link } from "react-router-dom";
@@ -12,6 +13,7 @@ import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
 import ThankYou from "../ThankYou";
 import { MySnackbarContentWrapper } from "../SnackBar";
 import { CheckoutCard_user } from "../../__generated__/CheckoutCard_user.graphql";
+import environment from "../../relay/Environment";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,6 +61,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type IProps = {
   user: CheckoutCard_user;
+};
+
+type IOrderedProducts = {
+  name: string | null;
+  price: number | null;
+  quantity: number | null;
 };
 
 const CheckoutCard = ({ user }: IProps) => {
@@ -139,6 +147,43 @@ const CheckoutCard = ({ user }: IProps) => {
       : setFeedbackMessage("Algum erro ocorreu");
     setSnackBarVisible(true);
     setTimeout(() => setSnackBarVisible(false), 3000);
+  };
+
+  const mutation = graphql`
+    mutation CreateOrderMutation($input: CreateOrderInput!) {
+      createOrder(input: $input) {
+        id
+        totalOrderValue
+        isPaid
+      }
+    }
+  `;
+
+  const createOrder = (
+    isPaid: boolean,
+    totalOrderValue: number,
+    orderedProduct: IOrderedProducts[],
+    onCompletedCallBack: () => void,
+    onErrorCallBack: () => void
+  ) => {
+    const variables = {
+      input: {
+        isPaid,
+        totalOrderValue,
+        orderedProduct
+      }
+    };
+
+    commitMutation(environment, {
+      mutation,
+      variables,
+      onCompleted: (response, errors) => {
+        onCompletedCallBack();
+      },
+      onError: err => {
+        onErrorCallBack();
+      }
+    });
   };
 
   return (
