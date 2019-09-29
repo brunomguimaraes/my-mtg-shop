@@ -97,9 +97,9 @@ const CartProductsList = ({
     setError(false);
     setLoading(true);
     if (
-      cartProductId ||
-      productId ||
-      numberOnCart ||
+      cartProductId === null ||
+      productId === null ||
+      numberOnCart === null ||
       productsInStock === null
     ) {
       errorHandler("Algum erro ocorreu.");
@@ -125,11 +125,15 @@ const CartProductsList = ({
     setError(false);
     setLoading(true);
     if (
-      cartProductId ||
-      productId ||
-      numberOnCart ||
+      cartProductId === null ||
+      productId === null ||
+      numberOnCart === null ||
       productsInStock === null
     ) {
+      console.log("cpID", cartProductId);
+      console.log("pid", productId);
+      console.log("ncart", numberOnCart);
+      console.log("stock", productsInStock);
       errorHandler("Algum erro ocorreu.");
     } else {
       updateCartProduct(cartProductId, numberOnCart! - 1);
