@@ -17,7 +17,6 @@ import { updateProduct } from "../../relay/mutations/UpdateProduct";
 import { updateCartProduct } from "../../relay/mutations/UpdateCartProduct";
 import { MySnackbarContentWrapper } from "../SnackBar";
 import { Link } from "react-router-dom";
-import { CartProductsList_shoppingCart } from "../../__generated__/CartProductsList_shoppingCart.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,9 +53,23 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type IProps = {
-  shoppingCart: CartProductsList_shoppingCart;
+  shoppingCart: IShoppingCart;
   anchorElementReference: null | HTMLElement;
   anchorElOnClose: () => void;
+};
+
+export type IShoppingCart = {
+  id: string;
+  cartProducts: Array<{
+    id: string;
+    quantityOnCart: number;
+    product: {
+      id: string;
+      name: string;
+      price: number;
+      quantityInStock: number;
+    };
+  }>;
 };
 
 const CartProductsList = ({
