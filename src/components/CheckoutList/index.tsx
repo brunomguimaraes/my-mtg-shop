@@ -9,7 +9,7 @@ import {
 import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import { formatCurrency } from "../../utils/formaters";
-import { CheckoutList_shoppingCart } from "../../__generated__/CheckoutList_shoppingCart.graphql";
+import { CartProduct } from "../CheckoutCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,13 +46,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type IProps = {
-  shoppingCart: CheckoutList_shoppingCart;
+type Props = {
+  shoppingCart: ShoppingCart;
   anchorElementReference?: null | HTMLElement;
   anchorElOnClose?: () => void;
 };
 
-const CheckoutList = ({ shoppingCart }: IProps) => {
+type ShoppingCart = {
+  cartProducts: CartProduct[];
+};
+
+const CheckoutList = ({ shoppingCart }: Props) => {
   const classes = useStyles();
 
   return (

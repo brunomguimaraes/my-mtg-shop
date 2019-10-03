@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
 import ThankYou from "../ThankYou";
 import { MySnackbarContentWrapper } from "../SnackBar";
-import { CheckoutCard_user } from "../../__generated__/CheckoutCard_user.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,7 +57,36 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type IProps = {
-  user: CheckoutCard_user;
+  user: User;
+};
+
+type User = {
+  name: string;
+  id: string;
+  shoppingCart: {
+    cartProducts: CartProduct[];
+  };
+  creditCardInfo: CreditCard[];
+};
+
+export type CartProduct = {
+  id: string;
+  quantityOnCart: number;
+  product: Product;
+};
+
+export type CreditCard = {
+  cardNumber: number;
+  cvv: number;
+  id: string;
+  isValid: boolean;
+};
+
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  quantityInStock: number;
 };
 
 const CheckoutCard = ({ user }: IProps) => {
@@ -176,7 +204,7 @@ const CheckoutCard = ({ user }: IProps) => {
               <Grid>
                 <CreditCardList
                   creditCardChecker={creditCardSelector}
-                  creditCardInfo={user}
+                  creditCardInfo={user.creditCardInfo}
                 />
               </Grid>
             </div>
