@@ -46,13 +46,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type IProps = {
+type Props = {
   shoppingCart: CheckoutList_shoppingCart;
   anchorElementReference?: null | HTMLElement;
   anchorElOnClose?: () => void;
 };
 
-const CheckoutList = ({ shoppingCart }: IProps) => {
+const CheckoutList = ({ shoppingCart }: Props) => {
   const classes = useStyles();
 
   return (

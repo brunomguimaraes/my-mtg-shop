@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type IProps = {
+type Props = {
   user: INavbar;
   showCart?: boolean;
 };
@@ -48,7 +48,7 @@ export type INavbar = {
   shoppingCart: IShoppingCart;
 };
 
-const NavBar = ({ user, showCart }: IProps) => {
+const NavBar = ({ user, showCart }: Props) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

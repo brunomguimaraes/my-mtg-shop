@@ -22,17 +22,17 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
-type IOrderedProducts = {
+type OrderedProducts = {
   name: string;
   price: number;
   quantity: number;
 };
 
-type IProps = {
-  order: IOrderedProducts[];
+type Props = {
+  order: OrderedProducts[];
 };
 
-export default function ThankYou({ order }: IProps) {
+export default function ThankYou({ order }: Props) {
   const classes = useStyles();
 
   return (
