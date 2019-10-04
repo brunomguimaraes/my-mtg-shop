@@ -15,8 +15,6 @@ import { MySnackbarContentWrapper } from "../SnackBar";
 import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
 import { mutationResolve } from "../../utils/relay/commitMutation";
 
-import { CheckoutCard_user } from "../../__generated__/CheckoutCard_user.graphql";
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -61,6 +59,39 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+type Props = {
+  user: User;
+};
+
+type User = {
+  name: string;
+  id: string;
+  shoppingCart: {
+    cartProducts: CartProduct[];
+  };
+  creditCardInfo: CreditCard[];
+};
+
+export type CartProduct = {
+  id: string;
+  quantityOnCart: number;
+  product: Product;
+};
+
+export type CreditCard = {
+  cardNumber: number;
+  cvv: number;
+  id: string;
+  isValid: boolean;
+};
+
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  quantityInStock: number;
+};
+
 const mutation = graphql`
   mutation CreateOrderMutation($input: CreateOrderInput!) {
     createOrder(input: $input) {
@@ -70,10 +101,6 @@ const mutation = graphql`
     }
   }
 `;
-
-type Props = {
-  user: CheckoutCard_user;
-};
 
 const CheckoutCard = ({ user }: Props) => {
   const classes = useStyles();
@@ -191,7 +218,7 @@ const CheckoutCard = ({ user }: Props) => {
               <Grid>
                 <CreditCardList
                   creditCardChecker={creditCardSelector}
-                  creditCardInfo={user}
+                  creditCardInfo={user.creditCardInfo}
                 />
               </Grid>
             </div>

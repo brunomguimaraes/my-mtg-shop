@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { graphql } from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
-import { CreditCardList_creditCardInfo } from "./__generated__/CreditCardList_creditCardInfo.graphql";
+import { CreditCard } from "../CheckoutCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Props = {
-  creditCardInfo: CreditCardList_creditCardInfo;
+type IProps = {
+  creditCardInfo: CreditCard[];
   creditCardChecker: (cardIsValid: boolean) => void;
 };
 
@@ -51,26 +51,26 @@ const CreditCardList = ({ creditCardInfo, creditCardChecker }: Props) => {
         Selecione o Cartão para pagamento:
       </Typography>
       <div className={classes.cardContainer}>
-        {creditCardInfo!.creditCardInfo.map(creditCard => (
+        {creditCardInfo.map(creditCard => (
           <Card
-            key={creditCard!.id}
+            key={creditCard.id}
             className={
-              isSelectedId === creditCard!.id
+              isSelectedId === creditCard.id
                 ? classes.selectedCard
                 : classes.card
             }
           >
             <CardActionArea
               onClick={() =>
-                creditCardSelector(creditCard!.isValid, creditCard!.id)
+                creditCardSelector(creditCard.isValid, creditCard.id)
               }
             >
               <CardContent>
                 <Typography gutterBottom variant="h6" component="h2">
-                  {creditCard!.cardNumber}
+                  {creditCard.cardNumber}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" component="p">
-                  CVV: {creditCard!.cvv}
+                  CVV: {creditCard.cvv}
                 </Typography>
               </CardContent>
             </CardActionArea>
