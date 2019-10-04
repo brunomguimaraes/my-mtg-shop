@@ -31,12 +31,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type IProps = {
+type Props = {
   creditCardInfo: CreditCardList_creditCardInfo;
   creditCardChecker: (cardIsValid: boolean) => void;
 };
 
-const CreditCardList = ({ creditCardInfo, creditCardChecker }: IProps) => {
+const CreditCardList = ({ creditCardInfo, creditCardChecker }: Props) => {
   const classes = useStyles();
   const [isSelectedId, setSelectedId] = React.useState();
 
