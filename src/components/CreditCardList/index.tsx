@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type IProps = {
+type Props = {
   creditCardInfo: CreditCard[];
   creditCardChecker: (cardIsValid: boolean) => void;
 };

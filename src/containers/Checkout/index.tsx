@@ -6,11 +6,10 @@ import environment from "../../relay/Environment";
 import { CssBaseline, Container } from "@material-ui/core";
 import NavBar from "../../components/NavBar";
 import CheckoutCard from "../../components/CheckoutCard";
-import { CheckoutQuery } from "../../__generated__/CheckoutQuery.graphql";
 
 const Checkout: React.FC = () => {
   return (
-    <QueryRenderer<CheckoutQuery>
+    <QueryRenderer
       environment={environment}
       query={CheckoutViewerQuery}
       variables={{}}
