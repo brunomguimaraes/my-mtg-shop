@@ -1,16 +1,19 @@
 import React from "react";
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import { Box, Grid, Divider, Button, Typography } from "@material-ui/core";
 import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
-import CheckoutList from "../CheckoutList";
-import { createOrder } from "../../relay/mutations/CreateOrder";
-import CreditCardList from "../CreditCardList";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link } from "react-router-dom";
-import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
+
+import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
+import { Box, Grid, Divider, Button, Typography } from "@material-ui/core";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+
+import CheckoutList from "../CheckoutList";
+import CreditCardList from "../CreditCardList";
 import ThankYou from "../ThankYou";
 import { MySnackbarContentWrapper } from "../SnackBar";
+
+import { deleteCartProduct } from "../../relay/mutations/DeleteCartProduct";
+import { mutationResolve } from "../../utils/relay/commitMutation";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type IProps = {
+type Props = {
   user: User;
 };
 
@@ -89,7 +92,17 @@ type Product = {
   quantityInStock: number;
 };
 
-const CheckoutCard = ({ user }: IProps) => {
+const mutation = graphql`
+  mutation CreateOrderMutation($input: CreateOrderInput!) {
+    createOrder(input: $input) {
+      id
+      totalOrderValue
+      isPaid
+    }
+  }
+`;
+
+const CheckoutCard = ({ user }: Props) => {
   const classes = useStyles();
   const productsToCheckout = user.shoppingCart!.cartProducts;
   const totalValue =
@@ -105,11 +118,9 @@ const CheckoutCard = ({ user }: IProps) => {
   const [completedOrder, setcompletedOrder] = React.useState(false);
   const [validCreditCard, setValidCreditCard] = React.useState();
   const [orderReview, setOrderReview] = React.useState();
-  const [isSnackBarVisible, setSnackBarVisible] = React.useState<boolean>(
-    false
-  );
-  const [error, setError] = React.useState<boolean>(false);
-  const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
+  const [isSnackBarVisible, setSnackBarVisible] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [feedbackMessage, setFeedbackMessage] = React.useState("");
 
   const placeOrder = () => {
     if (productsToCheckout) {
@@ -128,13 +139,16 @@ const CheckoutCard = ({ user }: IProps) => {
 
       setOrderReview(orderedProducts);
       if (validCreditCard) {
-        createOrder(
-          validCreditCard,
-          totalValue,
-          orderedProducts,
-          () => cleanUpCart(checkoutProductsIds),
-          () => errorHandler("Erro ao efetuar o pedido")
-        );
+        mutationResolve({
+          mutation,
+          variables: {
+            isPaid: !!validCreditCard,
+            totalOrderValue: totalValue,
+            orderedProducts
+          }
+        })
+          .then(() => cleanUpCart(checkoutProductsIds))
+          .catch(() => errorHandler("Erro ao efetuar o pedido"));
       } else if (validCreditCard === false) {
         errorHandler("Erro, cartão inválido");
       } else {
