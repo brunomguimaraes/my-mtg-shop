@@ -17,12 +17,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type IProps = {
+type Props = {
   products: ProductsList_products | null;
   shoppingCart: ProductsList_shoppingCart | null;
 };
 
-const ProductsList = ({ products, shoppingCart }: IProps) => {
+const ProductsList = ({ products, shoppingCart }: Props) => {
   const classes = useStyles();
   const [selectedProductInfo, setSelectedProductInfo] = React.useState();
 

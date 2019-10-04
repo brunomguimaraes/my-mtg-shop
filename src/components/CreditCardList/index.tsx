@@ -36,7 +36,7 @@ type IProps = {
   creditCardChecker: (cardIsValid: boolean) => void;
 };
 
-const CreditCardList = ({ creditCardInfo, creditCardChecker }: IProps) => {
+const CreditCardList = ({ creditCardInfo, creditCardChecker }: Props) => {
   const classes = useStyles();
   const [isSelectedId, setSelectedId] = React.useState();
 

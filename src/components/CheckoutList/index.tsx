@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   shoppingCart: ShoppingCart;
+
   anchorElementReference?: null | HTMLElement;
   anchorElOnClose?: () => void;
 };

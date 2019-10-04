@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type IProps = {
+type Props = {
   shoppingCart: IShoppingCart;
   anchorElementReference: null | HTMLElement;
   anchorElOnClose: () => void;
@@ -76,7 +76,7 @@ const CartProductsList = ({
   shoppingCart,
   anchorElementReference,
   anchorElOnClose
-}: IProps) => {
+}: Props) => {
   const classes = useStyles();
 
   React.useEffect(() => {
