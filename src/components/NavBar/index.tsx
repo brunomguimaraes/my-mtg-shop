@@ -1,15 +1,16 @@
 import React from "react";
+import { graphql } from "babel-plugin-relay/macro";
+import { createFragmentContainer } from "react-relay";
+
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import { graphql } from "babel-plugin-relay/macro";
-import { createFragmentContainer } from "react-relay";
-import CartProductsList from "../CartProductsList";
 import { IconButton, Badge } from "@material-ui/core";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+
+import CartProductsList, { IShoppingCart } from "../CartProductsList";
 import { MySnackbarContentWrapper } from "../SnackBar";
-import { NavBar_user } from "../../__generated__/NavBar_user.graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,8 +38,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type IProps = {
-  user: NavBar_user;
+  user: INavbar;
   showCart?: boolean;
+};
+
+export type INavbar = {
+  name: string;
+  id: string;
+  shoppingCart: IShoppingCart;
 };
 
 const NavBar = ({ user, showCart }: IProps) => {
@@ -91,10 +98,8 @@ const NavBar = ({ user, showCart }: IProps) => {
                   aria-controls={CartListId}
                   aria-haspopup="true"
                   onClick={
-                    user
-                      .shoppingCart!.cartProducts!.map(
-                        product => product!.quantityOnCart!
-                      )
+                    user.shoppingCart.cartProducts
+                      .map(product => product.quantityOnCart!)
                       .reduce((totalValue, amount) => totalValue + amount) > 0
                       ? handleCartListOpen
                       : () => navBarErrorHandler("Carrinho vazio.")
@@ -103,12 +108,10 @@ const NavBar = ({ user, showCart }: IProps) => {
                 >
                   <Badge
                     badgeContent={
-                      user.shoppingCart!.cartProducts! &&
-                      user.shoppingCart!.cartProducts!.length !== 0
-                        ? user
-                            .shoppingCart!.cartProducts!.map(
-                              product => product!.quantityOnCart!
-                            )
+                      user.shoppingCart.cartProducts! &&
+                      user.shoppingCart.cartProducts.length !== 0
+                        ? user.shoppingCart.cartProducts
+                            .map(product => product.quantityOnCart!)
                             .reduce((totalValue, amount) => totalValue + amount)
                         : 0
                     }
@@ -122,7 +125,7 @@ const NavBar = ({ user, showCart }: IProps) => {
           )}
         </Toolbar>
       </AppBar>
-      {user.shoppingCart && user.shoppingCart!.cartProducts && (
+      {user.shoppingCart && user.shoppingCart.cartProducts && (
         <CartProductsList
           anchorElOnClose={handleCartListClose}
           anchorElementReference={anchorEl}
