@@ -93,7 +93,7 @@ type Product = {
 };
 
 const mutation = graphql`
-  mutation CreateOrderMutation($input: CreateOrderInput!) {
+  mutation CheckoutCardMutation($input: CreateOrderInput!) {
     createOrder(input: $input) {
       id
       totalOrderValue
