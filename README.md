@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Live version: https://mtg-shop-client.herokuapp.com/
+
 ### Major Notes
 
 This project uses React and Relay(Graphql) for the client side. For the server side check: https://github.com/brunomguimaraes/my-mtg-server, it uses Apollo Server, sequelize and a Postgres DB. 
